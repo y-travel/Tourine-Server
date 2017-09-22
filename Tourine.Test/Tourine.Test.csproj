@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="1.1.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.1.11" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.1.11" />
+    <PackageReference Include="NUnit" Version="3.8.1" />
+    <PackageReference Include="NUnit.Console" Version="3.7.0" />
+    <PackageReference Include="ServiceStack.Admin.Core" Version="1.0.44" />
+    <PackageReference Include="ServiceStack.Core" Version="1.0.44" />
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.44" />
+    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.44" />
+    <PackageReference Include="ServiceStack.OrmLite.Sqlite.Core" Version="1.0.44" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tourine.Models\Tourine.Models.csproj" />
+    <ProjectReference Include="..\Tourine.ServiceInterfaces\Tourine.ServiceInterfaces.csproj" />
+    <ProjectReference Include="..\Tourine\Tourine.csproj" />
+  </ItemGroup>
+
+</Project>

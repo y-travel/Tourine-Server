@@ -1,9 +1,0 @@
-﻿{
-  "ConnectionString": "Data Source=.\\sqlserver2016;Initial Catalog=Tourine;Integrated Security=true",
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Warning"
-    }
-  }
-}

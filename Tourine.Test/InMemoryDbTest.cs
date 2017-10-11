@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
+using System.Data;
 using NUnit.Framework;
 using ServiceStack.OrmLite;
 using Tourine;
 using Tourine.Models;
+using Tourine.Common;
 
 namespace Tourine.Test
 {
@@ -81,16 +81,14 @@ public class GlobalFixture
         JsConfigurator.Init();
         AppHost.RegisterLicense();
         ConnectionFactory = new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider);
-        var settings =
-            new Settings(
-                new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>()).Build());
+        var settings = new Settings();
 
-        AppHost = (AppHost)new AppHost(settings, ConnectionFactory) { TestMode = true }.Init();
+        AppHost = (AppHost)new AppHost(settings, ConnectionFactory) { TestMode = true }.Init().Start(BaseUri);
 
-      /*  TablesTypes = new[] { typeof(User) };//should be fill with tables
+        TablesTypes = new[] { typeof(User) };//should be fill with tables
 
         using (var db = ConnectionFactory.OpenDbConnection())
-            db.CreateTables(false, TablesTypes);*/
+            db.CreateTables(false, TablesTypes);
     }
 
     [OneTimeTearDown]

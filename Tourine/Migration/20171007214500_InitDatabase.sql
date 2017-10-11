@@ -21,20 +21,6 @@ ON [PRIMARY]
 GO
 
 --
--- Create table "dbo.Unit"
---
-PRINT (N'Create table "dbo.Unit"')
-GO
-CREATE TABLE dbo.Unit (
-  ID int IDENTITY,
-  Name varchar(50) NULL,
-  Factor varchar(50) NULL,
-  CONSTRAINT PK_Unit_ID PRIMARY KEY CLUSTERED (ID)
-)
-ON [PRIMARY]
-GO
-
---
 -- Create table "dbo.Tour"
 --
 PRINT (N'Create table "dbo.Tour"')
@@ -120,6 +106,20 @@ ON [PRIMARY]
 GO
 
 --
+-- Create table "dbo.Currency"
+--
+PRINT (N'Create table "dbo.Currency"')
+GO
+CREATE TABLE dbo.Currency (
+  ID int IDENTITY,
+  Name nvarchar(50) NULL,
+  Factor nvarchar(50) NULL,
+  CONSTRAINT PK_Unit_ID PRIMARY KEY CLUSTERED (ID)
+)
+ON [PRIMARY]
+GO
+
+--
 -- Create table "dbo.Coppon"
 --
 PRINT (N'Create table "dbo.Coppon"')
@@ -128,7 +128,7 @@ CREATE TABLE dbo.Coppon (
   ID bigint IDENTITY,
   Code varchar(50) NULL,
   TourID bigint NULL,
-  PresenterID int NULL,
+  PresenterUID int NULL,
   Price money NULL,
   Capacity int NULL,
   HotelID int NULL,
@@ -155,6 +155,16 @@ GO
 -- Dumping data for table Coppon
 --
 -- Table Tourine.dbo.Coppon does not contain any data (it is empty)
+-- 
+-- Dumping data for table Currency
+--
+SET IDENTITY_INSERT dbo.Currency ON
+GO
+INSERT dbo.Currency(ID, Name, Factor) VALUES (1, N'تومان', N'1')
+INSERT dbo.Currency(ID, Name, Factor) VALUES (2, N'دلار', N'4000')
+GO
+SET IDENTITY_INSERT dbo.Currency OFF
+GO
 -- 
 -- Dumping data for table DatePattern
 --
@@ -184,10 +194,6 @@ GO
 --
 -- Table Tourine.dbo.Tour does not contain any data (it is empty)
 -- 
--- Dumping data for table Unit
---
--- Table Tourine.dbo.Unit does not contain any data (it is empty)
--- 
 -- Dumping data for table [User]
 --
 -- Table Tourine.dbo.[User] does not contain any data (it is empty)
@@ -204,7 +210,7 @@ GO
 PRINT (N'Create foreign key "FK_PriceDetail_Unit_ID" on table "dbo.PriceDetail"')
 GO
 ALTER TABLE dbo.PriceDetail
-  ADD CONSTRAINT FK_PriceDetail_Unit_ID FOREIGN KEY (UnitID) REFERENCES dbo.Unit (ID)
+  ADD CONSTRAINT FK_PriceDetail_Unit_ID FOREIGN KEY (UnitID) REFERENCES dbo.Currency (ID)
 GO
 
 --
@@ -285,7 +291,7 @@ GO
 PRINT (N'Create foreign key "FK_Coppon_User_ID" on table "dbo.Coppon"')
 GO
 ALTER TABLE dbo.Coppon
-  ADD CONSTRAINT FK_Coppon_User_ID FOREIGN KEY (PresenterID) REFERENCES dbo.[User] (ID)
+  ADD CONSTRAINT FK_Coppon_User_ID FOREIGN KEY (PresenterUID) REFERENCES dbo.[User] (ID)
 GO
 SET NOEXEC OFF
 GO

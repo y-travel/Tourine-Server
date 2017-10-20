@@ -1,3 +1,4 @@
 [submodule "Tourine.Web"]
 	path = Tourine.Web
 	url = ../../tourine.auto/_git/Tourine.Web
+	ignore=all

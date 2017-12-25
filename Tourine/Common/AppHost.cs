@@ -63,6 +63,7 @@ namespace Tourine.Common
 
             Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
             Plugins.Add(new AdminFeature());
+            Plugins.Add(new PostmanFeature());
             Plugins.Add(new CorsFeature());
         }
     }

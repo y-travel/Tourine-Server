@@ -75,6 +75,7 @@ public class GlobalFixture
 
     public static Type[] TablesTypes { get; private set; }
 
+
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -85,7 +86,7 @@ public class GlobalFixture
 
         AppHost = (AppHost)new AppHost(settings, ConnectionFactory) { TestMode = true }.Init().Start(BaseUri);
 
-        TablesTypes = new[] { typeof(User) };//should be fill with tables
+        TablesTypes = new[] { typeof(Test) };//should be fill with tables
 
         using (var db = ConnectionFactory.OpenDbConnection())
             db.CreateTables(false, TablesTypes);
@@ -98,4 +99,6 @@ public class GlobalFixture
     }
 
 }
+
+class Test { }
 

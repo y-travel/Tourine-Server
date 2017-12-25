@@ -9,7 +9,6 @@ namespace Tourine.ServiceInterfaces
     public class TourService : AppService
     {
         public IAutoQueryDb AutoQuery { get; set; }
-
         public object Get(GetTours query)
         {
             if (string.IsNullOrEmpty(query.Code)) throw HttpError.NotFound("");

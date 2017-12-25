@@ -11,8 +11,11 @@ namespace Tourine.ServiceInterfaces
         public IAutoQueryDb AutoQuery { get; set; }
         public object Get(GetTours query)
         {
-            if (string.IsNullOrEmpty(query.Code)) throw HttpError.NotFound("");
-            var qry = AutoQuery.CreateQuery(query, Request).And(x => x.Code == query.Code);//@TODO modify, this is mock
+            if (string.IsNullOrEmpty(query.Code))
+                throw HttpError.NotFound("");
+            var qry = AutoQuery
+                .CreateQuery(query, Request)
+                .And(x => x.Code == query.Code);//@TODO modify, this is mock
             return AutoQuery.Execute(query, qry);
         }
     }

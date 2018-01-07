@@ -78,13 +78,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Currency.cs" />
+    <Compile Include="Destination.cs" />
+    <Compile Include="GetTour.cs" />
+    <Compile Include="GetTours.cs" />
     <Compile Include="GetUserInfo.cs" />
-    <Compile Include="GetUsers.cs" />
+    <Compile Include="Place.cs" />
+    <Compile Include="PriceDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="Tour.cs" />
     <Compile Include="TourInfo.cs" />
-    <Compile Include="GetTours.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserInfo.cs" />
   </ItemGroup>

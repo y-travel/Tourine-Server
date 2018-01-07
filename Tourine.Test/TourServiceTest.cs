@@ -12,7 +12,7 @@ namespace Tourine.Test
         [SetUp]
         public new void Setup()
         {
-            CreateTours();    
+            CreateTours();
         }
 
         [Test]
@@ -33,7 +33,6 @@ namespace Tourine.Test
         public void CreateTours()
         {
             Db.Insert(new Tour { Code = "1" });
-
         }
     }
 }

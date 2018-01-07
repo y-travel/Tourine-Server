@@ -22,22 +22,10 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void GetUser_should_return_result()
+        public void GetUserInfo_should_throw_exception()
         {
-            var res = Client.Get(new GetUsers { Name = "Ali" });
-            res.Results.Count.Should().Be(1);
-
-        }
-
-        [Test]
-        public void GetUser_should_throw_exception()
-        {
-            Client.Invoking(x => x.Get(new GetUsers()))
-                .ShouldThrow<WebServiceException>()
-                .Which
-                .StatusCode
-                .Should()
-                .Be(404);
+            Client.Invoking(x => x.Get(new GetUserInfo { Id = Guid.NewGuid() }))
+                .ShouldThrow<WebServiceException>();
         }
 
         [Test]
@@ -47,6 +35,7 @@ namespace Tourine.Test
             userInfo.Should().NotBeNull();
             userInfo.Role.Should().NotBeNull();
         }
+
         public void CreateUsers()
         {
             Db.Insert(new Role { Id = 1, Name = "Admin" });

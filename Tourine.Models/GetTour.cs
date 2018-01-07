@@ -7,8 +7,8 @@ using ServiceStack;
 
 namespace Tourine.Models
 {
-    [Route("/customer/user/{Id}", "GET")]
-    public class GetUserInfo : IGet
+    [Route("/customer/tour/{Id}","GET")]
+    public class GetTour:IGet
     {
         public Guid Id { get; set; }
     }

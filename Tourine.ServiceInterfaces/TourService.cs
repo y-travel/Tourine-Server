@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ServiceStack;
+using ServiceStack.OrmLite;
+using ServiceStack.Web;
 using Tourine.Models;
 
 namespace Tourine.ServiceInterfaces
@@ -9,14 +12,22 @@ namespace Tourine.ServiceInterfaces
     public class TourService : AppService
     {
         public IAutoQueryDb AutoQuery { get; set; }
-        public object Get(GetTours query)
+        public object Get(GetTour reqTour)
         {
-            if (string.IsNullOrEmpty(query.Code))
+            if (reqTour.Id == null)
                 throw HttpError.NotFound("");
-            var qry = AutoQuery
-                .CreateQuery(query, Request)
-                .And(x => x.Code == query.Code);//@TODO modify, this is mock
-            return AutoQuery.Execute(query, qry);
+
+            var tour = Db.SingleById<Tour>(reqTour.Id);
+            Db.LoadReferences(tour);
+            return tour;
+        }
+
+        public object Get(GetTours reqTours)
+        {
+            var tours = AutoQuery.CreateQuery(reqTours, Request.GetRequestParams());
+            return AutoQuery.Execute(reqTours,tours);
         }
     }
 }
+
+

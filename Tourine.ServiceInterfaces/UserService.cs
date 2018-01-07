@@ -17,7 +17,7 @@ namespace Tourine.ServiceInterfaces
 
         public object Get(GetUsers query)
         {
-            
+
             if (query.Id == null)
                 throw HttpError.NotFound("");
             /*            var qr = AutoQuery
@@ -28,9 +28,17 @@ namespace Tourine.ServiceInterfaces
             var q = Db
                 .From<User>()
                 .Join<Role>((u, r) => r.Id == u.RoleId)
-                .Where<User>(x => x.Id == query.Id); 
-            var qq = Db.SelectMulti<User,Role>(q);
+                .Where<User>(x => x.Id == query.Id);
+            var qq = Db.SelectMulti<User, Role>(q).Select(x => new UserInfo { Id = x.Item1.Id });
             return qq;
+        }
+
+        public object Get(GetUserInfo request)
+        {
+            var user = Db.Single<User>(x => x.Id == request.Id);
+            Db.LoadReferences(user);
+            var userInfo = user.ConvertTo<UserInfo>();
+            return userInfo;
         }
     }
 }

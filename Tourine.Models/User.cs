@@ -16,5 +16,7 @@ namespace Tourine.Models
         public string Name { get; set; }
         [References(typeof(Role))]
         public int RoleId { get; set; }
+        [Reference]
+        public Role Role { get; set; }
     }
 }

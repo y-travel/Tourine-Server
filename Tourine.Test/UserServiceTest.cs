@@ -14,6 +14,7 @@ namespace Tourine.Test
 {
     public class UserServiceTest : ServiceTest
     {
+        private Guid _testUserId = Guid.NewGuid();
         [SetUp]
         public new void Setup()
         {
@@ -23,7 +24,7 @@ namespace Tourine.Test
         [Test]
         public void GetUser_should_return_result()
         {
-            var res = Client.Get(new GetUsers { Name = "Ali"});
+            var res = Client.Get(new GetUsers { Name = "Ali" });
             res.Results.Count.Should().Be(1);
 
         }
@@ -39,9 +40,17 @@ namespace Tourine.Test
                 .Be(404);
         }
 
+        [Test]
+        public void GetUserInfo_should_return_UserInfo()
+        {
+            var userInfo = Client.Get<UserInfo>(new GetUserInfo { Id = _testUserId });
+            userInfo.Should().NotBeNull();
+            userInfo.Role.Should().NotBeNull();
+        }
         public void CreateUsers()
         {
-            Db.Insert(new User { Name = "Ali" });
+            Db.Insert(new Role { Id = 1, Name = "Admin" });
+            Db.Insert(new User { Id = _testUserId, Name = "Ali", RoleId = 1 });
         }
     }
 }

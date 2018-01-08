@@ -86,7 +86,7 @@ public class GlobalFixture
 
         AppHost = (AppHost)new AppHost(settings, ConnectionFactory) { TestMode = true }.Init().Start(BaseUri);
 
-        TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Role), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Status) };//should be fill with tables
+        TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Role), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Status), typeof(Reagent), typeof(Customer) };//should be fill with tables
 
         using (var db = ConnectionFactory.OpenDbConnection())
             db.CreateTables(false, TablesTypes);

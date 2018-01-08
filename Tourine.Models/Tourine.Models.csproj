@@ -79,15 +79,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Currency.cs" />
+    <Compile Include="Customer.cs" />
     <Compile Include="Destination.cs" />
     <Compile Include="GetDestinations.cs" />
     <Compile Include="GetTour.cs" />
     <Compile Include="GetTours.cs" />
     <Compile Include="GetUserInfo.cs" />
     <Compile Include="Place.cs" />
+    <Compile Include="CRUDReagent.cs" />
     <Compile Include="PostTour.cs" />
     <Compile Include="PriceDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reagent.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="Tour.cs" />

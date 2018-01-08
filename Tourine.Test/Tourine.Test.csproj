@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="DestinationServiceTest.cs" />
     <Compile Include="InMemoryDbTest.cs" />
+    <Compile Include="ReagentServiceTest.cs" />
     <Compile Include="ServiceTest.cs" />
     <Compile Include="TourServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Currency.cs" />
     <Compile Include="Destination.cs" />
+    <Compile Include="GetDestinations.cs" />
     <Compile Include="GetTour.cs" />
     <Compile Include="GetTours.cs" />
     <Compile Include="GetUserInfo.cs" />

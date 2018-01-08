@@ -25,7 +25,15 @@ namespace Tourine.ServiceInterfaces
         public object Get(GetTours reqTours)
         {
             var tours = AutoQuery.CreateQuery(reqTours, Request.GetRequestParams());
-            return AutoQuery.Execute(reqTours,tours);
+            return AutoQuery.Execute(reqTours, tours);
+        }
+
+        public object Post(PostTour postReq)
+        {
+            postReq.Tour.Id = Guid.NewGuid();
+            var id = Db.Insert(postReq.Tour);
+            var insertedItem = Db.SingleById<Tour>(postReq.Tour.Id);
+            return insertedItem;
         }
     }
 }

@@ -84,9 +84,11 @@
     <Compile Include="GetTours.cs" />
     <Compile Include="GetUserInfo.cs" />
     <Compile Include="Place.cs" />
+    <Compile Include="PostTour.cs" />
     <Compile Include="PriceDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
+    <Compile Include="Status.cs" />
     <Compile Include="Tour.cs" />
     <Compile Include="TourInfo.cs" />
     <Compile Include="User.cs" />

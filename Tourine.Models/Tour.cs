@@ -28,6 +28,11 @@ namespace Tourine.Models
         public Guid PlaceId { get; set; }
         [Reference]
         public Place Place { get; set; }
+        
+        [References(typeof(Status))]
+        public int StatusId { get; set; }
+        [Reference]
+        public Status Status { get; set; }
 
         public int Duration { get; set; }
         public DateTime Date { get; set; }

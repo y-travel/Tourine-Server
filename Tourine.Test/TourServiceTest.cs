@@ -30,28 +30,49 @@ namespace Tourine.Test
             var tourInfo = Client.Get<Tour>(new GetTour { Id = _testTourId });
             tourInfo.Should().NotBeNull();
             tourInfo.Destination.Should().NotBeNull();
-            /*            tourInfo.Place.Should().BeNull();
-                        tourInfo.PriceDetail.Should().BeNull();*/
+            tourInfo.Place.Should().NotBeNull();
+            tourInfo.PriceDetail.Should().NotBeNull();
+            tourInfo.Status.Should().NotBeNull();
         }
-
-        /*        [Test]
-                public void GetTours_should_throw_exception()
-                {
-                    Client.Invoking(x => x.Get(new GetTours()))
-                        .ShouldThrow<WebServiceException>()
-                        .Which.StatusCode.Should().Be(404);
-                }*/
 
         public void CreateTours()
         {
             var testPDId = Guid.NewGuid();
             var testDId = Guid.NewGuid();
             var testPId = Guid.NewGuid();
-            Db.Insert(new Place { Id = testPDId, Name = "Hotel" });
+            Db.Insert(new Place { Id = testPId, Name = "Hotel" });
             Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
             Db.Insert(new Currency { Id = 1, Name = "Rial", Factor = "1" });
-            Db.Insert(new PriceDetail { Id = testPId, CurrencyId = 1, Price = 4000 });
-            Db.Insert(new Tour { Id = _testTourId, PriceDetailId = testPDId, DestinationId = testDId, PlaceId = testPId });
+            Db.Insert(new PriceDetail { Id = testPDId, CurrencyId = 1, Price = 4000 });
+            Db.Insert(new Tour { Id = _testTourId, PriceDetailId = testPDId, DestinationId = testDId, PlaceId = testPId , StatusId = 1});
+            Db.Insert(new Status { Id = 1, Name = "expired" });
+        }
+
+        [Test]
+        public void PostTour_must_return_new_result()
+        {
+            var res = Client.Post(new PostTour
+            {
+                Tour = new Tour
+                {
+                    Id = Guid.NewGuid(),
+                    Code = "555",
+                    Capacity = 5,
+                    PriceDetailId = Guid.NewGuid(),
+                    DestinationId = Guid.NewGuid(),
+                    PlaceId = Guid.NewGuid(),
+                    Duration = 12,
+                    IsFlight = true,
+                    AdultCount = 80,
+                    AdultMinPrice = 8000,
+                    InfantPrice = 65000,
+                    BusPrice = 50000,
+                    RoomPrice = 45000,
+                    FoodPrice = 35000
+                }
+            });
+
+            res.Code.Should().Be("555");
         }
     }
 }

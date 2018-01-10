@@ -13,7 +13,7 @@ namespace Tourine.Test
 {
     public class ReagentServiceTest : ServiceTest
     {
-        private Guid testGuid = Guid.NewGuid();
+        private readonly Guid _testGuid = Guid.NewGuid();
         [SetUp]
         public new void Setup()
         {
@@ -31,8 +31,8 @@ namespace Tourine.Test
         [Test]
         public void DeleteReagent_should_return_result()
         {
-            var res = Client.Delete(new DeleteReagent { Id = testGuid });
-            res.Id.Should().Be(testGuid);
+            var res = Client.Delete(new DeleteReagent { Id = _testGuid });
+            res.Id.Should().Be(_testGuid);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace Tourine.Test
             {
                 reagent = new Reagent
                 {
-                    Id = testGuid,
+                    Id = _testGuid,
                     Name = "emaN",
                     Family = "fdj",
                     AgencyName = "agc",
@@ -88,7 +88,7 @@ namespace Tourine.Test
             {
                 reagent = new Reagent
                 {
-                    Id = testGuid,
+                    Id = _testGuid,
                     Name = "aaaa",
                     Family = "ffff",
                     AgencyName = "gggg",
@@ -103,7 +103,7 @@ namespace Tourine.Test
         {
             Db.Insert(new Reagent
             {
-                Id = testGuid,
+                Id = _testGuid,
                 Name = "name",
                 Family = "fam",
                 AgencyName = "Yekta",

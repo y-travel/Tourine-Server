@@ -13,11 +13,11 @@ namespace Tourine.Test
 {
     public class DestinationServiceTest : ServiceTest
     {
-        private Guid _testDestGuid = Guid.NewGuid();
+        private readonly Guid _testDestGuid = Guid.NewGuid();
         [SetUp]
         public new void Setup()
         {
-            createDestination();
+            CreateDestination();
         }
 
         [Test]
@@ -27,9 +27,9 @@ namespace Tourine.Test
             res.Results.Count.Should().Be(1);
         }
 
-        public void createDestination()
+        public void CreateDestination()
         {
-            Db.Insert(new Destination {Id = _testDestGuid, Name = "Karbala"});
+            Db.Insert(new Destination { Id = _testDestGuid, Name = "Karbala" });
         }
     }
 }

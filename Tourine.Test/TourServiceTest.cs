@@ -10,7 +10,7 @@ namespace Tourine.Test
 {
     public class TourServiceTest : ServiceTest
     {
-        private Guid _testTourId = Guid.NewGuid();
+        private readonly Guid _testTourId = Guid.NewGuid();
         [SetUp]
         public new void Setup()
         {
@@ -37,14 +37,14 @@ namespace Tourine.Test
 
         public void CreateTours()
         {
-            var testPDId = Guid.NewGuid();
+            var testPdId = Guid.NewGuid();
             var testDId = Guid.NewGuid();
             var testPId = Guid.NewGuid();
             Db.Insert(new Place { Id = testPId, Name = "Hotel" });
             Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
             Db.Insert(new Currency { Id = 1, Name = "Rial", Factor = "1" });
-            Db.Insert(new PriceDetail { Id = testPDId, CurrencyId = 1, Price = 4000 });
-            Db.Insert(new Tour { Id = _testTourId, PriceDetailId = testPDId, DestinationId = testDId, PlaceId = testPId , StatusId = 1});
+            Db.Insert(new PriceDetail { Id = testPdId, CurrencyId = 1, Price = 4000 });
+            Db.Insert(new Tour { Id = _testTourId, PriceDetailId = testPdId, DestinationId = testDId, PlaceId = testPId, StatusId = 1 });
             Db.Insert(new Status { Id = 1, Name = "expired" });
         }
 

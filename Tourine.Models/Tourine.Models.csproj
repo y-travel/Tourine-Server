@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CRUDCustomer.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Destination.cs" />

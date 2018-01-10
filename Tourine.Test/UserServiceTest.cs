@@ -14,7 +14,7 @@ namespace Tourine.Test
 {
     public class UserServiceTest : ServiceTest
     {
-        private Guid _testUserId = Guid.NewGuid();
+        private readonly Guid _testUserId = Guid.NewGuid();
         [SetUp]
         public new void Setup()
         {

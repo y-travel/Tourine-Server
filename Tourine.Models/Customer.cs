@@ -15,6 +15,6 @@ namespace Tourine.Models
         public string NationalCode { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime PassportExpireDate { get; set; }
-        public string PassportNumber { get; set; }
+        public string PassportNo { get; set; }
     }
 }

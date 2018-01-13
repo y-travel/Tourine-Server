@@ -204,6 +204,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migration\20171007214500_InitDatabase.cs" />
+    <Compile Include="Migration\20180113203452_DeveloperSeed.cs" />
+    <Compile Include="Migration\20180113205532_UpdateSchema.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +244,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migration\20171007214500_InitDatabase.sql">
       <DependentUpon>20171007214500_InitDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\20180113203452_DeveloperSeed.sql">
+      <DependentUpon>20180113203452_DeveloperSeed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\20180113205532_UpdateSchema.sql">
+      <DependentUpon>20180113205532_UpdateSchema.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -78,16 +78,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CRUDCustomer.cs" />
-    <Compile Include="Currency.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="Destination.cs" />
-    <Compile Include="GetDestinations.cs" />
-    <Compile Include="GetTour.cs" />
-    <Compile Include="GetTours.cs" />
-    <Compile Include="GetUserInfo.cs" />
+    <Compile Include="ServiceModels\CRUDCustomer.cs" />
+    <Compile Include="DatabaseModels\Currency.cs" />
+    <Compile Include="DatabaseModels\Customer.cs" />
+    <Compile Include="DatabaseModels\Destination.cs" />
+    <Compile Include="ServiceModels\GetDestinations.cs" />
+    <Compile Include="ServiceModels\GetTour.cs" />
+    <Compile Include="ServiceModels\GetTours.cs" />
+    <Compile Include="ServiceModels\GetUserInfo.cs" />
     <Compile Include="DatabaseModels\Place.cs" />
-    <Compile Include="CRUDReagent.cs" />
+    <Compile Include="ServiceModels\CRUDReagent.cs" />
     <Compile Include="DatabaseModels\PostTour.cs" />
     <Compile Include="DatabaseModels\PriceDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

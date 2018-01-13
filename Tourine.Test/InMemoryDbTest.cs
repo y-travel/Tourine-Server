@@ -7,6 +7,7 @@ using ServiceStack.OrmLite;
 using Tourine;
 using Tourine.Models;
 using Tourine.Common;
+using Tourine.Models.DatabaseModels;
 
 namespace Tourine.Test
 {

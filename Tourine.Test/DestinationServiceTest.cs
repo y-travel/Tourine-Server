@@ -8,6 +8,8 @@ using NUnit.Framework;
 using ServiceStack.Messaging.Rcon;
 using ServiceStack.OrmLite;
 using Tourine.Models;
+using Tourine.Models.DatabaseModels;
+using Tourine.Models.ServiceModels;
 
 namespace Tourine.Test
 {

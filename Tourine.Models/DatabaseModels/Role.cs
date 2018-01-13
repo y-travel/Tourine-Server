@@ -1,4 +1,4 @@
-﻿namespace Tourine.Models
+﻿namespace Tourine.Models.DatabaseModels
 {
     public class Role
     {

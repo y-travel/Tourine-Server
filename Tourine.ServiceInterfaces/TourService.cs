@@ -6,6 +6,8 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
 using Tourine.Models;
+using Tourine.Models.DatabaseModels;
+using Tourine.Models.ServiceModels;
 
 namespace Tourine.ServiceInterfaces
 {

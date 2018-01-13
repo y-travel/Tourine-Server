@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.Models;
+using Tourine.Models.DatabaseModels;
 
 namespace Tourine.Test
 {

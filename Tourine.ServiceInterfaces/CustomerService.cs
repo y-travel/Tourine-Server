@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.Models;
+using Tourine.Models.DatabaseModels;
+using Tourine.Models.ServiceModels;
 
 namespace Tourine.ServiceInterfaces
 {

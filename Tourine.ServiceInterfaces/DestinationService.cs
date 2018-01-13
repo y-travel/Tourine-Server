@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceStack;
 using Tourine.Models;
+using Tourine.Models.ServiceModels;
 
 namespace Tourine.ServiceInterfaces
 {

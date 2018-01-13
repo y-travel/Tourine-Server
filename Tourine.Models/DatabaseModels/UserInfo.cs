@@ -1,7 +1,7 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
 
-namespace Tourine.Models
+namespace Tourine.Models.DatabaseModels
 {
     public class UserInfo
     {

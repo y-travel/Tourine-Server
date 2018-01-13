@@ -1,5 +1,4 @@
 ﻿using System;
-using ServiceStack;
 using ServiceStack.DataAnnotations;
 
 namespace Tourine.Models

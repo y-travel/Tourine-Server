@@ -8,6 +8,7 @@ using ServiceStack.Data;
 using ServiceStack.FluentValidation;
 using ServiceStack.OrmLite;
 using ServiceStack.Razor;
+using ServiceStack.Web;
 using Tourine.ServiceInterfaces;
 
 namespace Tourine.Common
@@ -18,7 +19,7 @@ namespace Tourine.Common
 
         public OrmLiteConnectionFactory ConnectionFactory { get; }
 
-        public AppHost(Settings settings, OrmLiteConnectionFactory connectionFactory) : base("Tourine Services",typeof(AppService).GetAssembly())
+        public AppHost(Settings settings, OrmLiteConnectionFactory connectionFactory) : base("Tourine Services", typeof(AppService).GetAssembly())
         {
             Settings = settings;
             ConnectionFactory = connectionFactory;
@@ -60,11 +61,22 @@ namespace Tourine.Common
             });
             container.Register<IDbConnectionFactory>(ConnectionFactory);
             container.Register(Settings);
-
+            GlobalRequestFilters.Add(ValidationFilter);
             Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
             Plugins.Add(new AdminFeature());
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new CorsFeature());
+        }
+
+        private void ValidationFilter(IRequest request, IResponse response, object dto)
+        {
+            var validatorType = typeof(IValidator<>).MakeGenericType(dto.GetType());
+            var validator = (IValidator)Container.TryResolve(validatorType);
+            var validationResult = validator?.Validate(dto);
+            if (validationResult?.IsValid ?? true) return;
+            var exception = new ValidationException(validationResult.Errors);
+            var error = HostContext.RaiseServiceException(request, dto, exception) ?? DtoUtils.CreateErrorResponse(dto, exception);
+            response.WriteToResponse(request, error);
         }
     }
 }

@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
-using ServiceStack.Messaging.Rcon;
 using ServiceStack.OrmLite;
-using Tourine.Models;
 using Tourine.Models.DatabaseModels;
-using Tourine.Models.ServiceModels;
+using Tourine.ServiceInterfaces.Customers;
 
 namespace Tourine.Test
 {
@@ -45,9 +39,9 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void PutCustomer_should_return_inserted_result()
+        public void PutCustomer_should_not_return_exception()
         {
-            var item = Client.Put(new PutCustomer
+            Client.Invoking(x => x.Put(new PutCustomer
             {
                 Customer = new Customer
                 {
@@ -55,13 +49,9 @@ namespace Tourine.Test
                     Name = "Ali",
                     Family = "Mrz",
                     MobileNumber = "09123456789",
-                    PassportNo = "12147123",
-                    NationalCode = "0012234567"
+                    Phone = "09122136458"
                 }
-            });
-
-            item.Id.Should().Be(_testId);
-            item.Name.Should().Be("Ali");
+            })).ShouldNotThrow<WebServiceException>();
         }
 
         [Test]
@@ -75,8 +65,7 @@ namespace Tourine.Test
                     Name = "A--",
                     Family = "M--",
                     MobileNumber = "09123456789",
-                    PassportNo = "12147123",
-                    NationalCode = "0012234567"
+                    Phone = "09123654789"
                 }
             })).ShouldThrow<WebServiceException>();
 
@@ -85,8 +74,8 @@ namespace Tourine.Test
         [Test]
         public void DeleteCustomer_should_return_result()
         {
-            var item = Client.Delete(new DeleteCustomer { Id = _testId });
-            item.Id.Should().Be(_testId);
+            Client.Invoking(x => x.Delete(new DeleteCustomer { Id = _testId }))
+                .ShouldNotThrow<WebServiceException>();
         }
 
         [Test]
@@ -104,8 +93,7 @@ namespace Tourine.Test
                 Name = "Emad",
                 Family = "Bagheri",
                 MobileNumber = "09126963724",
-                NationalCode = "0012345698",
-                PassportNo = "123456789abcdef"
+                Phone = "09145236987"
             });
         }
     }

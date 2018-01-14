@@ -1,9 +1,12 @@
-﻿namespace Tourine.Models.DatabaseModels
+﻿using ServiceStack.DataAnnotations;
+
+namespace Tourine.Models.DatabaseModels
 {
     public class Currency
     {
+        [AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Factor { get; set; }
+        public int Factor { get; set; }
     }
 }

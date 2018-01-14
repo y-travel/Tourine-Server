@@ -5,7 +5,7 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.Models;
 using Tourine.Models.DatabaseModels;
-using Tourine.Models.ServiceModels;
+using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
@@ -21,22 +21,27 @@ namespace Tourine.Test
         [Test]
         public void GetUserInfo_should_throw_exception()
         {
-            Client.Invoking(x => x.Get(new GetUserInfo { Id = Guid.NewGuid() }))
+            Client.Invoking(x => x.Get(new GetUser { Id = Guid.NewGuid() }))
                 .ShouldThrow<WebServiceException>();
         }
 
         [Test]
-        public void GetUserInfo_should_return_UserInfo()
+        public void GetUser_should_return_User()
         {
-            var userInfo = Client.Get<UserInfo>(new GetUserInfo { Id = _testUserId });
+            var userInfo = Client.Get<User>(new GetUser { Id = _testUserId });
             userInfo.Should().NotBeNull();
-            userInfo.Role.Should().NotBeNull();
         }
 
         public void CreateUsers()
         {
-            Db.Insert(new Role { Id = 1, Name = "Admin" });
-            Db.Insert(new User { Id = _testUserId, Name = "Ali", RoleId = 1 });
+            Db.Insert(new User
+            {
+                Id = _testUserId,
+                Username = "Ali",
+                Password = "123",
+                CustomerId = Guid.NewGuid(),
+                Role = Role.Admin
+            });
         }
     }
 }

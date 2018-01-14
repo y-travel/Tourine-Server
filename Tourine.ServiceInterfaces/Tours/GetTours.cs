@@ -1,13 +1,12 @@
 ﻿using ServiceStack;
 using Tourine.Models.DatabaseModels;
 
-namespace Tourine.Models.ServiceModels
+namespace Tourine.ServiceInterfaces.Tours
 {
 
-    [Route("/customer/tours", "GET")]
+    [Route("/tours", "GET")]
     public class GetTours : QueryDb<Tour>
     {
-
     }
 
 }

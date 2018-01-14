@@ -1,14 +1,9 @@
-﻿using System.Globalization;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using System.Web;
-using Funq;
 using ServiceStack.Configuration;
 using ServiceStack.OrmLite;
 using ServiceStack.OrmLite.SqlServer;
-using Tourine;
 using Tourine.Common;
-using LogManager = ServiceStack.Logging.LogManager;
 
 namespace Tourine
 {

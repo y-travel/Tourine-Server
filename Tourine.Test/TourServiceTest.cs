@@ -3,10 +3,9 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using ServiceStack.Text;
 using Tourine.Models;
 using Tourine.Models.DatabaseModels;
-using Tourine.Models.ServiceModels;
+using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.Test
 {
@@ -33,8 +32,6 @@ namespace Tourine.Test
             tourInfo.Should().NotBeNull();
             tourInfo.Destination.Should().NotBeNull();
             tourInfo.Place.Should().NotBeNull();
-            tourInfo.PriceDetail.Should().NotBeNull();
-            tourInfo.Status.Should().NotBeNull();
         }
 
         public void CreateTours()
@@ -44,23 +41,22 @@ namespace Tourine.Test
             var testPId = Guid.NewGuid();
             Db.Insert(new Place { Id = testPId, Name = "Hotel" });
             Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
-            Db.Insert(new Currency { Id = 1, Name = "Rial", Factor = "1" });
-            Db.Insert(new PriceDetail { Id = testPdId, CurrencyId = 1, Price = 4000 });
-            Db.Insert(new Tour { Id = _testTourId, PriceDetailId = testPdId, DestinationId = testDId, PlaceId = testPId, StatusId = 1 });
-            Db.Insert(new Status { Id = 1, Name = "expired" });
+            Db.Insert(new Currency { Id = 1, Name = "Rial", Factor = 1 });
+            Db.Insert(new PriceDetail { Id = testPdId, CurrencyId = 1, Value = 4000 });
+            Db.Insert(new Tour { Id = _testTourId, DestinationId = testDId, PlaceId = testPId, Status = TourStatus.Created });
+
         }
 
         [Test]
-        public void PostTour_must_return_new_result()
+        public void PostTour_should_not_return_exception()
         {
-            var res = Client.Post(new PostTour
+            Client.Invoking(x => x.Post(new PostTour
             {
                 Tour = new Tour
                 {
                     Id = Guid.NewGuid(),
                     Code = "555",
                     Capacity = 5,
-                    PriceDetailId = Guid.NewGuid(),
                     DestinationId = Guid.NewGuid(),
                     PlaceId = Guid.NewGuid(),
                     Duration = 12,
@@ -72,9 +68,7 @@ namespace Tourine.Test
                     RoomPrice = 45000,
                     FoodPrice = 35000
                 }
-            });
-
-            res.Code.Should().Be("555");
+            })).ShouldNotThrow<WebServiceException>();
         }
     }
 }

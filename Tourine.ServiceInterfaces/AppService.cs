@@ -1,9 +1,8 @@
-﻿using System;
-using ServiceStack;
+﻿using ServiceStack;
 
 namespace Tourine.ServiceInterfaces
 {
-    public abstract class AppService:Service
+    public abstract class AppService : Service
     {
     }
 }

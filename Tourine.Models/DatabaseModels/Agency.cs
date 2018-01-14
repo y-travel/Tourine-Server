@@ -3,11 +3,11 @@ using ServiceStack.DataAnnotations;
 
 namespace Tourine.Models.DatabaseModels
 {
-    public class UserInfo
+    public class Agency
     {
+        [AutoIncrement]
         public Guid Id { get; set; }
         public string Name { get; set; }
-        [Reference]
-        public Role Role { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

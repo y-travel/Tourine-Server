@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ServiceStack;
-using ServiceStack.OrmLite;
-using ServiceStack.Text;
-using Tourine.Models;
+﻿using ServiceStack.OrmLite;
 using Tourine.Models.DatabaseModels;
-using Tourine.Models.ServiceModels;
+using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.ServiceInterfaces
 {
     public class UserService : AppService
     {
-        public object Get(GetUserInfo request)
+        public object Get(GetUser request)
         {
             var user = Db.SingleById<User>(request.Id);
             Db.LoadReferences(user);
-            var userInfo = user.ConvertTo<UserInfo>();
-            return userInfo;
+            return user;
         }
     }
 }

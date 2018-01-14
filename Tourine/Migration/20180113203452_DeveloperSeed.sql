@@ -72,7 +72,7 @@ GO
 -- 
 -- Dumping data for table Block
 --
-INSERT dbo.Block(ID, Code, TourID, Price, Capacity, Parent, CustomerId, SubmitDate) VALUES ('67b0796a-534a-477a-b457-6bb285e0ee5f', N'1009-12', 'f48192d9-7dc9-4a25-bd9c-370b23264d9a', 2300000, 2, NULL, '9fe7b4d7-3eef-4c99-a8db-2bb6c1c0245c', '2018-01-13 07:49:50.077')
+INSERT dbo.Block(ID, Code, TourID, Price, Capacity, ParentId, CustomerId, SubmitDate) VALUES ('67b0796a-534a-477a-b457-6bb285e0ee5f', N'1009-12', 'f48192d9-7dc9-4a25-bd9c-370b23264d9a', 2300000, 2, NULL, '9fe7b4d7-3eef-4c99-a8db-2bb6c1c0245c', '2018-01-13 07:49:50.077')
 GO
 -- 
 -- Dumping data for table PriceDetail

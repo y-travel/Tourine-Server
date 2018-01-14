@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using ServiceStack.Web;
 using Tourine.Models;
 using Tourine.Models.DatabaseModels;
-using Tourine.Models.ServiceModels;
+using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces
 {
@@ -18,8 +14,7 @@ namespace Tourine.ServiceInterfaces
         {
             if (reqTour.Id == null)
                 throw HttpError.NotFound("");
-
-            var tour = Db.SingleById<Tour>(reqTour.Id);
+            var tour = Db.SingleById<Models.DatabaseModels.Tour>(reqTour.Id);
             Db.LoadReferences(tour);
             return tour;
         }
@@ -30,12 +25,46 @@ namespace Tourine.ServiceInterfaces
             return AutoQuery.Execute(reqTours, tours);
         }
 
-        public object Post(PostTour postReq)
+        public void Post(PostTour postReq)
         {
-            postReq.Tour.Id = Guid.NewGuid();
-            var id = Db.Insert(postReq.Tour);
-            var insertedItem = Db.SingleById<Tour>(postReq.Tour.Id);
-            return insertedItem;
+            postReq.Tour.Status = TourStatus.Created;
+            postReq.Tour.CreationDate = DateTime.Now;
+            Db.Insert(postReq.Tour);
+        }
+
+        public void Put(PutTour putTour)
+        {
+            Db.UpdateOnly(new Tour
+            {
+                AdultCount = putTour.Tour.AdultCount,
+                AdultMinPrice = putTour.Tour.AdultMinPrice,
+                BusPrice = putTour.Tour.BusPrice,
+                DestinationId = putTour.Tour.DestinationId,
+                Duration = putTour.Tour.Duration,
+                FoodPrice = putTour.Tour.FoodPrice,
+                InfantCount = putTour.Tour.InfantCount,
+                InfantPrice = putTour.Tour.InfantPrice,
+                IsFlight = putTour.Tour.IsFlight,
+                PlaceId = putTour.Tour.PlaceId,
+                RoomPrice = putTour.Tour.RoomPrice,
+                StartDate = putTour.Tour.StartDate
+            }
+            , onlyFields: tour => new
+            {
+                tour.AdultCount,
+                tour.AdultMinPrice,
+                tour.BusPrice,
+                tour.DestinationId,
+                tour.Duration,
+                tour.FoodPrice,
+                tour.InfantCount,
+                tour.InfantPrice,
+                tour.IsFlight,
+                tour.PlaceId,
+                tour.RoomPrice,
+                tour.StartDate
+            }
+            , where: tour => tour.Code == putTour.Tour.Code);
         }
     }
 }

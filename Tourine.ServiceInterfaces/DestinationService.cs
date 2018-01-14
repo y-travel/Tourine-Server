@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ServiceStack;
-using Tourine.Models;
-using Tourine.Models.ServiceModels;
+﻿using ServiceStack;
+using Tourine.ServiceInterfaces.Destinations;
 
 namespace Tourine.ServiceInterfaces
 {

@@ -5,8 +5,7 @@ namespace Tourine.Models.DatabaseModels
 {
     public class Tour
     {
-        [AutoIncrement]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Code { get; set; }
 
         [References(typeof(Destination))]
@@ -14,7 +13,7 @@ namespace Tourine.Models.DatabaseModels
         [Reference]
         public Destination Destination { get; set; }
 
-        [Compute]
+        [Compute,Ignore]
         public int Capacity { get; set; }
         public TourStatus Status { get; set; } = TourStatus.Created;
         public int Duration { get; set; }

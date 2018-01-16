@@ -1,8 +1,7 @@
 ﻿using ServiceStack.OrmLite;
 using Tourine.Models.DatabaseModels;
-using Tourine.ServiceInterfaces.Users;
 
-namespace Tourine.ServiceInterfaces
+namespace Tourine.ServiceInterfaces.Users
 {
     public class UserService : AppService
     {

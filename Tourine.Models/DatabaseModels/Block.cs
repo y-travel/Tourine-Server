@@ -5,8 +5,7 @@ namespace Tourine.Models.DatabaseModels
 {
     public class Block
     {
-        [AutoIncrement]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Code { get; set; }
 
         [References(typeof(Tour))]
@@ -18,7 +17,7 @@ namespace Tourine.Models.DatabaseModels
         public int Capacity { get; set; }
 
         [References(typeof(Block))]
-        public Guid ParentId { get; set; }
+        public Guid? ParentId { get; set; }
         [Reference]
         public Block Parent { get; set; }
 

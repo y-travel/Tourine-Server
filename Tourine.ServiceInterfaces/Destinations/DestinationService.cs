@@ -1,7 +1,6 @@
 ﻿using ServiceStack;
-using Tourine.ServiceInterfaces.Destinations;
 
-namespace Tourine.ServiceInterfaces
+namespace Tourine.ServiceInterfaces.Destinations
 {
     public class DestinationService : AppService
     {

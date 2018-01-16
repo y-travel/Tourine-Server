@@ -73,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppService.cs" />
+    <Compile Include="BlockService.cs" />
+    <Compile Include="Blocks\GetBlocks.cs" />
+    <Compile Include="Blocks\PostBlock.cs" />
     <Compile Include="Customers\DeleteCustomer.cs" />
     <Compile Include="Customers\GetCustomer.cs" />
     <Compile Include="Passengers\DeletePassenger.cs" />

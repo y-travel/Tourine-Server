@@ -4,9 +4,8 @@ using ServiceStack.DataAnnotations;
 namespace Tourine.Models.DatabaseModels
 {
     public class PriceDetail
-    {
-        [AutoIncrement]
-        public Guid Id { get; set; }
+    { 
+        public Guid Id { get; set; } = Guid.NewGuid();
         public int Value { get; set; }
 
         [References(typeof(Currency))]

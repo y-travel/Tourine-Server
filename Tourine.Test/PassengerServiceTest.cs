@@ -11,6 +11,7 @@ namespace Tourine.Test
     public class PassengerServiceTest : ServiceTest
     {
         private readonly Guid _testGuid = Guid.NewGuid();
+        private readonly Guid _testGuidAgency = Guid.NewGuid();
         [SetUp]
         public new void Setup()
         {
@@ -22,7 +23,7 @@ namespace Tourine.Test
         {
             var res = Client.Get(new GetPassengers());
             res.Results.Count.Should().Be(1);
-            res.Results[0].Name.Should().Be("name");
+            res.Results[0].Name.Should().Be("emaN");
         }
 
         [Test]
@@ -42,17 +43,37 @@ namespace Tourine.Test
         [Test]
         public void PutPassenger_should_not_return_exception()
         {
+            var it = new Passenger
+            {
+                Id = _testGuid,
+                BirthDate = DateTime.Now,
+                PassportExpireDate = DateTime.Now,
+                NationalCode = "123456",
+                PassportNo = "456789",
+                AgencyId = _testGuidAgency,
+                Family = "Mrz",
+                MobileNumber = "45678987",
+                Name = "Ali"
+            };
             Client.Invoking(x => x.Put(new PutPassenger
             {
-                Passenger = new Passenger
-                {
-                    Id = _testGuid,
-                    Name = "emaN",
-                    Family = "fdj",
-                    AgencyId = Guid.NewGuid(),
-                    MobileNumber = "00989125412164"
-                }
+                Passenger = it
             })).ShouldNotThrow<WebServiceException>();
+            /*            Client.Invoking(x => x.Put(new PutPassenger
+                       {
+                          Passenger = new Passenger
+                           {
+                               Id = _testGuid,
+                               Name = "emaN",
+                               Family = "fdj",
+                               AgencyId = Guid.NewGuid(),
+                               MobileNumber = "00989125412164",
+                               BirthDate = DateTime.Now,
+                               PassportExpireDate = DateTime.Now,
+                               NationalCode = "123456789",
+                               PassportNo = "123456789"
+                           }
+                       })).ShouldNotThrow<WebServiceException>();*/
         }
 
         [Test]
@@ -66,7 +87,11 @@ namespace Tourine.Test
                     Name = "emaN",
                     Family = "fdj",
                     AgencyId = Guid.NewGuid(),
-                    MobileNumber = "09125412164"
+                    MobileNumber = "09125412164",
+                    BirthDate = DateTime.Now,
+                    NationalCode = "123456789",
+                    PassportExpireDate = DateTime.Now,
+                    PassportNo = "123456879"
                 }
             }))
             .ShouldThrow<WebServiceException>();
@@ -80,7 +105,6 @@ namespace Tourine.Test
             {
                 Passenger = new Passenger
                 {
-                    Id = _testGuid,
                     Name = "emaN",
                     Family = "fdj",
                     AgencyId = Guid.NewGuid(),
@@ -98,6 +122,12 @@ namespace Tourine.Test
                 Family = "Bghr",
                 AgencyId = Guid.NewGuid(),
                 MobileNumber = "09125412168"
+            });
+            Db.Insert(new Agency
+            {
+                Id = _testGuidAgency,
+                Name = "Taha",
+                PhoneNumber = "132456789"
             });
         }
     }

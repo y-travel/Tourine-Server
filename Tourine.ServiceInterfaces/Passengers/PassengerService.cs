@@ -1,9 +1,8 @@
 ﻿using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.Models.DatabaseModels;
-using Tourine.ServiceInterfaces.Passengers;
 
-namespace Tourine.ServiceInterfaces
+namespace Tourine.ServiceInterfaces.Passengers
 {
     public class PassengerService : AppService
     {
@@ -15,6 +14,8 @@ namespace Tourine.ServiceInterfaces
 
         public void Put(PutPassenger putPassenger)
         {
+            if (!Db.Exists<Passenger>(new { Id = putPassenger.Passenger.Id }))
+                throw HttpError.NotFound("");
             Db.Update(putPassenger.Passenger);
         }
 
@@ -27,6 +28,8 @@ namespace Tourine.ServiceInterfaces
         public void Delete(DeletePassenger deletePassenger)
         {
             if (deletePassenger.Id == null)
+                throw HttpError.NotFound("");
+            if (!Db.Exists<Passenger>(new  { Id = deletePassenger.Id }))
                 throw HttpError.NotFound("");
             Db.DeleteById<Passenger>(deletePassenger.Id);
         }

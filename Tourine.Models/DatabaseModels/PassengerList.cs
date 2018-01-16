@@ -5,8 +5,7 @@ namespace Tourine.Models.DatabaseModels
 {
     public class PassengerList
     {
-        [AutoIncrement]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [References(typeof(Block))]
         public Guid BlockId { get; set; }

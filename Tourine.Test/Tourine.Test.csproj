@@ -94,6 +94,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockServiceTest.cs" />
     <Compile Include="CustomerServiceTest.cs" />
     <Compile Include="DestinationServiceTest.cs" />
     <Compile Include="InMemoryDbTest.cs" />

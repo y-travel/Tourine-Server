@@ -3,9 +3,8 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.Models;
 using Tourine.Models.DatabaseModels;
-using Tourine.ServiceInterfaces.Tours;
 
-namespace Tourine.ServiceInterfaces
+namespace Tourine.ServiceInterfaces.Tours
 {
     public class TourService : AppService
     {
@@ -14,7 +13,9 @@ namespace Tourine.ServiceInterfaces
         {
             if (reqTour.Id == null)
                 throw HttpError.NotFound("");
-            var tour = Db.SingleById<Models.DatabaseModels.Tour>(reqTour.Id);
+            if (!Db.Exists<Tour>(new { Id = reqTour.Id }))
+                throw HttpError.NotFound("");
+            var tour = Db.SingleById<Tour>(reqTour.Id);
             Db.LoadReferences(tour);
             return tour;
         }
@@ -34,6 +35,8 @@ namespace Tourine.ServiceInterfaces
 
         public void Put(PutTour putTour)
         {
+            if (!Db.Exists<Tour>(new { Id = putTour.Tour.Id }))
+                throw HttpError.NotFound("");
             Db.UpdateOnly(new Tour
             {
                 AdultCount = putTour.Tour.AdultCount,
@@ -64,7 +67,7 @@ namespace Tourine.ServiceInterfaces
                 tour.RoomPrice,
                 tour.StartDate
             }
-            , where: tour => tour.Code == putTour.Tour.Code);
+            , @where: tour => tour.Code == putTour.Tour.Code);
         }
     }
 }

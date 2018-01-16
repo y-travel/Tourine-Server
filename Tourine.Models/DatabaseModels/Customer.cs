@@ -5,8 +5,7 @@ namespace Tourine.Models.DatabaseModels
 {
     public class Customer
     {
-        [AutoIncrement]
-        public Guid Id { set; get; }
+        public Guid Id { set; get; } = Guid.NewGuid();
         public string Name { get; set; }
         public string Family { get; set; }
         public string MobileNumber { get; set; }

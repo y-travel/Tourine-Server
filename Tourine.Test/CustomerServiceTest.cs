@@ -29,6 +29,7 @@ namespace Tourine.Test
         {
             var res = Client.Get(new GetCustomer { Id = _testId });
             res.Should().NotBeNull();
+            res.Id.Should().Be(_testId);
         }
 
         [Test]
@@ -62,17 +63,16 @@ namespace Tourine.Test
                 Customer = new Customer
                 {
                     Id = Guid.NewGuid(),
-                    Name = "A--",
-                    Family = "M--",
-                    MobileNumber = "09123456789",
-                    Phone = "09123654789"
+                    Name = "A-6",
+                    Family = "M-5",
+                    MobileNumber = "09123456789"
                 }
             })).ShouldThrow<WebServiceException>();
 
         }
 
         [Test]
-        public void DeleteCustomer_should_return_result()
+        public void DeleteCustomer_should_not_throw_exception()
         {
             Client.Invoking(x => x.Delete(new DeleteCustomer { Id = _testId }))
                 .ShouldNotThrow<WebServiceException>();

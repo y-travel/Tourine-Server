@@ -28,23 +28,23 @@ namespace Tourine.Test
         [Test]
         public void GetTour_should_return_result()
         {
-            var tourInfo = Client.Get<Tour>(new GetTour { Id = _testTourId });
-            tourInfo.Should().NotBeNull();
+            var dto = new GetTour();
+            dto.Id = _testTourId;
+            try
+            {
+   var tourInfo = Client.Get<Tour>(dto);
+                tourInfo.Id.Should().Be(_testTourId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+         
+         
+/*            tourInfo.Should().NotBeNull();
             tourInfo.Destination.Should().NotBeNull();
-            tourInfo.Place.Should().NotBeNull();
-        }
-
-        public void CreateTours()
-        {
-            var testPdId = Guid.NewGuid();
-            var testDId = Guid.NewGuid();
-            var testPId = Guid.NewGuid();
-            Db.Insert(new Place { Id = testPId, Name = "Hotel" });
-            Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
-            Db.Insert(new Currency { Id = 1, Name = "Rial", Factor = 1 });
-            Db.Insert(new PriceDetail { Id = testPdId, CurrencyId = 1, Value = 4000 });
-            Db.Insert(new Tour { Id = _testTourId, DestinationId = testDId, PlaceId = testPId, Status = TourStatus.Created });
-
+            tourInfo.Place.Should().NotBeNull();*/
         }
 
         [Test]
@@ -54,14 +54,13 @@ namespace Tourine.Test
             {
                 Tour = new Tour
                 {
-                    Id = Guid.NewGuid(),
                     Code = "555",
-                    Capacity = 5,
                     DestinationId = Guid.NewGuid(),
                     PlaceId = Guid.NewGuid(),
                     Duration = 12,
                     IsFlight = true,
                     AdultCount = 80,
+                    InfantCount = 10,
                     AdultMinPrice = 8000,
                     InfantPrice = 65000,
                     BusPrice = 50000,
@@ -69,6 +68,34 @@ namespace Tourine.Test
                     FoodPrice = 35000
                 }
             })).ShouldNotThrow<WebServiceException>();
+        }
+
+
+        public void CreateTours()
+        {
+            var testDId = Guid.NewGuid();
+            var testPId = Guid.NewGuid();
+            Db.Insert(new Place { Id = testPId, Name = "Hotel" });
+            Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
+            Db.Insert(new Tour
+            {
+                Id = _testTourId,
+                DestinationId = testDId,
+                AdultCount = 12,
+                InfantCount = 10,
+                Code = "123456",
+                AdultMinPrice = 1200,
+                BusPrice = 120,
+                Duration = 10,
+                FoodPrice = 120,
+                RoomPrice = 130,
+                PlaceId = testPId,
+                Status = TourStatus.Created,
+                StartDate = DateTime.Now,
+                InfantPrice = 100,
+                IsFlight = true
+            });
+
         }
     }
 }

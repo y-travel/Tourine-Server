@@ -5,8 +5,7 @@ namespace Tourine.Models.DatabaseModels
 {
     public class AgencyCustomer
     {
-        [AutoIncrement]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [References(typeof(Agency))]
         public Guid AgencyId { get; set; }

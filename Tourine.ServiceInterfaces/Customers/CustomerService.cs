@@ -1,9 +1,8 @@
 ﻿using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.Models.DatabaseModels;
-using Tourine.ServiceInterfaces.Customers;
 
-namespace Tourine.ServiceInterfaces
+namespace Tourine.ServiceInterfaces.Customers
 {
     public class CustomerService : AppService
     {
@@ -12,6 +11,8 @@ namespace Tourine.ServiceInterfaces
         public object Get(GetCustomer getCustomer)
         {
             if (getCustomer.Id == null)
+                throw HttpError.NotFound("");
+            if (!Db.Exists<Customer>(new { Id = getCustomer.Id }))
                 throw HttpError.NotFound("");
             var item = Db.SingleById<Customer>(getCustomer.Id);
             return item;
@@ -32,11 +33,15 @@ namespace Tourine.ServiceInterfaces
         {
             if (putCustomer.Customer.Id == null)
                 throw HttpError.NotFound("");
+            if (!Db.Exists<Customer>(new { Id = putCustomer.Customer.Id }))
+                throw HttpError.NotFound("");
             Db.Update(putCustomer.Customer);
         }
 
         public void Delete(DeleteCustomer deleteCustomer)
         {
+            if (!Db.Exists<Customer>(new { Id = deleteCustomer.Id }))
+                throw HttpError.NotFound("");
             Db.DeleteById<Customer>(deleteCustomer.Id);
         }
     }

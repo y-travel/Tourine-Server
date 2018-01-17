@@ -1,7 +1,9 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
+using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Places;
 
-namespace Tourine.Models.DatabaseModels
+namespace Tourine.ServiceInterfaces.Tours
 {
     public class Tour
     {

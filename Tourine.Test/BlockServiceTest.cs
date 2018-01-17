@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.Models.DatabaseModels;
 using Tourine.ServiceInterfaces.Blocks;
 
 namespace Tourine.Test

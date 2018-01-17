@@ -1,8 +1,6 @@
 ﻿using System;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.Models;
-using Tourine.Models.DatabaseModels;
 
 namespace Tourine.ServiceInterfaces.Tours
 {

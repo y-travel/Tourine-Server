@@ -1,7 +1,9 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
+using Tourine.ServiceInterfaces.Blocks;
+using Tourine.ServiceInterfaces.Passengers;
 
-namespace Tourine.Models.DatabaseModels
+namespace Tourine.ServiceInterfaces
 {
     public class PassengerList
     {

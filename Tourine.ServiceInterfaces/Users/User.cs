@@ -1,12 +1,12 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
-using ServiceStack.FluentValidation;
+using Tourine.ServiceInterfaces.Customers;
 
-namespace Tourine.Models.DatabaseModels
+namespace Tourine.ServiceInterfaces.Users
 {
     public class User
     {
-        public Guid Id { get; set; } = new Guid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Username { get; set; }
         public string Password { get; set; }
 

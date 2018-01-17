@@ -1,4 +1,4 @@
-﻿namespace Tourine.Models
+﻿namespace Tourine.ServiceInterfaces
 {
     public enum Role
     {

@@ -3,8 +3,9 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.Models;
-using Tourine.Models.DatabaseModels;
+using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Places;
 using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.Test

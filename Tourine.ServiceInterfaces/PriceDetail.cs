@@ -1,7 +1,8 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
+using Tourine.ServiceInterfaces.Tours;
 
-namespace Tourine.Models.DatabaseModels
+namespace Tourine.ServiceInterfaces
 {
     public class PriceDetail
     { 

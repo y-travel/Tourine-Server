@@ -5,7 +5,14 @@ using NUnit.Framework;
 using ServiceStack.OrmLite;
 using Tourine;
 using Tourine.Common;
-using Tourine.Models.DatabaseModels;
+using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Blocks;
+using Tourine.ServiceInterfaces.Customers;
+using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Places;
+using Tourine.ServiceInterfaces.Tours;
+using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {

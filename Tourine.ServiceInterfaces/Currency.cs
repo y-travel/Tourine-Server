@@ -1,6 +1,6 @@
 ﻿using ServiceStack.DataAnnotations;
 
-namespace Tourine.Models.DatabaseModels
+namespace Tourine.ServiceInterfaces
 {
     public class Currency
     {

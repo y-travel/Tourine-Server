@@ -3,8 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.Models;
-using Tourine.Models.DatabaseModels;
+using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
@@ -32,6 +31,35 @@ namespace Tourine.Test
             userInfo.Should().NotBeNull();
         }
 
+        [Test]
+        public void PostUser_should_throw_exception()
+        {
+            Client.Invoking(x => x.Post(new PostUser
+            {
+                User = new User
+                {
+                    Username = "",
+                    Password = "12009",
+                    Role = Role.Admin
+
+                }
+            })).ShouldThrow<WebServiceException>();
+        }
+
+        [Test]
+        public void PostUser_should_throw_not_exception()
+        {
+            Client.Invoking(x => x.Post(new PostUser
+            {
+                User = new User
+                {
+                    Username = "test",
+                    Password = "12345678",
+                    Role = Role.Admin
+
+                }
+            })).ShouldNotThrow<WebServiceException>();
+        }
         public void CreateUsers()
         {
             Db.Insert(new User

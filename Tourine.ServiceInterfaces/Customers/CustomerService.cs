@@ -1,6 +1,5 @@
 ﻿using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.Models.DatabaseModels;
 
 namespace Tourine.ServiceInterfaces.Customers
 {

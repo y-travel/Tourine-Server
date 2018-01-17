@@ -61,7 +61,7 @@ namespace Tourine.Common
                 AdminAuthSecret = "123456"
             });
             container.Register<IDbConnectionFactory>(ConnectionFactory);
-            container.RegisterGeneric(typeof(IValidator<>), Assembly.Load("Tourine.Models"));
+            container.RegisterGeneric(typeof(IValidator<>), Assembly.Load("Tourine.ServiceInterfaces"));
             container.Register(Settings);
             GlobalRequestFilters.Add(ValidationFilter);
             Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });

@@ -78,26 +78,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseModels\Agency.cs" />
-    <Compile Include="DatabaseModels\AgencyCustomer.cs" />
-    <Compile Include="DatabaseModels\Block.cs" />
-    <Compile Include="DatabaseModels\Currency.cs" />
-    <Compile Include="DatabaseModels\Customer.cs" />
-    <Compile Include="DatabaseModels\Destination.cs" />
-    <Compile Include="DatabaseModels\PassengerList.cs" />
-    <Compile Include="DatabaseModels\Place.cs" />
-    <Compile Include="DatabaseModels\PriceDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DatabaseModels\Passenger.cs" />
-    <Compile Include="DatabaseModels\Tour.cs" />
-    <Compile Include="DatabaseModels\User.cs" />
-    <Compile Include="Role.cs" />
-    <Compile Include="TourStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DatabaseModels\" />
     <Folder Include="ValidationModel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

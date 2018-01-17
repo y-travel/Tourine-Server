@@ -1,5 +1,4 @@
 ﻿using ServiceStack;
-using Tourine.Models.DatabaseModels;
 
 namespace Tourine.ServiceInterfaces.Places
 {

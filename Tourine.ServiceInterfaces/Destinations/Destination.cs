@@ -1,7 +1,6 @@
 ﻿using System;
-using ServiceStack.DataAnnotations;
 
-namespace Tourine.Models.DatabaseModels
+namespace Tourine.ServiceInterfaces.Destinations
 {
     public class Destination
     {

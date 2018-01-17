@@ -3,7 +3,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.Models.DatabaseModels;
 using Tourine.ServiceInterfaces.Customers;
 
 namespace Tourine.Test

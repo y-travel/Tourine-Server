@@ -1,5 +1,4 @@
 ﻿using ServiceStack.OrmLite;
-using Tourine.Models.DatabaseModels;
 
 namespace Tourine.ServiceInterfaces.Users
 {
@@ -10,6 +9,11 @@ namespace Tourine.ServiceInterfaces.Users
             var user = Db.SingleById<User>(request.Id);
             Db.LoadReferences(user);
             return user;
+        }
+
+        public void Post(PostUser postUser)
+        {
+            Db.Insert(postUser.User);
         }
     }
 }

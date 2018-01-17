@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using Funq;
 using ServiceStack;
 using ServiceStack.Admin;
@@ -9,6 +10,7 @@ using ServiceStack.FluentValidation;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
 using Tourine.ServiceInterfaces;
+using ValidationException = ServiceStack.FluentValidation.ValidationException;
 
 namespace Tourine.Common
 {
@@ -59,6 +61,7 @@ namespace Tourine.Common
                 AdminAuthSecret = "123456"
             });
             container.Register<IDbConnectionFactory>(ConnectionFactory);
+            container.RegisterGeneric(typeof(IValidator<>), Assembly.Load("Tourine.Models"));
             container.Register(Settings);
             GlobalRequestFilters.Add(ValidationFilter);
             Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
@@ -70,7 +73,7 @@ namespace Tourine.Common
         private void ValidationFilter(IRequest request, IResponse response, object dto)
         {
             var validatorType = typeof(IValidator<>).MakeGenericType(dto.GetType());
-            var validator = (IValidator)Container.TryResolve(validatorType);
+            var validator = (IValidator)Container.MyTryResolve(validatorType);
             var validationResult = validator?.Validate(dto);
             if (validationResult?.IsValid ?? true) return;
             var exception = new ValidationException(validationResult.Errors);

@@ -195,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppHost.cs" />
+    <Compile Include="Common\ContainerExtensions.cs" />
     <Compile Include="Common\CustomStaticFileHandler.cs" />
     <Compile Include="Common\FluentMigratorRunner.cs" />
     <Compile Include="Common\JsConfigurator.cs" />

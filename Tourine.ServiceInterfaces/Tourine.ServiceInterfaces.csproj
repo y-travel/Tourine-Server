@@ -99,6 +99,7 @@
     <Compile Include="Passengers\PutPassenger.cs" />
     <Compile Include="TourService.cs" />
     <Compile Include="UserService.cs" />
+    <Compile Include="UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

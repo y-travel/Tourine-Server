@@ -5,6 +5,7 @@ using System.Reflection;
 using Funq;
 using ServiceStack;
 using ServiceStack.Admin;
+using ServiceStack.Auth;
 using ServiceStack.Data;
 using ServiceStack.FluentValidation;
 using ServiceStack.OrmLite;
@@ -16,6 +17,7 @@ namespace Tourine.Common
 {
     public class AppHost : AppSelfHostBase
     {
+        public static readonly string JwtKey = "dG&^&%##R@F534dsaHGFD#$#RFDS";
         public Settings Settings { get; }
 
         public OrmLiteConnectionFactory ConnectionFactory { get; }
@@ -60,6 +62,7 @@ namespace Tourine.Common
                 MapExceptionToStatusCode = { { typeof(ValidationException), 422 } },
                 AdminAuthSecret = "123456"
             });
+
             container.Register<IDbConnectionFactory>(ConnectionFactory);
             container.RegisterGeneric(typeof(IValidator<>), Assembly.Load("Tourine.ServiceInterfaces"));
             container.Register(Settings);
@@ -68,6 +71,29 @@ namespace Tourine.Common
             Plugins.Add(new AdminFeature());
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new CorsFeature());
+            Plugins.Add(
+                new AuthFeature(() => new AuthUserSession(), new IAuthProvider[]
+                {
+                    new AuthProvider(container.Resolve<IDbConnectionFactory>()),
+                    new JwtAuthProvider
+                    {
+                        RequireSecureConnection = false,
+                        ExpireTokensIn = TimeSpan.FromDays(1000),
+                        AuthKey = JwtKey.ToAsciiBytes(),
+                        CreatePayloadFilter = (jwt, session) =>
+                        {
+                            jwt["user_id"] = session.UserAuthId;
+                        },
+                        PopulateSessionFilter = (session, jwt, request) =>
+                        {
+                            session.UserAuthId = jwt["user_id"];
+                        },
+                        PersistSession = true,
+                        SessionExpiry = TimeSpan.FromDays(365)
+                    }
+                })
+                { IncludeRegistrationService = false, IncludeAssignRoleServices = false, IncludeAuthMetadataProvider = false, HtmlRedirect = null }
+            );
         }
 
         private void ValidationFilter(IRequest request, IResponse response, object dto)

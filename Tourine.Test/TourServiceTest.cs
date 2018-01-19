@@ -31,21 +31,8 @@ namespace Tourine.Test
         {
             var dto = new GetTour();
             dto.Id = _testTourId;
-            try
-            {
-   var tourInfo = Client.Get<Tour>(dto);
-                tourInfo.Id.Should().Be(_testTourId);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-         
-         
-/*            tourInfo.Should().NotBeNull();
-            tourInfo.Destination.Should().NotBeNull();
-            tourInfo.Place.Should().NotBeNull();*/
+            var tourInfo = Client.Get<Tour>(dto);
+            tourInfo.Id.Should().Be(_testTourId);
         }
 
         [Test]
@@ -66,12 +53,57 @@ namespace Tourine.Test
                     InfantPrice = 65000,
                     BusPrice = 50000,
                     RoomPrice = 45000,
-                    FoodPrice = 35000
+                    FoodPrice = 35000,
+                    StartDate = DateTime.MaxValue
                 }
             })).ShouldNotThrow<WebServiceException>();
         }
 
+        [Test]
+        public void PutTour_should_not_throw_exceprion()
+        {
+            Client.Invoking(x=> x.Put(new PutTour{ Tour = new Tour
+            {
+                Id = _testTourId,
+                AdultCount = 12,
+                AdultMinPrice = 1200,
+                InfantCount = 12,
+                InfantPrice = 3000,
+                BusPrice = 120,
+                Code = "123",
+                FoodPrice = 100,
+                DestinationId = Guid.NewGuid(),
+                IsFlight = true,
+                Duration = 1,
+                PlaceId = Guid.NewGuid(),
+                RoomPrice = 16
+            }
+            })).ShouldNotThrow<WebServiceException>();
+        }
 
+        [Test]
+        public void PutTour_should_throw_exceprion()
+        {
+            Client.Invoking(x => x.Put(new PutTour
+            {
+                Tour = new Tour
+                {
+                    Id = Guid.NewGuid(),
+                    AdultCount = 12,
+                    AdultMinPrice = 1200,
+                    InfantCount = 12,
+                    InfantPrice = 3000,
+                    BusPrice = 120,
+                    Code = "123",
+                    FoodPrice = 100,
+                    DestinationId = Guid.NewGuid(),
+                    IsFlight = true,
+                    Duration = 1,
+                    PlaceId = Guid.NewGuid(),
+                    RoomPrice = 16
+                }
+            })).ShouldThrow<WebServiceException>();
+        }
         public void CreateTours()
         {
             var testDId = Guid.NewGuid();

@@ -9,6 +9,7 @@ using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Blocks;
 using Tourine.ServiceInterfaces.Customers;
 using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.PassengerList;
 using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Places;
 using Tourine.ServiceInterfaces.Tours;
@@ -92,7 +93,7 @@ public class GlobalFixture
 
         AppHost = (AppHost)new AppHost(settings, ConnectionFactory) { TestMode = true }.Init().Start(BaseUri);
 
-        TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Passenger), typeof(Customer), typeof(Block)};//should be fill with tables
+        TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Passenger), typeof(Customer), typeof(Block), typeof(PassengerList)};//should be fill with tables
 
         using (var db = ConnectionFactory.OpenDbConnection())
             db.CreateTables(false, TablesTypes);

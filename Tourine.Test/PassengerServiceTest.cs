@@ -59,21 +59,6 @@ namespace Tourine.Test
             {
                 Passenger = it
             })).ShouldNotThrow<WebServiceException>();
-            /*            Client.Invoking(x => x.Put(new PutPassenger
-                       {
-                          Passenger = new Passenger
-                           {
-                               Id = _testGuid,
-                               Name = "emaN",
-                               Family = "fdj",
-                               AgencyId = Guid.NewGuid(),
-                               MobileNumber = "00989125412164",
-                               BirthDate = DateTime.Now,
-                               PassportExpireDate = DateTime.Now,
-                               NationalCode = "123456789",
-                               PassportNo = "123456789"
-                           }
-                       })).ShouldNotThrow<WebServiceException>();*/
         }
 
         [Test]

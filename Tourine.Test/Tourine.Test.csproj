@@ -99,6 +99,7 @@
     <Compile Include="CustomerServiceTest.cs" />
     <Compile Include="DestinationServiceTest.cs" />
     <Compile Include="InMemoryDbTest.cs" />
+    <Compile Include="PassengerListServiceTest.cs" />
     <Compile Include="PassengerServiceTest.cs" />
     <Compile Include="ServiceTest.cs" />
     <Compile Include="TourServiceTest.cs" />

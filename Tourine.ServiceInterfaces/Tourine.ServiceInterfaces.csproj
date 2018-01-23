@@ -114,7 +114,6 @@
     <Compile Include="Tours\GetTour.cs" />
     <Compile Include="Tours\GetTours.cs" />
     <Compile Include="Tours\PostTour.cs" />
-    <Compile Include="Tours\PostTourValidator.cs" />
     <Compile Include="Tours\PutTour.cs" />
     <Compile Include="Tours\Tour.cs" />
     <Compile Include="Tours\TourService.cs" />
@@ -127,16 +126,12 @@
     <Compile Include="Users\PostUser.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserService.cs" />
-    <Compile Include="Users\PostUserValidator.cs" />
+    <Compile Include="Users\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tourine.Models\Tourine.Models.csproj">
-      <Project>{2441673a-d065-4801-bcd0-190be24e50c2}</Project>
-      <Name>Tourine.Models</Name>
-    </ProjectReference>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -120,10 +120,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Tourine.Models\Tourine.Models.csproj">
-      <Project>{2441673a-d065-4801-bcd0-190be24e50c2}</Project>
-      <Name>Tourine.Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Tourine.ServiceInterfaces\Tourine.ServiceInterfaces.csproj">
       <Project>{cfb41d35-98aa-4302-b0a9-de84af33b9c3}</Project>
       <Name>Tourine.ServiceInterfaces</Name>

@@ -28,9 +28,14 @@ namespace Tourine.ServiceInterfaces.Passengers
         {
             if (deletePassenger.Id == null)
                 throw HttpError.NotFound("");
-            if (!Db.Exists<Passenger>(new  { Id = deletePassenger.Id }))
+            if (!Db.Exists<Passenger>(new { Id = deletePassenger.Id }))
                 throw HttpError.NotFound("");
             Db.DeleteById<Passenger>(deletePassenger.Id);
+        }
+
+        public object Get(GetPassengerWithNatioanCode passengerWith)
+        {
+            return Db.Single<Passenger>(new { NationalCode = passengerWith.NationalCode });
         }
     }
 }

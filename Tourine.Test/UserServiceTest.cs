@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using ServiceStack.Text;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Users;
 
@@ -41,9 +42,10 @@ namespace Tourine.Test
                     Username = "",
                     Password = "12009",
                     Role = Role.Admin
-
                 }
-            })).ShouldThrow<WebServiceException>();
+            })).ShouldNotThrow<WebServiceException>();
+
+
         }
 
         [Test]

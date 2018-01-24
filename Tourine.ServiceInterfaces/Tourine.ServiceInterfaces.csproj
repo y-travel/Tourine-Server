@@ -103,6 +103,7 @@
     <Compile Include="Customers\PostCustomer.cs" />
     <Compile Include="Customers\PutCustomer.cs" />
     <Compile Include="Destinations\GetDestinations.cs" />
+    <Compile Include="Passengers\GetPassengerWithNatioanCode.cs" />
     <Compile Include="Passengers\Passenger.cs" />
     <Compile Include="Passengers\PassengerService.cs" />
     <Compile Include="Places\GetPlace.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="Users\PostUser.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserService.cs" />
-    <Compile Include="Users\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

@@ -98,6 +98,13 @@ namespace Tourine.Test
             })).ShouldNotThrow<WebServiceException>();
         }
 
+        [Test]
+        public void GetPassengerWithNationalCode_should_retuen_result()
+        {
+            var item = Client.Get(new GetPassengerWithNatioanCode { NationalCode = "0012234567" });
+            item.Name.Should().Be("emaN");
+        }
+
         public void CreatePassenger()
         {
             Db.Insert(new Passenger
@@ -106,7 +113,8 @@ namespace Tourine.Test
                 Name = "emaN",
                 Family = "Bghr",
                 AgencyId = Guid.NewGuid(),
-                MobileNumber = "09125412168"
+                MobileNumber = "09125412168",
+                NationalCode = "0012234567"
             });
             Db.Insert(new Agency
             {

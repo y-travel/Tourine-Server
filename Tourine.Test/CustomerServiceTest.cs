@@ -64,9 +64,44 @@ namespace Tourine.Test
                     Id = Guid.NewGuid(),
                     Name = "A-6",
                     Family = "M-5",
-                    MobileNumber = "09123456789"
+                    MobileNumber = "09123456789",
+                    Phone = "123456"
                 }
             })).ShouldThrow<WebServiceException>();
+
+        }
+
+        [Test]
+        public void PostCustomer_should_throw_exception()
+        {
+            Client.Invoking(x => x.Post(new PostCustomer
+            {
+                Customer = new Customer
+                {
+                    Id = Guid.NewGuid(),
+                    Family = "M-5",
+                    MobileNumber = "09123456789",
+                    Phone = "123456",
+                    Name = ""
+                }
+            })).ShouldThrow<WebServiceException>();
+
+        }
+
+        [Test]
+        public void PostCustomer_should_not_throw_exception()
+        {
+            Client.Invoking(x => x.Post(new PostCustomer
+            {
+                Customer = new Customer
+                {
+                    Id = Guid.NewGuid(),
+                    Family = "M-5",
+                    MobileNumber = "09123456789",
+                    Phone = "123456",
+                    Name = "123"
+                }
+            })).ShouldNotThrow<WebServiceException>();
 
         }
 

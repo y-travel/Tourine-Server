@@ -119,6 +119,7 @@
     <Compile Include="InMemoryDbTest.cs" />
     <Compile Include="PassengerListServiceTest.cs" />
     <Compile Include="PassengerServiceTest.cs" />
+    <Compile Include="PlaceServiceTest.cs" />
     <Compile Include="ServiceTest.cs" />
     <Compile Include="TourServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

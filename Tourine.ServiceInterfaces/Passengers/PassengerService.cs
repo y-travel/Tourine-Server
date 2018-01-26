@@ -35,6 +35,8 @@ namespace Tourine.ServiceInterfaces.Passengers
 
         public object Get(GetPassengerWithNatioanCode passengerWith)
         {
+            if (!Db.Exists<Passenger>(new {NationalCode = passengerWith.NationalCode}))
+                throw HttpError.NotFound("");
             return Db.Single<Passenger>(new { NationalCode = passengerWith.NationalCode });
         }
     }

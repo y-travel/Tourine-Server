@@ -105,6 +105,13 @@ namespace Tourine.Test
             item.Name.Should().Be("emaN");
         }
 
+        [Test]
+        public void GetPassengerWithNationalCode_should_throw_exception()
+        {
+            Client.Invoking(x => x.Get(new GetPassengerWithNatioanCode { NationalCode = "000000000" }))
+                .ShouldThrow<WebServiceException>();
+        }
+
         public void CreatePassenger()
         {
             Db.Insert(new Passenger

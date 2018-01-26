@@ -3,7 +3,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using ServiceStack.Text;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Users;
 
@@ -19,7 +18,7 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void GetUserInfo_should_throw_exception()
+        public void GetUser_should_throw_exception()
         {
             Client.Invoking(x => x.Get(new GetUser { Id = Guid.NewGuid() }))
                 .ShouldThrow<WebServiceException>();
@@ -39,26 +38,60 @@ namespace Tourine.Test
             {
                 User = new User
                 {
+                    CustomerId = Guid.NewGuid(),
                     Username = "",
-                    Password = "12009",
+                    Password = "123456789",
                     Role = Role.Admin
                 }
-            })).ShouldNotThrow<WebServiceException>();
+            })).ShouldThrow<WebServiceException>();
 
 
         }
 
         [Test]
-        public void PostUser_should_throw_not_exception()
+        public void PostUser_should_not_throw_exception()
         {
             Client.Invoking(x => x.Post(new PostUser
             {
                 User = new User
                 {
+                    CustomerId = Guid.NewGuid(),
                     Username = "test",
                     Password = "12345678",
                     Role = Role.Admin
 
+                }
+            })).ShouldNotThrow<WebServiceException>();
+        }
+
+        [Test]
+        public void PutUser_should_throw_exception()
+        {
+            Client.Invoking(u => u.Put(new PutUser
+            {
+                User = new User
+                {
+                    Id = Guid.NewGuid(),
+                    CustomerId = Guid.NewGuid(),
+                    Password = "12346789",
+                    Username = "validUserName",
+                    Role = Role.Admin
+                }
+            })).ShouldThrow<WebServiceException>();
+        }
+
+        [Test]
+        public void PutUser_should_not_throw_exception()
+        {
+            Client.Invoking(u => u.Put(new PutUser
+            {
+                User = new User
+                {
+                    Id = _testUserId,
+                    CustomerId = Guid.NewGuid(),
+                    Password = "vaidPass",
+                    Username = "validUserName",
+                    Role = Role.Admin
                 }
             })).ShouldNotThrow<WebServiceException>();
         }
@@ -67,8 +100,8 @@ namespace Tourine.Test
             Db.Insert(new User
             {
                 Id = _testUserId,
-                Username = "Ali",
-                Password = "123",
+                Username = "aias",
+                Password = "pass",
                 CustomerId = Guid.NewGuid(),
                 Role = Role.Admin
             });

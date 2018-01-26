@@ -1,4 +1,5 @@
-﻿using ServiceStack.OrmLite;
+﻿using ServiceStack;
+using ServiceStack.OrmLite;
 
 namespace Tourine.ServiceInterfaces.Users
 {
@@ -14,6 +15,13 @@ namespace Tourine.ServiceInterfaces.Users
         public void Post(PostUser postUser)
         {
             Db.Insert(postUser.User);
+        }
+
+        public void Put(PutUser putUser)
+        {
+            if (!Db.Exists<User>(new  { Id = putUser.User.Id}))
+                throw HttpError.NotFound("");
+            Db.Update(putUser.User);
         }
     }
 }

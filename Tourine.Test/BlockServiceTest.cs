@@ -33,7 +33,6 @@ namespace Tourine.Test
                     TourId = Guid.NewGuid(),
                     CustomerId = Guid.NewGuid(),
                     Price = 120000,
-                    Capacity = 1,
                     Code = "1",
                     SubmitDate = DateTime.Now
                 }
@@ -54,12 +53,46 @@ namespace Tourine.Test
             })).ShouldThrow<WebServiceException>();
         }
 
+        [Test]
+        public void PutBlockValidator_should_throw_exception()
+        {
+            Client.Invoking(x => x.Put(new PutBlock
+            {
+                Block = new Block
+                {
+                    Id = Guid.NewGuid(),
+                    Code = "132",
+                    CustomerId = Guid.NewGuid(),
+                    SubmitDate = DateTime.Today,
+                    TourId = Guid.NewGuid(),
+                    Price = 12000
+
+                }
+            })).ShouldThrow<WebServiceException>();
+        }
+
+        [Test]
+        public void PutBlockValidator_should_not_throw_exception()
+        {
+            Client.Invoking(x => x.Put(new PutBlock
+            {
+                Block = new Block
+                {
+                    Id = _testGuid,
+                    Code = "132",
+                    CustomerId = Guid.NewGuid(),
+                    SubmitDate = DateTime.Today,
+                    TourId = Guid.NewGuid(),
+                    Price = 12000
+                }
+            })).ShouldNotThrow<WebServiceException>();
+        }
+
         private void CreateBlock()
         {
             Db.Insert(new Block
             {
                 Id = _testGuid,
-                Capacity = 2,
                 Code = "1000",
                 CustomerId = Guid.NewGuid(),
                 Price = 200000,

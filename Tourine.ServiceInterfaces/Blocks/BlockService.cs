@@ -1,4 +1,5 @@
-﻿using ServiceStack;
+﻿using System;
+using ServiceStack;
 using ServiceStack.OrmLite;
 
 namespace Tourine.ServiceInterfaces.Blocks
@@ -16,6 +17,13 @@ namespace Tourine.ServiceInterfaces.Blocks
         public void Post(PostBlock postBlock)
         {
             Db.Insert(postBlock.Block);
+        }
+
+        public void Put(PutBlock block)
+        {
+            if (!Db.Exists<Block>(new { Id = block.Block.Id}))
+                throw HttpError.NotFound("");
+            Db.Update(block.Block);
         }
     }
 }

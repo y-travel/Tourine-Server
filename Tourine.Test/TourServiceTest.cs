@@ -36,6 +36,16 @@ namespace Tourine.Test
         }
 
         [Test]
+        public void GetTour_should_throw_exception()
+        {
+            Client.Invoking(t => t.Get(new GetTour
+                {
+                    Id = Guid.NewGuid()
+                }))
+                .ShouldThrow<WebServiceException>();
+        }
+
+        [Test]
         public void PostTour_should_not_return_exception()
         {
             Client.Invoking(x => x.Post(new PostTour
@@ -60,6 +70,30 @@ namespace Tourine.Test
         }
 
         [Test]
+        public void PostTour_should_return_exception()
+        {
+            Client.Invoking(x => x.Post(new PostTour
+            {
+                Tour = new Tour
+                {
+                    Code = "",
+                    DestinationId = Guid.NewGuid(),
+                    PlaceId = Guid.NewGuid(),
+                    Duration = 12,
+                    IsFlight = true,
+                    AdultCount = 80,
+                    InfantCount = 10,
+                    AdultMinPrice = 8000,
+                    InfantPrice = 65000,
+                    BusPrice = 50000,
+                    RoomPrice = 45000,
+                    FoodPrice = 35000,
+                    StartDate = DateTime.MinValue
+                }
+            })).ShouldThrow<WebServiceException>();
+        }
+
+        [Test]
         public void PutTour_should_not_throw_exceprion()
         {
             Client.Invoking(x=> x.Put(new PutTour{ Tour = new Tour
@@ -76,7 +110,8 @@ namespace Tourine.Test
                 IsFlight = true,
                 Duration = 1,
                 PlaceId = Guid.NewGuid(),
-                RoomPrice = 16
+                RoomPrice = 16,
+                StartDate = DateTime.Now
             }
             })).ShouldNotThrow<WebServiceException>();
         }
@@ -100,7 +135,8 @@ namespace Tourine.Test
                     IsFlight = true,
                     Duration = 1,
                     PlaceId = Guid.NewGuid(),
-                    RoomPrice = 16
+                    RoomPrice = 16,
+                    StartDate = DateTime.Now
                 }
             })).ShouldThrow<WebServiceException>();
         }

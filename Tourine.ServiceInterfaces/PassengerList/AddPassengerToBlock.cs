@@ -2,7 +2,7 @@
 
 namespace Tourine.ServiceInterfaces.PassengerList
 {
-    [Route("/AddPassengerToBlock/", "POST")]
+    [Route("/passengerBlock/", "POST")]
     public class AddPassengerToBlock : IReturn
     {
         public PassengerList PassengerList { get; set; }

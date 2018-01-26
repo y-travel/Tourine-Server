@@ -9,8 +9,6 @@ namespace Tourine.ServiceInterfaces.Tours
         public IAutoQueryDb AutoQuery { get; set; }
         public object Get(GetTour reqTour)
         {
-            if (reqTour.Id == null)
-                throw HttpError.NotFound("");
             if (!Db.Exists<Tour>(new { Id = reqTour.Id }))
                 throw HttpError.NotFound("");
             var tour = Db.SingleById<Tour>(reqTour.Id);

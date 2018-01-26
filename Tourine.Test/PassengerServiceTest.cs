@@ -93,9 +93,32 @@ namespace Tourine.Test
                     Name = "emaN",
                     Family = "fdj",
                     AgencyId = Guid.NewGuid(),
-                    MobileNumber = "09125412162"
+                    MobileNumber = "09125412162",
+                    BirthDate = DateTime.Today,
+                    NationalCode = "1234567890",
+                    PassportExpireDate = DateTime.MaxValue,
+                    PassportNo = "12345689"
                 }
             })).ShouldNotThrow<WebServiceException>();
+        }
+
+        [Test]
+        public void PostPassenger_should_return_exception()
+        {
+
+            Client.Invoking(x => x.Post(new PostPassenger
+            {
+                Passenger = new Passenger
+                {
+                    Name = "emaN",
+                    Family = "fdj",
+                    AgencyId = Guid.NewGuid(),
+                    MobileNumber = "09125412162",
+                    BirthDate = DateTime.Today,
+                    NationalCode = "1234567890",
+                    PassportExpireDate = DateTime.MaxValue
+                }
+            })).ShouldThrow<WebServiceException>();
         }
 
         [Test]

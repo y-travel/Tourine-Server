@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using Funq;
+using Quartz;
+using Quartz.Impl;
 using ServiceStack;
 using ServiceStack.Admin;
 using ServiceStack.Auth;
@@ -67,6 +69,7 @@ namespace Tourine.Common
             container.RegisterGeneric(typeof(IValidator<>), Assembly.Load("Tourine.ServiceInterfaces"));
             container.Register(Settings);
             GlobalRequestFilters.Add(ValidationFilter);
+            ConfigureQuartzJobs();
             Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
             Plugins.Add(new AdminFeature());
             Plugins.Add(new PostmanFeature());
@@ -105,6 +108,29 @@ namespace Tourine.Common
             var exception = new ValidationException(validationResult.Errors);
             var error = HostContext.RaiseServiceException(request, dto, exception) ?? DtoUtils.CreateErrorResponse(dto, exception);
             response.WriteToResponse(request, error);
+        }
+
+        public static void ConfigureQuartzJobs()
+        {
+            // construct a scheduler factory
+            ISchedulerFactory schedFact = new StdSchedulerFactory();
+
+            // get a scheduler
+            var sched = schedFact.GetScheduler();
+            sched.Start();
+            IJobDetail job = JobBuilder.Create<Job>()
+                .WithIdentity("SendJob")
+                .Build();
+
+
+            var trigger = TriggerBuilder.Create()
+                .WithIdentity("SendTrigger")
+                .WithSimpleSchedule(x => x.WithIntervalInMinutes(15).RepeatForever())
+                //.StartAt(startTime)
+                .StartNow()
+                .Build();
+
+            //sched.ScheduleJob(job, cronTrigger);
         }
     }
 }

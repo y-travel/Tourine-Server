@@ -25,6 +25,14 @@ namespace Tourine.Test
             {
                 Tour = new Tour
                 {
+                    Code = "123",
+                    AdultCount = 3,
+                    DestinationId = Guid.NewGuid(),
+                    Duration = 1,
+                    InfantCount = 12,
+                    IsFlight = true,
+                    PlaceId = Guid.NewGuid(),
+                    AdultMinPrice = 12000,
                     StartDate = DateTime.Today
                 }
             })).ShouldNotThrow<WebServiceException>();
@@ -36,6 +44,14 @@ namespace Tourine.Test
             {
                 Tour = new Tour
                 {
+                    Code = "123",
+                    AdultCount = 3,
+                    DestinationId = Guid.NewGuid(),
+                    Duration = 1,
+                    InfantCount = 12,
+                    IsFlight = true,
+                    PlaceId = Guid.NewGuid(),
+                    AdultMinPrice = 12000,
                     StartDate = DateTime.MinValue
                 }
             })).ShouldThrow<WebServiceException>();

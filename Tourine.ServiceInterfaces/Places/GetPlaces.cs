@@ -3,7 +3,7 @@
 namespace Tourine.ServiceInterfaces.Places
 {
     [Route("/places")]
-    public class GetPlace : QueryDb<Place>
+    public class GetPlaces : QueryDb<Place>
     {
     }
 }

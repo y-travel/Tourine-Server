@@ -19,7 +19,7 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void GetPassenger_should_return_result()
+        public void GetPassengers_should_return_result()
         {
             var res = Client.Get(new GetPassengers());
             res.Results.Count.Should().Be(1);
@@ -124,14 +124,28 @@ namespace Tourine.Test
         [Test]
         public void GetPassengerWithNationalCode_should_retuen_result()
         {
-            var item = Client.Get(new GetPassengerWithNatioanCode { NationalCode = "0012234567" });
+            var item = Client.Get(new GetPassengerFromNc { NationalCode = "0012234567" });
             item.Name.Should().Be("emaN");
         }
 
         [Test]
         public void GetPassengerWithNationalCode_should_throw_exception()
         {
-            Client.Invoking(x => x.Get(new GetPassengerWithNatioanCode { NationalCode = "000000000" }))
+            Client.Invoking(x => x.Get(new GetPassengerFromNc { NationalCode = "000000000" }))
+                .ShouldThrow<WebServiceException>();
+        }
+
+        [Test]
+        public void FindPassengerInAgency_should_return_result()
+        {
+            var item = Client.Get(new FindPassengerInAgency { Str = "12", AgencyId = _testGuidAgency });
+            item.Results.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void FindPassengerInAgency_should_throw_exception()
+        {
+            Client.Invoking(p => p.Get(new FindPassengerInAgency { Str = "r", AgencyId = Guid.NewGuid() }))
                 .ShouldThrow<WebServiceException>();
         }
 
@@ -142,7 +156,7 @@ namespace Tourine.Test
                 Id = _testGuid,
                 Name = "emaN",
                 Family = "Bghr",
-                AgencyId = Guid.NewGuid(),
+                AgencyId = _testGuidAgency,
                 MobileNumber = "09125412168",
                 NationalCode = "0012234567"
             });

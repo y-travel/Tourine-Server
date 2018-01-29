@@ -33,11 +33,20 @@ namespace Tourine.ServiceInterfaces.Passengers
             Db.DeleteById<Passenger>(deletePassenger.Id);
         }
 
-        public object Get(GetPassengerWithNatioanCode passengerWith)
+        public object Get(GetPassengerFromNc fromNc)
         {
-            if (!Db.Exists<Passenger>(new {NationalCode = passengerWith.NationalCode}))
+            if (!Db.Exists<Passenger>(new { NationalCode = fromNc.NationalCode }))
                 throw HttpError.NotFound("");
-            return Db.Single<Passenger>(new { NationalCode = passengerWith.NationalCode });
+            return Db.Single<Passenger>(new { NationalCode = fromNc.NationalCode });
         }
+
+        public object Get(FindPassengerInAgency passengers)
+        {
+            if (!Db.Exists<Agency>(new Agency() { Id = passengers.AgencyId }))
+                throw HttpError.NotFound("");
+            var item = Db.From<Passenger>().Where(p => (p.AgencyId == passengers.AgencyId) && (p.Name.Contains(passengers.Str) || p.Family.Contains(passengers.Str) || p.MobileNumber.Contains(passengers.Str) || p.NationalCode.Contains(passengers.Str) || p.PassportNo.Contains(passengers.Str)));
+            return AutoQuery.Execute(passengers, item);
+        }
+
     }
 }

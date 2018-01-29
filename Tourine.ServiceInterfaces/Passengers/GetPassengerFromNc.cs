@@ -3,7 +3,7 @@
 namespace Tourine.ServiceInterfaces.Passengers
 {
     [Route("/passenger/{NationalCode}", "GET")]
-    public class GetPassengerWithNatioanCode : IReturn<Passenger>
+    public class GetPassengerFromNc : IReturn<Passenger>
     {
         public string NationalCode { get; set; }
     }

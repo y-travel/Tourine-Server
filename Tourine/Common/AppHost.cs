@@ -112,25 +112,21 @@ namespace Tourine.Common
 
         public static void ConfigureQuartzJobs()
         {
-            // construct a scheduler factory
             ISchedulerFactory schedFact = new StdSchedulerFactory();
 
-            // get a scheduler
             var sched = schedFact.GetScheduler();
             sched.Start();
-            IJobDetail job = JobBuilder.Create<Job>()
+            var job = JobBuilder.Create<Job>()
                 .WithIdentity("SendJob")
                 .Build();
-
 
             var trigger = TriggerBuilder.Create()
                 .WithIdentity("SendTrigger")
                 .WithSimpleSchedule(x => x.WithIntervalInMinutes(15).RepeatForever())
-                //.StartAt(startTime)
                 .StartNow()
                 .Build();
 
-            //sched.ScheduleJob(job, cronTrigger);
+            sched.ScheduleJob(job, trigger);
         }
     }
 }

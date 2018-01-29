@@ -210,6 +210,7 @@
     <Compile Include="Migration\20171007214500_InitDatabase.cs" />
     <Compile Include="Migration\20180113203452_DeveloperSeed.cs" />
     <Compile Include="Migration\20180113205532_UpdateSchema.cs" />
+    <Compile Include="Migration\20180129061255_TourStateChangeSp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +221,9 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Migration\20180129061255_TourStateChangeSp.sql">
+      <DependentUpon>20180129061255_TourStateChangeSp.cs</DependentUpon>
+    </EmbeddedResource>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

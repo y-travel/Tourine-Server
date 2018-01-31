@@ -207,10 +207,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Job.cs" />
-    <Compile Include="Migration\20171007214500_InitDatabase.cs" />
-    <Compile Include="Migration\20180113203452_DeveloperSeed.cs" />
-    <Compile Include="Migration\20180113205532_UpdateSchema.cs" />
-    <Compile Include="Migration\20180129061255_TourStateChangeSp.cs" />
+    <Compile Include="Migration\20180131160000_InitDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -221,8 +218,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Migration\20180129061255_TourStateChangeSp.sql">
-      <DependentUpon>20180129061255_TourStateChangeSp.cs</DependentUpon>
+    <EmbeddedResource Include="Migration\20180131160000_InitDatabase.sql">
+      <DependentUpon>20180131160000_InitDatabase.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -244,17 +241,6 @@
       <Project>{cfb41d35-98aa-4302-b0a9-de84af33b9c3}</Project>
       <Name>Tourine.ServiceInterfaces</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migration\20171007214500_InitDatabase.sql">
-      <DependentUpon>20171007214500_InitDatabase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\20180113203452_DeveloperSeed.sql">
-      <DependentUpon>20180113203452_DeveloperSeed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\20180113205532_UpdateSchema.sql">
-      <DependentUpon>20180113205532_UpdateSchema.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="job_scheduling_data_2_0.xsd">

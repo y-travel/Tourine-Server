@@ -78,8 +78,10 @@ CREATE TABLE dbo.TourDetail (
   RoomPrice bigint NULL,
   FoodPrice bigint NULL,
   SubmitDate datetime NOT NULL,
+  LeaderId uniqueidentifier NULL,
   CONSTRAINT PK_TourDetail_Id PRIMARY KEY CLUSTERED (Id),
   CONSTRAINT FK_TourDetail_Destination_Id FOREIGN KEY (DestinationId) REFERENCES dbo.Destination (Id),
+  CONSTRAINT FK_TourDetail_Passenger_Id FOREIGN KEY (LeaderId) REFERENCES dbo.Passenger (Id),
   CONSTRAINT FK_TourDetail_Place_Id FOREIGN KEY (PlaceId) REFERENCES dbo.Place (Id)
 )
 ON [PRIMARY]
@@ -169,7 +171,7 @@ ON [PRIMARY]
 GO
 
 --
--- Create foreign key "FK_Tour_Tour_ID" on table "dbo.Tour"
+-- Create foreign key "FK_Tour_Tour_Id" on table "dbo.Tour"
 --
 PRINT (N'Create foreign key "FK_Tour_Tour_Id" on table "dbo.Tour"')
 GO
@@ -189,10 +191,8 @@ CREATE TABLE dbo.Team (
   Buyer uniqueidentifier NOT NULL,
   Count int NULL,
   SubmitDate datetime NOT NULL,
-  LeaderId uniqueidentifier NULL,
   CONSTRAINT PK_Team_Id PRIMARY KEY CLUSTERED (Id),
   CONSTRAINT FK_Team_Passenger_Id FOREIGN KEY (Buyer) REFERENCES dbo.Passenger (Id),
-  CONSTRAINT FK_Team_Passenger_Leader_Id FOREIGN KEY (LeaderId) REFERENCES dbo.Passenger (Id),
   CONSTRAINT FK_Team_Tour_Id FOREIGN KEY (TourId) REFERENCES dbo.Tour (Id)
 )
 ON [PRIMARY]

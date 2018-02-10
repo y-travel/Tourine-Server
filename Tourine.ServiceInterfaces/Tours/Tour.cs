@@ -1,39 +1,33 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
-using Tourine.ServiceInterfaces.Destinations;
-using Tourine.ServiceInterfaces.Places;
+using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
     public class Tour
     {
         public Guid Id { get; set; } = Guid.NewGuid();
-        public string Code { get; set; }
-
-        [References(typeof(Destination))]
-        public Guid DestinationId { get; set; }
-        [Reference]
-        public Destination Destination { get; set; }
-
-        [Compute,Ignore]
         public int Capacity { get; set; }
-        public TourStatus Status { get; set; } = TourStatus.Created;
-        public int Duration { get; set; }
-        public DateTime StartDate { get; set; }
-
-        [References(typeof(Place))]
-        public Guid PlaceId { get; set; }
+        public int BasePrice { get; set; }
+        
+        [References(typeof(Tour))]
+        public Guid ParentId { get; set; }
         [Reference]
-        public Place Place { get; set; }
+        public Tour Parent { get; set; }
 
-        public bool IsFlight { get; set; }
-        public int AdultCount { get; set; }
-        public int AdultMinPrice { get; set; }
-        public int BusPrice { get; set; }
-        public int RoomPrice { get; set; }
-        public int FoodPrice { get; set; }
-        public int InfantPrice { get; set; }
-        public int InfantCount { get; set; }
+        public string Code { get; set; }
+        public TourStatus Status { get; set; } = TourStatus.Created;
+
+        [References(typeof(TourDetail))]
+        public Guid TourDetailId { get; set; }
+        [Reference]
+        public TourDetail TourDetail { get; set; }
+
+        [References(typeof(Agency))]
+        public Guid AgencyId { get; set; }
+        [Reference]
+        public Agency Agency { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

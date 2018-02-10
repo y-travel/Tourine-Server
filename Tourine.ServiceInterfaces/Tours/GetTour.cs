@@ -3,7 +3,7 @@ using ServiceStack;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
-    [Route("/tour/{Id}", "GET")]
+    [Route("/tour/{ID}", "GET")]
     public class GetTour : IGet
     {
         public Guid Id { get; set; }

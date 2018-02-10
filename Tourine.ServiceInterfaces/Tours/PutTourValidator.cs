@@ -7,13 +7,8 @@ namespace Tourine.ServiceInterfaces.Tours
         public PutTourValidator()
         {
             RuleFor(t => t.Tour.Id).NotEmpty();
-            RuleFor(t => t.Tour.DestinationId).NotEmpty();
-            RuleFor(t => t.Tour.AdultCount).NotEmpty();
             RuleFor(t => t.Tour.Code).NotEmpty();
-            RuleFor(t => t.Tour.Duration).NotEmpty();
-            RuleFor(t => t.Tour.IsFlight).NotEmpty();
-            RuleFor(t => t.Tour.PlaceId).NotEmpty();
-            RuleFor(t => t.Tour.StartDate).NotEmpty();
+            RuleFor(t => t.Tour.TourDetailId).NotEmpty();
         }
     }
 }

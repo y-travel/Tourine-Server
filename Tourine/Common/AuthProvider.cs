@@ -5,6 +5,8 @@ using ServiceStack.Auth;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
+using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Customers;
 using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Common
@@ -13,7 +15,7 @@ namespace Tourine.Common
     {
         private IDbConnectionFactory ConnectionFactory { get; }
 
-        private LoginInfo LoginInfo { get; set; }
+        private User User { get; set; }
 
         public AuthProvider(IDbConnectionFactory connectionFactory)
         {
@@ -25,34 +27,18 @@ namespace Tourine.Common
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
                 return false;
             using (var db = ConnectionFactory.OpenDbConnection())
-                LoginInfo = db.Single<User>(x => x.Username == userName && x.Password == password)
-                    .ConvertTo<LoginInfo>();
-            return LoginInfo != null;
+            {
+                User = db.Single<User>(x => x.Username == userName && x.Password == password);
+                if(User != null) db.LoadReferences(User);
+            }
+            return User != null;
         }
 
         public override IHttpResult OnAuthenticated(IServiceBase authService, IAuthSession session, IAuthTokens tokens, Dictionary<string, string> authInfo)
         {
-            session.UserAuthId = LoginInfo.Id.ToString();
-            session.DisplayName = $"{LoginInfo.Name} {LoginInfo.Family}";
+            session.UserAuthId = User.Id.ToString();
+            session.DisplayName = $"{User.Customer.Name} {User.Customer.Family}";
             return base.OnAuthenticated(authService, session, tokens, authInfo);
         }
     }
-
-    public class LoginInfo
-    {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Family { get; set; }
-
-        public string MobileNumber { get; set; }
-
-        public string Password { get; set; }
-
-        public string[] Roles { get; set; }
-
-        public bool IsLaboratory { get; set; }
-    }
-
 }

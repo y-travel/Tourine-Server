@@ -1,5 +1,7 @@
-﻿using ServiceStack;
+﻿using System;
+using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces.AgencyCustomers;
 
 namespace Tourine.ServiceInterfaces.Customers
 {
@@ -7,6 +9,7 @@ namespace Tourine.ServiceInterfaces.Customers
     {
         public IAutoQueryDb AutoQuery { get; set; }
 
+        [Authenticate]
         public object Get(GetCustomer getCustomer)
         {
             if (getCustomer.Id == null)
@@ -17,31 +20,47 @@ namespace Tourine.ServiceInterfaces.Customers
             return item;
         }
 
+        [Authenticate]
         public object Get(GetCustomers getCustomers)
         {
             var query = AutoQuery.CreateQuery(getCustomers, Request.GetRequestParams());
             return AutoQuery.Execute(getCustomers, query);
         }
 
-        public void Post(PostCustomer postCustomer)
+        [Authenticate]
+        public object Post(CreateCustomer createCustomer)
         {
-            Db.Insert(postCustomer.Customer);
+
+            createCustomer.Customer.Id = Guid.NewGuid();
+            Db.Insert(createCustomer.Customer);
+            Db.Insert(new AgencyCustomer
+            {
+                AgencyId = Session.Agency.Id,
+                CustomerId = createCustomer.Customer.Id
+            });
+            return Db.SingleById<Customer>(createCustomer.Customer.Id);
         }
 
-        public void Put(PutCustomer putCustomer)
+        [Authenticate]
+        public void Put(UpdateCustomer updateCustomer)
         {
-            if (putCustomer.Customer.Id == null)
+            if (updateCustomer.Customer.Id == null)
                 throw HttpError.NotFound("");
-            if (!Db.Exists<Customer>(new { Id = putCustomer.Customer.Id }))
+            if (!Db.Exists<Customer>(new { Id = updateCustomer.Customer.Id }))
                 throw HttpError.NotFound("");
-            Db.Update(putCustomer.Customer);
+            Db.Update(updateCustomer.Customer);
         }
 
+        [Authenticate]
         public void Delete(DeleteCustomer deleteCustomer)
         {
             if (!Db.Exists<Customer>(new { Id = deleteCustomer.Id }))
                 throw HttpError.NotFound("");
-            Db.DeleteById<Customer>(deleteCustomer.Id);
+            var customer = Db.Single<AgencyCustomer>(x => x.CustomerId == deleteCustomer.Id && x.AgencyId == Session.Agency.Id);
+            if (customer != null)
+                Db.DeleteById<Customer>(deleteCustomer.Id);
+            else
+                throw HttpError.NotFound("");
         }
     }
 

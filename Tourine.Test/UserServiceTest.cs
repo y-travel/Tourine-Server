@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Customers;
 using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
@@ -11,10 +12,13 @@ namespace Tourine.Test
     public class UserServiceTest : ServiceTest
     {
         private readonly Guid _testUserId = Guid.NewGuid();
+        private readonly Guid _testCustomerGuid = Guid.NewGuid();
+
         [SetUp]
         public new void Setup()
         {
             CreateUsers();
+            AppHost.Session = new AuthSession { TestMode = true, User = new User { Id = _testUserId } };
         }
 
         [Test]
@@ -102,8 +106,15 @@ namespace Tourine.Test
                 Id = _testUserId,
                 Username = "aias",
                 Password = "pass",
-                CustomerId = Guid.NewGuid(),
+                CustomerId = _testCustomerGuid,
                 Role = Role.Admin
+            });
+            Db.Insert(new Customer
+            {
+                Id = _testCustomerGuid,
+                Name = "CName",
+                Family = "CFamily",
+                MobileNumber = "09123456789"
             });
         }
     }

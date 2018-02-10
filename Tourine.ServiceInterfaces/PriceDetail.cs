@@ -8,6 +8,7 @@ namespace Tourine.ServiceInterfaces
     { 
         public Guid Id { get; set; } = Guid.NewGuid();
         public int Value { get; set; }
+        public string Title { get; set; }
 
         [References(typeof(Currency))]
         public int CurrencyId { get; set; }

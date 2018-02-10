@@ -6,17 +6,26 @@ using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Destinations;
 using Tourine.ServiceInterfaces.Places;
+using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
+using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
     public class TourServiceTest : ServiceTest
     {
         private readonly Guid _testTourId = Guid.NewGuid();
+        private readonly Guid _testTourDetaiGuid = Guid.NewGuid();
+
         [SetUp]
         public new void Setup()
         {
             CreateTours();
+            AppHost.Session = new AuthSession
+            {
+                TestMode = true,
+                User = new User { Id = Guid.NewGuid() }
+            };
         }
 
         [Test]
@@ -39,9 +48,9 @@ namespace Tourine.Test
         public void GetTour_should_throw_exception()
         {
             Client.Invoking(t => t.Get(new GetTour
-                {
-                    Id = Guid.NewGuid()
-                }))
+            {
+                Id = Guid.NewGuid()
+            }))
                 .ShouldThrow<WebServiceException>();
         }
 
@@ -53,18 +62,11 @@ namespace Tourine.Test
                 Tour = new Tour
                 {
                     Code = "555",
-                    DestinationId = Guid.NewGuid(),
-                    PlaceId = Guid.NewGuid(),
-                    Duration = 12,
-                    IsFlight = true,
-                    AdultCount = 80,
-                    InfantCount = 10,
-                    AdultMinPrice = 8000,
-                    InfantPrice = 65000,
-                    BusPrice = 50000,
-                    RoomPrice = 45000,
-                    FoodPrice = 35000,
-                    StartDate = DateTime.MaxValue
+                    Status = TourStatus.Created,
+                    Capacity = 500,
+                    BasePrice = 300000,
+                    TourDetailId = Guid.NewGuid(),
+                    AgencyId = Guid.NewGuid()
                 }
             })).ShouldNotThrow<WebServiceException>();
         }
@@ -77,18 +79,11 @@ namespace Tourine.Test
                 Tour = new Tour
                 {
                     Code = "",
-                    DestinationId = Guid.NewGuid(),
-                    PlaceId = Guid.NewGuid(),
-                    Duration = 12,
-                    IsFlight = true,
-                    AdultCount = 80,
-                    InfantCount = 10,
-                    AdultMinPrice = 8000,
-                    InfantPrice = 65000,
-                    BusPrice = 50000,
-                    RoomPrice = 45000,
-                    FoodPrice = 35000,
-                    StartDate = DateTime.MinValue
+                    Status = TourStatus.Created,
+                    Capacity = 500,
+                    BasePrice = 300000,
+                    TourDetailId = Guid.NewGuid(),
+                    AgencyId = Guid.NewGuid()
                 }
             })).ShouldThrow<WebServiceException>();
         }
@@ -96,23 +91,18 @@ namespace Tourine.Test
         [Test]
         public void PutTour_should_not_throw_exceprion()
         {
-            Client.Invoking(x=> x.Put(new PutTour{ Tour = new Tour
+            Client.Invoking(x => x.Put(new PutTour
             {
-                Id = _testTourId,
-                AdultCount = 12,
-                AdultMinPrice = 1200,
-                InfantCount = 12,
-                InfantPrice = 3000,
-                BusPrice = 120,
-                Code = "123",
-                FoodPrice = 100,
-                DestinationId = Guid.NewGuid(),
-                IsFlight = true,
-                Duration = 1,
-                PlaceId = Guid.NewGuid(),
-                RoomPrice = 16,
-                StartDate = DateTime.Now
-            }
+                Tour = new Tour
+                {
+                    Id = _testTourId,
+                    Code = "aio",
+                    Status = TourStatus.Created,
+                    Capacity = 500,
+                    BasePrice = 300000,
+                    TourDetailId = Guid.NewGuid(),
+                    AgencyId = Guid.NewGuid()
+                }
             })).ShouldNotThrow<WebServiceException>();
         }
 
@@ -124,19 +114,12 @@ namespace Tourine.Test
                 Tour = new Tour
                 {
                     Id = Guid.NewGuid(),
-                    AdultCount = 12,
-                    AdultMinPrice = 1200,
-                    InfantCount = 12,
-                    InfantPrice = 3000,
-                    BusPrice = 120,
-                    Code = "123",
-                    FoodPrice = 100,
-                    DestinationId = Guid.NewGuid(),
-                    IsFlight = true,
-                    Duration = 1,
-                    PlaceId = Guid.NewGuid(),
-                    RoomPrice = 16,
-                    StartDate = DateTime.Now
+                    Code = "123456",
+                    Status = TourStatus.Created,
+                    Capacity = 50,
+                    BasePrice = 1200000,
+                    TourDetailId = Guid.NewGuid(),
+                    AgencyId = Guid.NewGuid()
                 }
             })).ShouldThrow<WebServiceException>();
         }
@@ -146,23 +129,24 @@ namespace Tourine.Test
             var testPId = Guid.NewGuid();
             Db.Insert(new Place { Id = testPId, Name = "Hotel" });
             Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
+            Db.Insert(new TourDetail
+            {
+                Id = _testTourDetaiGuid,
+                DestinationId = testDId,
+                PlaceId = testPId,
+                SubmitDate = DateTime.Today
+            });
+
             Db.Insert(new Tour
             {
                 Id = _testTourId,
-                DestinationId = testDId,
-                AdultCount = 12,
-                InfantCount = 10,
                 Code = "123456",
-                AdultMinPrice = 1200,
-                BusPrice = 120,
-                Duration = 10,
-                FoodPrice = 120,
-                RoomPrice = 130,
-                PlaceId = testPId,
                 Status = TourStatus.Created,
-                StartDate = DateTime.Now,
-                InfantPrice = 100,
-                IsFlight = true
+                Capacity = 50,
+                BasePrice = 1200000,
+                TourDetailId = _testTourDetaiGuid,
+                AgencyId = Guid.NewGuid()
+
             });
 
         }

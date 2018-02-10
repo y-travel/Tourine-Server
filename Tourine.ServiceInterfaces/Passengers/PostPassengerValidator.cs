@@ -2,7 +2,7 @@
 
 namespace Tourine.ServiceInterfaces.Passengers
 {
-    public class PostPassengerValidator : AbstractValidator<PostPassenger>
+    public class PostPassengerValidator : AbstractValidator<CreatePassenger>
     {
         public PostPassengerValidator()
         {
@@ -13,7 +13,6 @@ namespace Tourine.ServiceInterfaces.Passengers
             RuleFor(p => p.Passenger.NationalCode).NotEmpty();
             RuleFor(p => p.Passenger.PassportExpireDate).NotEmpty();
             RuleFor(p => p.Passenger.PassportNo).NotEmpty();
-            RuleFor(p => p.Passenger.AgencyId).NotEmpty();
         }
     }
 }

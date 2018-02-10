@@ -1,29 +1,34 @@
 ﻿using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces.Agencies;
 
 namespace Tourine.ServiceInterfaces.Passengers
 {
     public class PassengerService : AppService
     {
         public IAutoQueryDb AutoQuery { get; set; }
-        public void Post(PostPassenger postPassenger)
+        [Authenticate]
+        public void Post(CreatePassenger createPassenger)
         {
-            Db.Insert(postPassenger.Passenger);
+            Db.Insert(createPassenger.Passenger);
         }
 
-        public void Put(PutPassenger putPassenger)
+        [Authenticate]
+        public void Put(UpdatePassenger updatePassenger)
         {
-            if (!Db.Exists<Passenger>(new { Id = putPassenger.Passenger.Id }))
+            if (!Db.Exists<Passenger>(new { Id = updatePassenger.Passenger.Id }))
                 throw HttpError.NotFound("");
-            Db.Update(putPassenger.Passenger);
+            Db.Update(updatePassenger.Passenger);
         }
 
+        [Authenticate]
         public object Get(GetPassengers getPassenger)
         {
             var query = AutoQuery.CreateQuery(getPassenger, Request.GetRequestParams());
             return AutoQuery.Execute(getPassenger, query);
         }
 
+        [Authenticate]
         public void Delete(DeletePassenger deletePassenger)
         {
             if (deletePassenger.Id == null)
@@ -33,20 +38,33 @@ namespace Tourine.ServiceInterfaces.Passengers
             Db.DeleteById<Passenger>(deletePassenger.Id);
         }
 
-        public object Get(GetPassengerFromNc fromNc)
+        [Authenticate]
+        public object Get(FindPassengerFromNc fromNc)
         {
             if (!Db.Exists<Passenger>(new { NationalCode = fromNc.NationalCode }))
                 throw HttpError.NotFound("");
             return Db.Single<Passenger>(new { NationalCode = fromNc.NationalCode });
         }
 
+        [Authenticate]
         public object Get(FindPassengerInAgency passengers)
         {
-            if (!Db.Exists<Agency>(new Agency() { Id = passengers.AgencyId }))
+            if (!Db.Exists<Agency>(new { Id = passengers.AgencyId }))
                 throw HttpError.NotFound("");
-            var item = Db.From<Passenger>().Where(p => (p.AgencyId == passengers.AgencyId) && (p.Name.Contains(passengers.Str) || p.Family.Contains(passengers.Str) || p.MobileNumber.Contains(passengers.Str) || p.NationalCode.Contains(passengers.Str) || p.PassportNo.Contains(passengers.Str)));
-            return AutoQuery.Execute(passengers, item);
+            var item = AutoQuery.CreateQuery(passengers, Request.GetRequestParams()).Where(p =>
+                p.Name.Contains(passengers.Str) ||
+                p.Family.Contains(passengers.Str) ||
+                p.MobileNumber.Contains(passengers.Str));
+            var it = AutoQuery.Execute(passengers, item);
+            return it;
         }
 
+        [Authenticate]
+        public object Get(GetLeaders leaders)
+        {
+            var query = AutoQuery.CreateQuery(leaders, Request.GetRequestParams())
+                .Where(passenger => passenger.Type == PassengerType.Leader);
+            return AutoQuery.Execute(leaders, query);
+        }
     }
 }

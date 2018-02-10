@@ -14,12 +14,12 @@ namespace Tourine
 
             using (StreamWriter sw = new StreamWriter(path, true))
             {
-                var affectedRow = Db.ExecuteSql("EXEC UpdateTourSatus");
-                if (affectedRow != 0)
-                {
-                    sw.WriteLine(DateTime.Now + " - " + "EXEC UpdateTourSatus, number of rows affected : " + affectedRow);
-                    sw.WriteLine();
-                }
+//                var affectedRow = Db.ExecuteSql("EXEC UpdateTourSatus");
+//                if (affectedRow != 0)
+//                {
+//                    sw.WriteLine(DateTime.Now + " - " + "EXEC UpdateTourSatus, number of rows affected : " + affectedRow);
+//                    sw.WriteLine();
+//                }
 
             }
         }

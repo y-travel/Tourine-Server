@@ -41,7 +41,9 @@ CREATE TABLE dbo.Passenger (
   BirthDate date NOT NULL,
   PassportExpireDate date NULL,
   PassportNo varchar(50) NULL,
-  CONSTRAINT PK_Customer_Id PRIMARY KEY CLUSTERED (Id)
+  Gender bit NOT NULL,
+  Type tinyint NOT NULL,
+  CONSTRAINT PK_Passenger_Id PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 GO
@@ -52,9 +54,9 @@ GO
 PRINT (N'Create table "dbo.Destination"')
 GO
 CREATE TABLE dbo.Destination (
-  ID uniqueidentifier NOT NULL DEFAULT (newid()),
+  Id uniqueidentifier NOT NULL DEFAULT (newid()),
   Name nvarchar(50) NOT NULL,
-  CONSTRAINT PK_Destination_ID PRIMARY KEY CLUSTERED (ID)
+  CONSTRAINT PK_Destination_Id PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 GO
@@ -65,7 +67,7 @@ GO
 PRINT (N'Create table "dbo.TourDetail"')
 GO
 CREATE TABLE dbo.TourDetail (
-  ID uniqueidentifier NOT NULL CONSTRAINT DF_Block_ID DEFAULT (newid()) ROWGUIDCOL,
+  Id uniqueidentifier NOT NULL CONSTRAINT DF_TourDetail_Id DEFAULT (newid()) ROWGUIDCOL,
   DestinationId uniqueidentifier NOT NULL,
   Duration int NULL,
   StartDate datetime NULL,
@@ -76,8 +78,8 @@ CREATE TABLE dbo.TourDetail (
   RoomPrice bigint NULL,
   FoodPrice bigint NULL,
   SubmitDate datetime NOT NULL,
-  CONSTRAINT PK_Coppon_ID PRIMARY KEY CLUSTERED (ID),
-  CONSTRAINT FK_TourDetail_Destination_ID FOREIGN KEY (DestinationId) REFERENCES dbo.Destination (ID),
+  CONSTRAINT PK_TourDetail_Id PRIMARY KEY CLUSTERED (Id),
+  CONSTRAINT FK_TourDetail_Destination_Id FOREIGN KEY (DestinationId) REFERENCES dbo.Destination (Id),
   CONSTRAINT FK_TourDetail_Place_Id FOREIGN KEY (PlaceId) REFERENCES dbo.Place (Id)
 )
 ON [PRIMARY]
@@ -94,7 +96,7 @@ CREATE TABLE dbo.Customer (
   Family nvarchar(50) NOT NULL,
   MobileNumber varchar(15) NULL,
   Phone varchar(15) NULL,
-  CONSTRAINT PK_Reagent_Id PRIMARY KEY CLUSTERED (Id)
+  CONSTRAINT PK_Customer_Id PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 GO
@@ -110,7 +112,7 @@ CREATE TABLE dbo.[User] (
   Password nvarchar(50) NOT NULL,
   CustomerId uniqueidentifier NOT NULL,
   Role tinyint NOT NULL,
-  CONSTRAINT PK_User_ID PRIMARY KEY CLUSTERED (Id),
+  CONSTRAINT PK_User_Id PRIMARY KEY CLUSTERED (Id),
   CONSTRAINT FK_User_Customer_Id FOREIGN KEY (CustomerId) REFERENCES dbo.Customer (Id)
 )
 ON [PRIMARY]
@@ -122,10 +124,10 @@ GO
 PRINT (N'Create table "dbo.Currency"')
 GO
 CREATE TABLE dbo.Currency (
-  ID int NOT NULL,
+  Id int NOT NULL,
   Name nvarchar(50) NOT NULL,
   Factor float NULL,
-  CONSTRAINT PK_ID PRIMARY KEY CLUSTERED (ID)
+  CONSTRAINT PK_Currency_Id PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 GO
@@ -139,7 +141,7 @@ CREATE TABLE dbo.Agency (
   Id uniqueidentifier NOT NULL CONSTRAINT DF_Agency_Id DEFAULT (newid()) ROWGUIDCOL,
   Name nvarchar(50) NOT NULL,
   PhoneNumber varchar(11) NULL,
-  CONSTRAINT PK_Agency PRIMARY KEY CLUSTERED (Id)
+  CONSTRAINT PK_Agency_Id PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 GO
@@ -150,7 +152,7 @@ GO
 PRINT (N'Create table "dbo.Tour"')
 GO
 CREATE TABLE dbo.Tour (
-  ID uniqueidentifier NOT NULL CONSTRAINT DF_Tour_ID DEFAULT (newid()) ROWGUIDCOL,
+  Id uniqueidentifier NOT NULL CONSTRAINT DF_Tour_ID DEFAULT (newid()) ROWGUIDCOL,
   Capacity int NULL,
   BasePrice bigint NULL,
   ParentId uniqueidentifier NULL,
@@ -159,9 +161,9 @@ CREATE TABLE dbo.Tour (
   TourDetailId uniqueidentifier NULL,
   AgencyId uniqueidentifier NULL,
   CreationDate datetime NOT NULL,
-  CONSTRAINT PK_Tour_ID PRIMARY KEY CLUSTERED (ID),
+  CONSTRAINT PK_Tour_Id PRIMARY KEY CLUSTERED (Id),
   CONSTRAINT FK_Tour_Agency_Id FOREIGN KEY (AgencyId) REFERENCES dbo.Agency (Id),
-  CONSTRAINT FK_Tour_TourDetail_ID FOREIGN KEY (TourDetailId) REFERENCES dbo.TourDetail (ID)
+  CONSTRAINT FK_Tour_TourDetail_Id FOREIGN KEY (TourDetailId) REFERENCES dbo.TourDetail (Id)
 )
 ON [PRIMARY]
 GO
@@ -169,10 +171,10 @@ GO
 --
 -- Create foreign key "FK_Tour_Tour_ID" on table "dbo.Tour"
 --
-PRINT (N'Create foreign key "FK_Tour_Tour_ID" on table "dbo.Tour"')
+PRINT (N'Create foreign key "FK_Tour_Tour_Id" on table "dbo.Tour"')
 GO
 ALTER TABLE dbo.Tour WITH CHECK
-  ADD CONSTRAINT FK_Tour_Tour_ID FOREIGN KEY (ParentId) REFERENCES dbo.Tour (ID)
+  ADD CONSTRAINT FK_Tour_Tour_Id FOREIGN KEY (ParentId) REFERENCES dbo.Tour (Id)
 GO
 
 --
@@ -187,9 +189,11 @@ CREATE TABLE dbo.Team (
   Buyer uniqueidentifier NOT NULL,
   Count int NULL,
   SubmitDate datetime NOT NULL,
+  LeaderId uniqueidentifier NULL,
   CONSTRAINT PK_Team_Id PRIMARY KEY CLUSTERED (Id),
   CONSTRAINT FK_Team_Passenger_Id FOREIGN KEY (Buyer) REFERENCES dbo.Passenger (Id),
-  CONSTRAINT FK_Team_Tour_ID FOREIGN KEY (TourId) REFERENCES dbo.Tour (ID)
+  CONSTRAINT FK_Team_Passenger_Leader_Id FOREIGN KEY (LeaderId) REFERENCES dbo.Passenger (Id),
+  CONSTRAINT FK_Team_Tour_Id FOREIGN KEY (TourId) REFERENCES dbo.Tour (Id)
 )
 ON [PRIMARY]
 GO
@@ -223,7 +227,7 @@ CREATE TABLE dbo.Service (
   Status tinyint NOT NULL,
   CONSTRAINT PK_Service_Id PRIMARY KEY CLUSTERED (Id),
   CONSTRAINT FK_Service_Passenger_Id FOREIGN KEY (PassengerId) REFERENCES dbo.Passenger (Id),
-  CONSTRAINT FK_Service_Tour_ID FOREIGN KEY (TourId) REFERENCES dbo.Tour (ID)
+  CONSTRAINT FK_Service_Tour_Id FOREIGN KEY (TourId) REFERENCES dbo.Tour (Id)
 )
 ON [PRIMARY]
 GO
@@ -234,14 +238,14 @@ GO
 PRINT (N'Create table "dbo.PriceDetail"')
 GO
 CREATE TABLE dbo.PriceDetail (
-  ID uniqueidentifier NOT NULL CONSTRAINT DF_PriceDetail_ID DEFAULT (newid()) ROWGUIDCOL,
-  value bigint NOT NULL,
-  CurrencyID int NOT NULL,
+  Id uniqueidentifier NOT NULL CONSTRAINT DF_PriceDetail_ID DEFAULT (newid()) ROWGUIDCOL,
+  Value bigint NOT NULL,
+  CurrencyId int NOT NULL,
   TourId uniqueidentifier NOT NULL,
   Title nvarchar(100) NULL,
-  CONSTRAINT PK_PriceDetail_ID PRIMARY KEY CLUSTERED (ID),
-  CONSTRAINT FK_PriceDetail_Currency_ID FOREIGN KEY (CurrencyID) REFERENCES dbo.Currency (ID),
-  CONSTRAINT FK_PriceDetail_Tour_ID FOREIGN KEY (TourId) REFERENCES dbo.Tour (ID)
+  CONSTRAINT PK_PriceDetail_Id PRIMARY KEY CLUSTERED (Id),
+  CONSTRAINT FK_PriceDetail_Currency_Id FOREIGN KEY (CurrencyId) REFERENCES dbo.Currency (Id),
+  CONSTRAINT FK_PriceDetail_Tour_Id FOREIGN KEY (TourId) REFERENCES dbo.Tour (Id)
 )
 ON [PRIMARY]
 GO

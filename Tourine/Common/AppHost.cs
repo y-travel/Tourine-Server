@@ -8,11 +8,14 @@ using Quartz.Impl;
 using ServiceStack;
 using ServiceStack.Admin;
 using ServiceStack.Auth;
+using ServiceStack.Caching;
 using ServiceStack.Data;
 using ServiceStack.FluentValidation;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.Users;
 using ValidationException = ServiceStack.FluentValidation.ValidationException;
 
 namespace Tourine.Common
@@ -23,16 +26,20 @@ namespace Tourine.Common
         public Settings Settings { get; }
 
         public OrmLiteConnectionFactory ConnectionFactory { get; }
+        public AuthSession Session { get; set; }
+
 
         public AppHost(Settings settings, OrmLiteConnectionFactory connectionFactory) : base("Tourine Services", typeof(AppService).GetAssembly())
         {
             Settings = settings;
             ConnectionFactory = connectionFactory;
         }
+
         static AppHost()
         {
             RegisterLicense();
         }
+
         private class MyNet40PclExport : Net40PclExport
         {
             public override LicenseKey VerifyLicenseKeyText(string licenseKeyText)
@@ -64,7 +71,11 @@ namespace Tourine.Common
                 MapExceptionToStatusCode = { { typeof(ValidationException), 422 } },
                 AdminAuthSecret = "123456"
             });
-
+            if (TestMode)
+            {
+                container.Register<IAuthSession>(x => Session).ReusedWithin(ReuseScope.None);
+                container.Register(x => Session).ReusedWithin(ReuseScope.None);
+            }
             container.Register<IDbConnectionFactory>(ConnectionFactory);
             container.RegisterGeneric(typeof(IValidator<>), Assembly.Load("Tourine.ServiceInterfaces"));
             container.Register(Settings);
@@ -75,7 +86,7 @@ namespace Tourine.Common
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new CorsFeature());
             Plugins.Add(
-                new AuthFeature(() => new AuthUserSession(), new IAuthProvider[]
+                new AuthFeature(() => new AuthSession(), new IAuthProvider[]
                 {
                     new AuthProvider(container.Resolve<IDbConnectionFactory>()),
                     new JwtAuthProvider
@@ -97,6 +108,7 @@ namespace Tourine.Common
                 })
                 { IncludeRegistrationService = false, IncludeAssignRoleServices = false, IncludeAuthMetadataProvider = false, HtmlRedirect = null }
             );
+
         }
 
         private void ValidationFilter(IRequest request, IResponse response, object dto)
@@ -112,21 +124,21 @@ namespace Tourine.Common
 
         public static void ConfigureQuartzJobs()
         {
-            ISchedulerFactory schedFact = new StdSchedulerFactory();
-
-            var sched = schedFact.GetScheduler();
-            sched.Start();
-            var job = JobBuilder.Create<Job>()
-                .WithIdentity("SendJob")
-                .Build();
-
-            var trigger = TriggerBuilder.Create()
-                .WithIdentity("SendTrigger")
-                .WithSimpleSchedule(x => x.WithIntervalInMinutes(15).RepeatForever())
-                .StartNow()
-                .Build();
-
-            sched.ScheduleJob(job, trigger);
+            //            ISchedulerFactory schedFact = new StdSchedulerFactory();
+            //
+            //            var sched = schedFact.GetScheduler();
+            //            sched.Start();
+            //            var job = JobBuilder.Create<Job>()
+            //                .WithIdentity("SendJob")
+            //                .Build();
+            //
+            //            var trigger = TriggerBuilder.Create()
+            //                .WithIdentity("SendTrigger")
+            //                .WithSimpleSchedule(x => x.WithIntervalInMinutes(15).RepeatForever())
+            //                .StartNow()
+            //                .Build();
+            //
+            //            sched.ScheduleJob(job, trigger);
         }
     }
 }

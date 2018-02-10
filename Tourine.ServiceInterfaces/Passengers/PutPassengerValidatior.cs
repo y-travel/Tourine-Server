@@ -2,7 +2,7 @@
 
 namespace Tourine.ServiceInterfaces.Passengers
 {
-    public class PutPassengerValidatior : AbstractValidator<PutPassenger>
+    public class PutPassengerValidatior : AbstractValidator<UpdatePassenger>
     {
         public PutPassengerValidatior()
         {
@@ -14,7 +14,6 @@ namespace Tourine.ServiceInterfaces.Passengers
             RuleFor(p => p.Passenger.NationalCode).NotEmpty();
             RuleFor(p => p.Passenger.PassportExpireDate).NotEmpty();
             RuleFor(p => p.Passenger.PassportNo).NotEmpty();
-            RuleFor(p => p.Passenger.AgencyId).NotEmpty();
         }
     }
 }

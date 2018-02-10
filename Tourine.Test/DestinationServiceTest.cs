@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Destinations;
 
 namespace Tourine.Test
@@ -14,6 +15,7 @@ namespace Tourine.Test
         public new void Setup()
         {
             CreateDestination();
+            AppHost.Session = new AuthSession { TestMode = true };
         }
 
         [Test]
@@ -26,7 +28,7 @@ namespace Tourine.Test
         [Test]
         public void PostDestination_should_throw_exception()
         {
-            Client.Invoking(d => d.Post(new PostDestination
+            Client.Invoking(d => d.Post(new CreateDestination
             {
                 Destination = new Destination
                 {
@@ -38,7 +40,7 @@ namespace Tourine.Test
         [Test]
         public void PostDestination_should_not_throw_exception()
         {
-            Client.Invoking(d => d.Post(new PostDestination
+            Client.Invoking(d => d.Post(new CreateDestination
             {
                 Destination = new Destination
                 {
@@ -50,7 +52,7 @@ namespace Tourine.Test
         [Test]
         public void PutDestination_should_not_throw_exception()
         {
-            Client.Invoking(d => d.Put(new PutDestination
+            Client.Invoking(d => d.Put(new UpdateDestination
             {
                 Destination = new Destination
                 {
@@ -63,7 +65,7 @@ namespace Tourine.Test
         [Test]
         public void PutDestination_should_throw_exception()
         {
-            Client.Invoking(d => d.Put(new PutDestination
+            Client.Invoking(d => d.Put(new UpdateDestination
             {
                 Destination = new Destination
                 {

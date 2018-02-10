@@ -2,16 +2,20 @@ using System;
 using System.Linq;
 using System.Data;
 using NUnit.Framework;
+using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine;
 using Tourine.Common;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Blocks;
+using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.AgencyCustomers;
 using Tourine.ServiceInterfaces.Customers;
 using Tourine.ServiceInterfaces.Destinations;
-using Tourine.ServiceInterfaces.PassengerList;
 using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Places;
+using Tourine.ServiceInterfaces.TeamPassengers;
+using Tourine.ServiceInterfaces.Teams;
+using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
 using Tourine.ServiceInterfaces.Users;
 
@@ -21,7 +25,6 @@ namespace Tourine.Test
     public abstract class InMemoryDbTest
     {
         protected IDbConnection Db { get; }
-
         protected InMemoryDbTest()
         {
             Db = GlobalFixture.ConnectionFactory.OpenDbConnection();
@@ -93,7 +96,7 @@ public class GlobalFixture
 
         AppHost = (AppHost)new AppHost(settings, ConnectionFactory) { TestMode = true }.Init().Start(BaseUri);
 
-        TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Passenger), typeof(Customer), typeof(Block), typeof(PassengerList)};//should be fill with tables
+        TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Passenger), typeof(Customer), typeof(TourDetail), typeof(TeamPassenger), typeof(Team), typeof(Service), typeof(AgencyCustomer) };//should be fill with tables
 
         using (var db = ConnectionFactory.OpenDbConnection())
             db.CreateTables(false, TablesTypes);

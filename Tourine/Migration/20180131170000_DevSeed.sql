@@ -18,6 +18,7 @@ IF DB_NAME() <> N'Tourine' SET NOEXEC ON
 -- 
 -- Dumping data for table Agency
 --
+INSERT dbo.Agency VALUES ('4c5ee6a3-c80c-436c-983c-a72b207a8925', N'Mahan', N'03211111')
 INSERT dbo.Agency VALUES ('5d0fd190-3c6a-45d9-9987-f698b700cd43', N'Taha', N'02136521478')
 GO
 -- 
@@ -41,14 +42,14 @@ GO
 INSERT dbo.Destination VALUES ('bfc8684b-0a99-406e-9c56-00f3398f72bd', N'کربلا')
 INSERT dbo.Destination VALUES ('37132bd5-297f-4208-89cb-586e546d1bb7', N'نجف')
 INSERT dbo.Destination VALUES ('a21e41d9-be48-4e53-b6ee-5b55d47cfb33', N'بغداد')
-INSERT dbo.Destination VALUES ('3706966d-6cbd-4cf4-aa87-f080a89e0e55', N'سلیانیه')
+INSERT dbo.Destination VALUES ('3706966d-6cbd-4cf4-aa87-f080a89e0e55', N'سلیمانیه')
 GO
 -- 
 -- Dumping data for table Passenger
 --
-INSERT dbo.Passenger VALUES ('cdaf2353-b68d-4f0f-8056-5e37e51d70aa', N'pass3', N'passfam3', N'12315645', N'455642211', '2008-01-17', '2018-01-30', NULL)
-INSERT dbo.Passenger VALUES ('5f05a5dc-3aee-4572-beba-a7d5a5fc3e64', N'pass1', N'passfam1', N'021000000', N'012345678', '1988-01-08', NULL, NULL)
-INSERT dbo.Passenger VALUES ('e2d864ca-19eb-40d6-adea-f5bfc7989846', N'pass2', N'passfam2', N'032156498', N'123678901', '1989-08-01', '2018-01-31', N'1324564')
+INSERT dbo.Passenger VALUES ('cdaf2353-b68d-4f0f-8056-5e37e51d70aa', N'Emad', N'Bagh', N'12315645', N'455642211', '2008-01-17', '2018-01-30', NULL, CONVERT(bit, 'True'), 0)
+INSERT dbo.Passenger VALUES ('5f05a5dc-3aee-4572-beba-a7d5a5fc3e64', N'Majid', N'Sham', N'021000000', N'012345678', '1988-01-08', NULL, NULL, CONVERT(bit, 'True'), 1)
+INSERT dbo.Passenger VALUES ('e2d864ca-19eb-40d6-adea-f5bfc7989846', N'Saeid', N'Sham', N'032156498', N'123678901', '1989-08-01', '2018-01-31', N'1324564', CONVERT(bit, 'False'), 0)
 GO
 -- 
 -- Dumping data for table Place
@@ -56,19 +57,22 @@ GO
 INSERT dbo.Place VALUES ('9a6822c4-3f1d-44ef-98e7-56f40c37ff33', N'السلطان')
 INSERT dbo.Place VALUES ('834c9273-52fd-4b84-94c5-638d883b1ce4', N'الفندق')
 INSERT dbo.Place VALUES ('18d084c4-6192-4d8e-a5c2-70302884aed2', N'جواد')
-INSERT dbo.Place VALUES ('dc07d0ae-2a1e-43d4-9b3b-e7cdb2d6b98e', N'شکوکات')
+INSERT dbo.Place VALUES ('dc07d0ae-2a1e-43d4-9b3b-e7cdb2d6b98e', N'مشکوکات')
 GO
 -- 
 -- Dumping data for table [User]
 --
-INSERT dbo.[User] VALUES ('9fbd8acb-029f-4fdf-8130-3a644c82018b', N'Arzdl', N'1234', 'cd689574-7a50-448a-8724-688ca5291777', 127)
+INSERT dbo.[User] VALUES ('9fbd8acb-029f-4fdf-8130-3a644c82018b', N'Alirzl', N'1234', 'cd689574-7a50-448a-8724-688ca5291777', 127)
 INSERT dbo.[User] VALUES ('fd6ec66b-68ba-4a90-a6f5-48330e35f3dc', N'zoz.zozm', N'62661950', '070d5d34-2723-4e48-bfe4-b07838e480f1', 255)
 INSERT dbo.[User] VALUES ('b88bc928-7330-4120-bac8-cc7ff29ba85c', N'Happiness', N'1234', '0cdf3854-efa5-4cca-b659-921a9309c60b', 127)
-INSERT dbo.[User] VALUES ('fdc52981-fac4-48a7-9aa4-f0f7b0835ccb', N'aziz', N'1234', 'f0905b1f-9221-4e4e-ac60-0617427602e7', 64)
+INSERT dbo.[User] VALUES ('fdc52981-fac4-48a7-9aa4-f0f7b0835ccb', N'Aziz', N'1234', 'f0905b1f-9221-4e4e-ac60-0617427602e7', 64)
 GO
 -- 
 -- Dumping data for table AgencyCustomer
 --
+INSERT dbo.AgencyCustomer VALUES ('05fc8759-50d3-45a6-8a3c-6bb7a900330b', '5d0fd190-3c6a-45d9-9987-f698b700cd43', '0cdf3854-efa5-4cca-b659-921a9309c60b')
+INSERT dbo.AgencyCustomer VALUES ('4502cbec-e095-4f98-831d-70c69d15f2b1', '5d0fd190-3c6a-45d9-9987-f698b700cd43', '070d5d34-2723-4e48-bfe4-b07838e480f1')
+INSERT dbo.AgencyCustomer VALUES ('5e9fbed1-1550-4907-995b-73f9e08c9992', '5d0fd190-3c6a-45d9-9987-f698b700cd43', 'cd689574-7a50-448a-8724-688ca5291777')
 INSERT dbo.AgencyCustomer VALUES ('f6d6ead3-160f-4969-89df-c57abef5159f', '5d0fd190-3c6a-45d9-9987-f698b700cd43', 'f0905b1f-9221-4e4e-ac60-0617427602e7')
 GO
 -- 
@@ -81,7 +85,7 @@ GO
 -- 
 -- Dumping data for table Tour
 --
-INSERT dbo.Tour VALUES ('c17496cf-7a71-451f-91da-1d10b165be13', 20, 1600000, NULL, N'bagh20180131', 1, '2e4b0d34-64b8-4b9a-9ff3-c31a09a9680b', '5d0fd190-3c6a-45d9-9987-f698b700cd43', '2018-01-31 18:23:29.797')
+INSERT dbo.Tour VALUES ('c17496cf-7a71-451f-91da-1d10b165be13', 20, 1600000, 'c17496cf-7a71-451f-91da-1d10b165be13', N'bagh20180131', 1, '2e4b0d34-64b8-4b9a-9ff3-c31a09a9680b', '5d0fd190-3c6a-45d9-9987-f698b700cd43', '2018-01-31 18:23:29.797')
 INSERT dbo.Tour VALUES ('443237f8-7eec-413f-9858-97bfd99ebc2b', 50, 750000, NULL, N'kar20180131', 1, '4beef3e3-c112-4a90-a0c3-651858f32195', '5d0fd190-3c6a-45d9-9987-f698b700cd43', '2018-01-31 18:23:06.557')
 INSERT dbo.Tour VALUES ('30a9c61b-9dde-4c3d-b681-9ecb1bafedf1', 50, 850000, NULL, N'naj20180113', 1, '4beef3e3-c112-4a90-a0c3-651858f32195', '5d0fd190-3c6a-45d9-9987-f698b700cd43', '2018-01-31 18:21:47.157')
 GO
@@ -101,8 +105,8 @@ GO
 -- 
 -- Dumping data for table Team
 --
-INSERT dbo.Team VALUES ('7e33370f-6ee0-4297-acd0-237783d4e4f1', '443237f8-7eec-413f-9858-97bfd99ebc2b', 850000, 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa', 3, '2018-01-31 18:27:04.893')
-INSERT dbo.Team VALUES ('c3fde9b5-234a-4eb8-8c0c-ab48e807ffc7', 'c17496cf-7a71-451f-91da-1d10b165be13', 1800000, '5f05a5dc-3aee-4572-beba-a7d5a5fc3e64', 5, '2018-01-31 18:26:45.133')
+INSERT dbo.Team VALUES ('7e33370f-6ee0-4297-acd0-237783d4e4f1', '443237f8-7eec-413f-9858-97bfd99ebc2b', 850000, 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa', 1, '2018-01-31 18:27:04.893', 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa')
+INSERT dbo.Team VALUES ('c3fde9b5-234a-4eb8-8c0c-ab48e807ffc7', 'c17496cf-7a71-451f-91da-1d10b165be13', 1800000, '5f05a5dc-3aee-4572-beba-a7d5a5fc3e64', 2, '2018-01-31 18:26:45.133', NULL)
 GO
 -- 
 -- Dumping data for table TeamPassenger

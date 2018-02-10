@@ -3,7 +3,9 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Places;
+using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
@@ -18,6 +20,11 @@ namespace Tourine.Test
                 Id = _testGuid,
                 Name = "newPlace"
             });
+            AppHost.Session = new AuthSession
+            {
+                TestMode = true,
+                User = new User { Id = Guid.NewGuid()}
+            };
         }
 
         [Test]

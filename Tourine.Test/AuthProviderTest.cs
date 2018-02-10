@@ -3,58 +3,41 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.ServiceInterfaces.Tours;
+using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.AgencyCustomers;
+using Tourine.ServiceInterfaces.Customers;
 using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
     public class AuthProviderTest : ServiceTest
     {
+        private readonly Guid _testCustomerGuid = Guid.NewGuid();
+        private readonly Guid _testUserGuid = Guid.NewGuid();
+        private readonly Guid _testAgencyGuid = Guid.NewGuid();
+
+        [SetUp]
+        public new void Setup()
+        {
+            Db.Insert(new User { Id = _testUserGuid, Username = "test", Password = "test", CustomerId = _testCustomerGuid });
+            Db.Insert(new Customer { Id = _testCustomerGuid, Name = "Ali", Family = "Mrz" });
+            Db.Insert(new AgencyCustomer { AgencyId = _testAgencyGuid, CustomerId = _testCustomerGuid });
+            Db.Insert(new Agency { Id = _testAgencyGuid , Name  = "TaHa"});
+        }
+
         [Test]
         public void try_authenticate_should_return_result()
         {
-            Db.Insert(new User { Username = "test", Password = "test" });
             Client.Invoking(x => x.Post(new Authenticate { UserName = "test", Password = "test" }))
                 .ShouldNotThrow();
         }
 
         [Test]
-        public void PostTourvalidator_should_not_throw_exception()
+        public void GetUser_should_return_result()
         {
-            Client.Invoking(p => p.Post(new PostTour
-            {
-                Tour = new Tour
-                {
-                    Code = "123",
-                    AdultCount = 3,
-                    DestinationId = Guid.NewGuid(),
-                    Duration = 1,
-                    InfantCount = 12,
-                    IsFlight = true,
-                    PlaceId = Guid.NewGuid(),
-                    AdultMinPrice = 12000,
-                    StartDate = DateTime.Today
-                }
-            })).ShouldNotThrow<WebServiceException>();
-        }
-
-        public void PostTourvalidator_should_throw_exception()
-        {
-            Client.Invoking(p => p.Post(new PostTour
-            {
-                Tour = new Tour
-                {
-                    Code = "123",
-                    AdultCount = 3,
-                    DestinationId = Guid.NewGuid(),
-                    Duration = 1,
-                    InfantCount = 12,
-                    IsFlight = true,
-                    PlaceId = Guid.NewGuid(),
-                    AdultMinPrice = 12000,
-                    StartDate = DateTime.MinValue
-                }
-            })).ShouldThrow<WebServiceException>();
+            Client.Post(new Authenticate { Password = "test", UserName = "test" });
+            Client.Invoking(x => x.Get(new GetUser { Id = _testUserGuid }))
+                .ShouldNotThrow();
         }
     }
 }

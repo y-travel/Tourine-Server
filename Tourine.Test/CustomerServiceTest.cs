@@ -3,17 +3,32 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.AgencyCustomers;
 using Tourine.ServiceInterfaces.Customers;
+using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
     public class CustomerServiceTest : ServiceTest
     {
         private readonly Guid _testId = Guid.NewGuid();
+        private readonly Guid _testUserId = Guid.NewGuid();
+        private readonly Guid _testAgencyGuid = Guid.NewGuid();
+        private readonly Guid _testCustomerGuid = Guid.NewGuid();
+
         [SetUp]
         public new void Setup()
         {
             CreateCustomer();
+            AppHost.Session = new AuthSession
+            {
+                TestMode = true,
+                User = new User { Id = _testUserId, CustomerId = _testCustomerGuid },
+                Agency = new Agency { Id = _testAgencyGuid }
+            };
+
         }
 
         [Test]
@@ -39,9 +54,9 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void PutCustomer_should_not_return_exception()
+        public void UpdateCustomer_should_not_return_exception()
         {
-            Client.Invoking(x => x.Put(new PutCustomer
+            Client.Invoking(x => x.Put(new UpdateCustomer
             {
                 Customer = new Customer
                 {
@@ -55,9 +70,9 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void PutCustomer_should_throw_exception()
+        public void UpdateCustomer_should_throw_exception()
         {
-            Client.Invoking(x => x.Put(new PutCustomer
+            Client.Invoking(x => x.Put(new UpdateCustomer
             {
                 Customer = new Customer
                 {
@@ -72,13 +87,12 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void PostCustomer_should_throw_exception()
+        public void CreateCustomer_should_throw_exception()
         {
-            Client.Invoking(x => x.Post(new PostCustomer
+            Client.Invoking(x => x.Post(new CreateCustomer
             {
                 Customer = new Customer
                 {
-                    Id = Guid.NewGuid(),
                     Family = "M-5",
                     MobileNumber = "09123456789",
                     Phone = "123456",
@@ -89,13 +103,12 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void PostCustomer_should_not_throw_exception()
+        public void CreateCustomer_should_not_throw_exception()
         {
-            Client.Invoking(x => x.Post(new PostCustomer
+            Client.Invoking(x => x.Post(new CreateCustomer
             {
                 Customer = new Customer
                 {
-                    Id = Guid.NewGuid(),
                     Family = "M-5",
                     MobileNumber = "09123456789",
                     Phone = "123456",
@@ -128,6 +141,11 @@ namespace Tourine.Test
                 Family = "Bagheri",
                 MobileNumber = "09126963724",
                 Phone = "09145236987"
+            });
+            Db.Insert(new AgencyCustomer
+            {
+                CustomerId = _testId,
+                AgencyId = _testAgencyGuid
             });
         }
     }

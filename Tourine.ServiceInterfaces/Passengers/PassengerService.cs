@@ -1,6 +1,10 @@
-﻿using ServiceStack;
+﻿using System;
+using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.TeamPassengers;
+using Tourine.ServiceInterfaces.Teams;
+using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Passengers
 {
@@ -65,6 +69,32 @@ namespace Tourine.ServiceInterfaces.Passengers
             var query = AutoQuery.CreateQuery(leaders, Request.GetRequestParams())
                 .Where(passenger => passenger.Type == PassengerType.Leader);
             return AutoQuery.Execute(leaders, query);
+        }
+
+        [Authenticate]
+        public object Post(RegisterPassenger regCmd)
+        {
+            if (!Db.Exists<Tour>(new { Id = regCmd.TourId}))
+                throw HttpError.NotFound("");
+       
+            var teamId = Guid.NewGuid();
+            Db.Insert(new Team
+            {
+                Id = teamId,
+                BuyerId = regCmd.BuyerId,
+                TourId = regCmd.TourId,
+                Count = regCmd.PassengersId.Count + 1,
+                SubmitDate = DateTime.Now
+            });
+            foreach (var passenger in regCmd.PassengersId)
+            {
+                Db.Insert(new TeamPassenger
+                {
+                    TeamId = teamId,
+                    PassengerId = passenger
+                });
+            }
+            return Db.SingleById<Team>(teamId);
         }
     }
 }

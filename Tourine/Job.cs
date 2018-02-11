@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Quartz;
-using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 
 namespace Tourine

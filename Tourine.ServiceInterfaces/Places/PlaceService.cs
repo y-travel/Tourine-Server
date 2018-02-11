@@ -1,7 +1,5 @@
-﻿using System;
-using ServiceStack;
+﻿using ServiceStack;
 using ServiceStack.OrmLite;
-using ServiceStack.Text;
 
 namespace Tourine.ServiceInterfaces.Places
 {

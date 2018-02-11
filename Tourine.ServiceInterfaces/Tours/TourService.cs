@@ -1,7 +1,5 @@
-﻿using System;
-using ServiceStack;
+﻿using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
@@ -23,34 +21,39 @@ namespace Tourine.ServiceInterfaces.Tours
         public object Get(GetTours reqTours)
         {
             var query = AutoQuery.CreateQuery(reqTours, Request)
-                .Where(tour => tour.ParentId != null);
+                .Where(tour => !tour.ParentId.HasValue);
             return AutoQuery.Execute(reqTours, query);
         }
 
         [Authenticate]
-        public object Post(PostTour postReq)
+        public object Post(CreateTour createReq)
         {
-            postReq.Tour.Status = TourStatus.Created;
-            postReq.Tour.CreationDate = DateTime.Now;
-            postReq.Tour.Id = Guid.NewGuid();
-            Db.Insert(postReq.Tour);
-            return Db.SingleById<Tour>(postReq.Tour.Id);
+            var tour = new Tour
+            {
+                AgencyId = Session.Agency.Id,
+                BasePrice = createReq.BasePrice,
+                Capacity = createReq.Capacity,
+                TourDetail = createReq.TourDetail
+            };
+            Db.Insert(tour);
+            Db.SaveAllReferences(tour);
+            return Db.LoadSingleById<Tour>(tour.Id);
         }
 
         [Authenticate]
-        public void Put(PutTour putTour)
+        public void Put(UpdateTour updateTour)
         {
-            if (!Db.Exists<Tour>(new { Id = putTour.Tour.Id }))
+            if (!Db.Exists<Tour>(new { Id = updateTour.Tour.Id }))
                 throw HttpError.NotFound("");
             Db.UpdateOnly(new Tour
             {
-                Capacity = putTour.Tour.Capacity,
-                BasePrice = putTour.Tour.BasePrice,
-                ParentId = putTour.Tour.ParentId,
-                Code = putTour.Tour.Code,
-                Status = putTour.Tour.Status,
-                TourDetailId = putTour.Tour.TourDetailId,
-                AgencyId = putTour.Tour.AgencyId
+                Capacity = updateTour.Tour.Capacity,
+                BasePrice = updateTour.Tour.BasePrice,
+                ParentId = updateTour.Tour.ParentId,
+                Code = updateTour.Tour.Code,
+                Status = updateTour.Tour.Status,
+                TourDetailId = updateTour.Tour.TourDetailId,
+                AgencyId = updateTour.Tour.AgencyId
             }
                 , onlyFields: tour => new
                 {
@@ -62,7 +65,7 @@ namespace Tourine.ServiceInterfaces.Tours
                     tour.TourDetailId,
                     tour.AgencyId
                 }
-                , @where: tour => tour.Code == putTour.Tour.Code);
+                , @where: tour => tour.Code == updateTour.Tour.Code);
         }
 
         [Authenticate]

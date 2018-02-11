@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
@@ -167,6 +168,46 @@ namespace Tourine.Test
         {
             var item = Client.Get(new GetLeaders());
             item.Results.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void RegisterPassenger_should_return_result()
+        {
+            List<Guid> psId = new List<Guid>();
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            psId.Add(id1);
+            psId.Add(id2);
+            var p1 = new Passenger {Id = id1, Name = "p1", NationalCode = "123456789", Type = 0,};
+            var p2 = new Passenger {Id = id1, Name = "p1", NationalCode = "123456789", Type = 0,};
+
+            var team = Client.Post(new RegisterPassenger
+            {
+                TourId = _testTourGuid,
+                BuyerId = _testPassengerGuid,
+                PassengersId = psId
+            });
+            team.BuyerId.Should().Be(_testPassengerGuid);
+            team.Count.Should().Be(psId.Count+1);
+        }
+
+        [Test]
+        public void RegisterPassenger_should_throw_exception()
+        {
+            List<Guid> psId = new List<Guid>();
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            psId.Add(id1);
+            psId.Add(id2);
+            var p1 = new Passenger { Id = id1, Name = "p1", NationalCode = "123456789", Type = 0, };
+            var p2 = new Passenger { Id = id1, Name = "p1", NationalCode = "123456789", Type = 0, };
+
+            Client.Invoking(x => x.Post(new RegisterPassenger
+            {
+                TourId = Guid.NewGuid(),
+                BuyerId = _testPassengerGuid,
+                PassengersId = psId
+            })).ShouldThrow<WebServiceException>();
         }
 
         public void CreatePassenger()

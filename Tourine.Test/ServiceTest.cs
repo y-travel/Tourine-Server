@@ -1,13 +1,6 @@
-using System;
-using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
-using ServiceStack.OrmLite;
 using Tourine.Common;
-using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.AgencyCustomers;
-using Tourine.ServiceInterfaces.Customers;
-using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {

@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
-using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Customers;
 using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Common

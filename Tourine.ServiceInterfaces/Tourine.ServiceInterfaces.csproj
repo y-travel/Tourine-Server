@@ -112,6 +112,7 @@
     <Compile Include="Destinations\UpdateDestination.cs" />
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
     <Compile Include="Passengers\GetLeaders.cs" />
+    <Compile Include="Passengers\RegisterPassenger.cs" />
     <Compile Include="PassengerType.cs" />
     <Compile Include="ServiceStatus.cs" />
     <Compile Include="Services\GetServiceOfTour.cs" />
@@ -166,10 +167,10 @@
     <Compile Include="Tours\GetRootTours.cs" />
     <Compile Include="Tours\GetTour.cs" />
     <Compile Include="Tours\GetTours.cs" />
-    <Compile Include="Tours\PostTour.cs" />
-    <Compile Include="Tours\PostTourValidator.cs" />
-    <Compile Include="Tours\PutTour.cs" />
-    <Compile Include="Tours\PutTourValidator.cs" />
+    <Compile Include="Tours\CreateTour.cs" />
+    <Compile Include="Tours\CreateTourValidator.cs" />
+    <Compile Include="Tours\UpdateTour.cs" />
+    <Compile Include="Tours\UpdateTourValidator.cs" />
     <Compile Include="Tours\Tour.cs" />
     <Compile Include="Tours\TourService.cs" />
     <Compile Include="Users\GetUser.cs" />

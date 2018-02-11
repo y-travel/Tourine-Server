@@ -3,19 +3,14 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using Funq;
-using Quartz;
-using Quartz.Impl;
 using ServiceStack;
 using ServiceStack.Admin;
 using ServiceStack.Auth;
-using ServiceStack.Caching;
 using ServiceStack.Data;
 using ServiceStack.FluentValidation;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.Users;
 using ValidationException = ServiceStack.FluentValidation.ValidationException;
 
 namespace Tourine.Common

@@ -7,7 +7,7 @@ namespace Tourine.ServiceInterfaces.TourDetails
 {
     public class TourDetail
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [References(typeof(Destination))]
         public Guid DestinationId { get; set; }
@@ -27,6 +27,6 @@ namespace Tourine.ServiceInterfaces.TourDetails
         public int BusPrice { get; set; }
         public int RoomPrice { get; set; }
         public int FoodPrice { get; set; }
-        public DateTime SubmitDate { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.Now;
     }
 }

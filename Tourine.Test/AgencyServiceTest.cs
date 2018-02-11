@@ -5,9 +5,6 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.AgencyCustomers;
-using Tourine.ServiceInterfaces.Customers;
-using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {

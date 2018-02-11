@@ -1,5 +1,4 @@
-﻿using System;
-using ServiceStack.FluentValidation;
+﻿using ServiceStack.FluentValidation;
 
 namespace Tourine.ServiceInterfaces.AgencyCustomers
 {

@@ -77,7 +77,7 @@ CREATE TABLE dbo.TourDetail (
   BusPrice bigint NULL,
   RoomPrice bigint NULL,
   FoodPrice bigint NULL,
-  SubmitDate datetime NOT NULL,
+  CreationDate datetime NOT NULL,
   LeaderId uniqueidentifier NULL,
   CONSTRAINT PK_TourDetail_Id PRIMARY KEY CLUSTERED (Id),
   CONSTRAINT FK_TourDetail_Destination_Id FOREIGN KEY (DestinationId) REFERENCES dbo.Destination (Id),
@@ -162,7 +162,6 @@ CREATE TABLE dbo.Tour (
   Status tinyint NOT NULL,
   TourDetailId uniqueidentifier NULL,
   AgencyId uniqueidentifier NULL,
-  CreationDate datetime NOT NULL,
   CONSTRAINT PK_Tour_Id PRIMARY KEY CLUSTERED (Id),
   CONSTRAINT FK_Tour_Agency_Id FOREIGN KEY (AgencyId) REFERENCES dbo.Agency (Id),
   CONSTRAINT FK_Tour_TourDetail_Id FOREIGN KEY (TourDetailId) REFERENCES dbo.TourDetail (Id)

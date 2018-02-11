@@ -10,9 +10,9 @@ namespace Tourine.ServiceInterfaces.Tours
         public Guid Id { get; set; } = Guid.NewGuid();
         public int Capacity { get; set; }
         public int BasePrice { get; set; }
-        
+
         [References(typeof(Tour))]
-        public Guid ParentId { get; set; }
+        public Guid? ParentId { get; set; }
         [Reference]
         public Tour Parent { get; set; }
 
@@ -20,7 +20,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public TourStatus Status { get; set; } = TourStatus.Created;
 
         [References(typeof(TourDetail))]
-        public Guid TourDetailId { get; set; }
+        public Guid? TourDetailId { get; set; }
         [Reference]
         public TourDetail TourDetail { get; set; }
 
@@ -28,6 +28,5 @@ namespace Tourine.ServiceInterfaces.Tours
         public Guid AgencyId { get; set; }
         [Reference]
         public Agency Agency { get; set; }
-        public DateTime CreationDate { get; set; }
     }
 }

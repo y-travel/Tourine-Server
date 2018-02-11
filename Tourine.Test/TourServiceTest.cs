@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Destinations;
 using Tourine.ServiceInterfaces.Places;
 using Tourine.ServiceInterfaces.TourDetails;
@@ -24,7 +25,8 @@ namespace Tourine.Test
             AppHost.Session = new AuthSession
             {
                 TestMode = true,
-                User = new User { Id = Guid.NewGuid() }
+                User = new User { Id = Guid.NewGuid() },
+                Agency = new Agency { Id = Guid.NewGuid() }
             };
         }
 
@@ -55,43 +57,55 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void PostTour_should_not_return_exception()
+        public void CreateTour_should_not_return_exception()
         {
-            Client.Invoking(x => x.Post(new PostTour
+            Client.Invoking(x => x.Post(new CreateTour
             {
-                Tour = new Tour
+                Capacity = 500,
+                BasePrice = 300000
+                ,
+                TourDetail = new TourDetail
                 {
-                    Code = "555",
-                    Status = TourStatus.Created,
-                    Capacity = 500,
-                    BasePrice = 300000,
-                    TourDetailId = Guid.NewGuid(),
-                    AgencyId = Guid.NewGuid()
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid(),
                 }
             })).ShouldNotThrow<WebServiceException>();
         }
 
         [Test]
-        public void PostTour_should_return_exception()
+        public void CreateTour_should_save_details()
         {
-            Client.Invoking(x => x.Post(new PostTour
+          var tour=  Client.Post(new CreateTour
             {
-                Tour = new Tour
+                Capacity = 1,
+                BasePrice = 3000,
+                TourDetail = new TourDetail
                 {
-                    Code = "",
-                    Status = TourStatus.Created,
-                    Capacity = 500,
-                    BasePrice = 300000,
-                    TourDetailId = Guid.NewGuid(),
-                    AgencyId = Guid.NewGuid()
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid()
+                }
+            });
+            tour.TourDetail.Should().NotBeNull();
+        }
+        [Test]
+        public void CreateTour_should_return_exception()
+        {
+            Client.Invoking(x => x.Post(new CreateTour
+            {
+                BasePrice = 300000,
+                TourDetail = new TourDetail
+                {
+                    DestinationId = Guid.NewGuid()
                 }
             })).ShouldThrow<WebServiceException>();
         }
 
         [Test]
-        public void PutTour_should_not_throw_exceprion()
+        public void UpdateTour_should_not_throw_exceprion()
         {
-            Client.Invoking(x => x.Put(new PutTour
+            Client.Invoking(x => x.Put(new UpdateTour
             {
                 Tour = new Tour
                 {
@@ -107,9 +121,9 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void PutTour_should_throw_exceprion()
+        public void UpdateTour_should_throw_exceprion()
         {
-            Client.Invoking(x => x.Put(new PutTour
+            Client.Invoking(x => x.Put(new UpdateTour
             {
                 Tour = new Tour
                 {
@@ -134,7 +148,7 @@ namespace Tourine.Test
                 Id = _testTourDetaiGuid,
                 DestinationId = testDId,
                 PlaceId = testPId,
-                SubmitDate = DateTime.Today
+                CreationDate = DateTime.Today
             });
 
             Db.Insert(new Tour

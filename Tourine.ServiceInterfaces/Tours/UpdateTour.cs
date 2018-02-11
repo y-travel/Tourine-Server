@@ -2,8 +2,8 @@
 
 namespace Tourine.ServiceInterfaces.Tours
 {
-    [Route("/tour/", "PUT")]
-    public class PutTour : IReturn
+    [Route("/tours/", "PUT")]
+    public class UpdateTour : IReturn
     {
         public Tour Tour { get; set; }
     }

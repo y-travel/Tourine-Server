@@ -1,7 +1,5 @@
-﻿using System;
-using ServiceStack;
+﻿using ServiceStack;
 using ServiceStack.OrmLite;
-using ServiceStack.Text;
 using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Teams;
 

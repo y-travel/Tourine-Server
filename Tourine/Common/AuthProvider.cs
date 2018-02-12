@@ -4,6 +4,7 @@ using ServiceStack.Auth;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
+using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Common
@@ -35,6 +36,7 @@ namespace Tourine.Common
         {
             session.UserAuthId = User.Id.ToString();
             session.DisplayName = $"{User.Customer.Name} {User.Customer.Family}";
+            session.Roles = User.Role.ParseRole<string>();
             return base.OnAuthenticated(authService, session, tokens, authInfo);
         }
     }

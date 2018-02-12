@@ -26,6 +26,7 @@ namespace Tourine.ServiceInterfaces.Tours
         }
 
         [Authenticate]
+        [RequiredRole(nameof(Role.Admin))]
         public object Post(CreateTour createReq)
         {
             var tour = new Tour
@@ -41,6 +42,7 @@ namespace Tourine.ServiceInterfaces.Tours
         }
 
         [Authenticate]
+        [RequiredRole(nameof(Role.Admin))]
         public void Put(UpdateTour updateTour)
         {
             if (!Db.Exists<Tour>(new { Id = updateTour.Tour.Id }))

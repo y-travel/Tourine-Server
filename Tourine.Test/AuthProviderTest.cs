@@ -2,11 +2,15 @@
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
+using ServiceStack.Host;
 using ServiceStack.OrmLite;
+using ServiceStack.Web;
+using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyCustomers;
 using Tourine.ServiceInterfaces.Customers;
 using Tourine.ServiceInterfaces.Users;
+using SessionExtensions = Tourine.ServiceInterfaces.SessionExtensions;
 
 namespace Tourine.Test
 {

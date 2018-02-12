@@ -25,8 +25,9 @@ namespace Tourine.Test
             AppHost.Session = new AuthSession
             {
                 TestMode = true,
-                User = new User { Id = Guid.NewGuid() },
-                Agency = new Agency { Id = Guid.NewGuid() }
+                User = new User { Id = Guid.NewGuid(), Role = Role.Admin },
+                Agency = new Agency { Id = Guid.NewGuid() },
+                Roles = Role.Admin.ParseRole<string>()
             };
         }
 
@@ -76,7 +77,7 @@ namespace Tourine.Test
         [Test]
         public void CreateTour_should_save_details()
         {
-          var tour=  Client.Post(new CreateTour
+            var tour = Client.Post(new CreateTour
             {
                 Capacity = 1,
                 BasePrice = 3000,

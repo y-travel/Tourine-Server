@@ -11,6 +11,7 @@ namespace Tourine.ServiceInterfaces.Users
         {
             var user = Db.SingleById<User>(request.Id);
             Db.LoadReferences(user);
+            user.Roles = user.Role.ParseRole<Role>();
             return user;
         }
 
@@ -25,7 +26,7 @@ namespace Tourine.ServiceInterfaces.Users
         [Authenticate]
         public void Put(PutUser putUser)
         {
-            if (!Db.Exists<User>(new  { Id = putUser.User.Id}))
+            if (!Db.Exists<User>(new { Id = putUser.User.Id }))
                 throw HttpError.NotFound("");
             Db.Update(putUser.User);
         }

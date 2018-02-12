@@ -18,7 +18,11 @@ namespace Tourine.Test
         public new void Setup()
         {
             CreateUsers();
-            AppHost.Session = new AuthSession { TestMode = true, User = new User { Id = _testUserId } };
+            AppHost.Session = new AuthSession
+            {
+                TestMode = true,
+                User = new User { Id = _testUserId }
+            };
         }
 
         [Test]
@@ -33,6 +37,8 @@ namespace Tourine.Test
         {
             var userInfo = Client.Get<User>(new GetUser { Id = _testUserId });
             userInfo.Should().NotBeNull();
+            userInfo.Roles.Should().Contain(Role.Admin);
+            userInfo.Roles.Should().Contain(Role.Agency);
         }
 
         [Test]
@@ -107,7 +113,7 @@ namespace Tourine.Test
                 Username = "aias",
                 Password = "pass",
                 CustomerId = _testCustomerGuid,
-                Role = Role.Admin
+                Role = Role.Admin | Role.Agency
             });
             Db.Insert(new Customer
             {

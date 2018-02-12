@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ServiceStack.DataAnnotations;
 using Tourine.ServiceInterfaces.Customers;
 
@@ -16,5 +17,8 @@ namespace Tourine.ServiceInterfaces.Users
         public Customer Customer { get; set; }
 
         public Role Role { get; set; }
+
+        [Ignore]
+        public List<Role> Roles { get; set; }
     }
 }

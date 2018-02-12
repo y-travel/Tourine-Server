@@ -31,7 +31,6 @@ namespace Tourine.ServiceInterfaces
         public override bool HasRole(string role, IAuthRepository authRepo)
         {
             return Roles?.Contains(role) ?? false;
-            //return base.HasRole(role, authRepo);
         }
     }
 
@@ -47,6 +46,7 @@ namespace Tourine.ServiceInterfaces
             var customer = db.SingleById<Customer>(agencyCustomer.CustomerId);
             session.DisplayName = customer.Name + " " + customer.Family;
             session.Agency = session.Agency ?? db.SingleById<Agency>(agencyCustomer.AgencyId);
+            session.Roles = session.User.Role.ParseRole<string>();
             return session;
         }
     }

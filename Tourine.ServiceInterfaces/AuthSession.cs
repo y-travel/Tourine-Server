@@ -6,7 +6,7 @@ using ServiceStack.OrmLite;
 using ServiceStack.Web;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyCustomers;
-using Tourine.ServiceInterfaces.Customers;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.ServiceInterfaces
@@ -42,10 +42,10 @@ namespace Tourine.ServiceInterfaces
             Guid id;
             id = Guid.TryParse(session.UserAuthId, out id) ? id : Guid.Empty;
             session.User = session.User ?? db.SingleById<User>(id);
-            var agencyCustomer = db.Single<AgencyCustomer>(x => x.CustomerId == session.User.CustomerId);
-            var customer = db.SingleById<Customer>(agencyCustomer.CustomerId);
+            var agencyPerson = db.Single<AgencyPerson>(x => x.PersonId == session.User.PersonId);
+            var customer = db.SingleById<Person>(agencyPerson.PersonId);
             session.DisplayName = customer.Name + " " + customer.Family;
-            session.Agency = session.Agency ?? db.SingleById<Agency>(agencyCustomer.AgencyId);
+            session.Agency = session.Agency ?? db.SingleById<Agency>(agencyPerson.AgencyId);
             session.Roles = session.User.Role.ParseRole<string>();
             return session;
         }

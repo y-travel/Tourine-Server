@@ -4,7 +4,7 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Customers;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
@@ -48,7 +48,7 @@ namespace Tourine.Test
             {
                 User = new User
                 {
-                    CustomerId = Guid.NewGuid(),
+                    PersonId = Guid.NewGuid(),
                     Username = "",
                     Password = "123456789",
                     Role = Role.Admin
@@ -65,7 +65,7 @@ namespace Tourine.Test
             {
                 User = new User
                 {
-                    CustomerId = Guid.NewGuid(),
+                    PersonId = Guid.NewGuid(),
                     Username = "test",
                     Password = "12345678",
                     Role = Role.Admin
@@ -82,7 +82,7 @@ namespace Tourine.Test
                 User = new User
                 {
                     Id = Guid.NewGuid(),
-                    CustomerId = Guid.NewGuid(),
+                    PersonId = Guid.NewGuid(),
                     Password = "12346789",
                     Username = "validUserName",
                     Role = Role.Admin
@@ -98,7 +98,7 @@ namespace Tourine.Test
                 User = new User
                 {
                     Id = _testUserId,
-                    CustomerId = Guid.NewGuid(),
+                    PersonId = Guid.NewGuid(),
                     Password = "vaidPass",
                     Username = "validUserName",
                     Role = Role.Admin
@@ -112,10 +112,10 @@ namespace Tourine.Test
                 Id = _testUserId,
                 Username = "aias",
                 Password = "pass",
-                CustomerId = _testCustomerGuid,
+                PersonId = _testCustomerGuid,
                 Role = Role.Admin | Role.Agency
             });
-            Db.Insert(new Customer
+            Db.Insert(new Person
             {
                 Id = _testCustomerGuid,
                 Name = "CName",

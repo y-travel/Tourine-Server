@@ -1,11 +1,11 @@
 ﻿using System;
 using ServiceStack;
-using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Persons;
 
 namespace Tourine.ServiceInterfaces.Services
 {
     [Route("/service/{TourId}")]
-    public class GetServiceOfTour : QueryDb<PassengerServiceInfo> , IJoin<Passenger,Service>
+    public class GetServiceOfTour : QueryDb<Service, Person> 
     {
         public Guid TourId { get; set; }
     }

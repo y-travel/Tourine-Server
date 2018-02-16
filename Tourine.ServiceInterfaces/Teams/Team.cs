@@ -1,6 +1,6 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
-using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Teams
@@ -18,14 +18,14 @@ namespace Tourine.ServiceInterfaces.Teams
         public int  Price { get; set; }
         public DateTime SubmitDate { get; set; }
 
-        [References(typeof(Passenger))]
+        [References(typeof(Person))]
         public Guid LeaderId { get; set; }
         [Reference]
-        public Passenger Leader { get; set; }
+        public Person Leader { get; set; }
 
-        [References(typeof(Passenger))]
+        [References(typeof(Person))]
         public Guid BuyerId { get; set; }
         [Reference]
-        public Passenger Buyer { get; set; }
+        public Person Buyer { get; set; }
     }
 }

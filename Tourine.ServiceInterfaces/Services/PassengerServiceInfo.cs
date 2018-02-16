@@ -1,10 +1,11 @@
-﻿using Tourine.ServiceInterfaces.Passengers;
+﻿using System.Collections.Generic;
+using Tourine.ServiceInterfaces.Persons;
 
 namespace Tourine.ServiceInterfaces.Services
 {
     public class PassengerServiceInfo
     {
-        public Service Service { get; set; }
-        public Passenger Passenger { get; set; }
+        public List<Person> Services { get; set; }
+        public Person Person { get; set; }
     }
 }

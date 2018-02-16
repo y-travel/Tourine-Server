@@ -6,6 +6,8 @@ namespace Tourine.ServiceInterfaces.Users
 {
     public class UserService : AppService
     {
+        public TourineBot Bot { get; set; }
+
         [Authenticate]
         public object Get(GetUser request)
         {

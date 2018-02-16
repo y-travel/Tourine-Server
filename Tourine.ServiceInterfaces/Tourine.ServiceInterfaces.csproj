@@ -42,6 +42,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack, Version=4.5.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.4.5.14\lib\net45\ServiceStack.dll</HintPath>
     </Reference>
@@ -79,6 +82,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Telegram.Bot, Version=13.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Telegram.Bot.13.4.0\lib\net45\Telegram.Bot.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agencies\Agency.cs" />
@@ -89,31 +95,26 @@
     <Compile Include="Agencies\CreateAgencyValidator.cs" />
     <Compile Include="Agencies\UpdateAgency.cs" />
     <Compile Include="Agencies\UpdateAgencyValidator.cs" />
-    <Compile Include="AgencyCustomers\AddCustomerToAgencyValidator.cs" />
-    <Compile Include="AgencyCustomers\AgencyCustomer.cs" />
-    <Compile Include="AgencyCustomers\AgencyCustomerService.cs" />
-    <Compile Include="AgencyCustomers\GetCustomerOfAgency.cs" />
-    <Compile Include="AgencyCustomers\AddCustomerToAgency.cs" />
-    <Compile Include="AgencyCustomers\UpdateCustomerToAgency.cs" />
-    <Compile Include="AgencyCustomers\UpdateCustomerToAgencyValidator.cs" />
+    <Compile Include="AgencyPersons\AddPersonToAgencyValidator.cs" />
+    <Compile Include="AgencyPersons\AgencyPerson.cs" />
+    <Compile Include="AgencyPersons\AgencyPersonService.cs" />
+    <Compile Include="AgencyPersons\GetPersonOfAgency.cs" />
+    <Compile Include="AgencyPersons\AddPersonToAgency.cs" />
+    <Compile Include="AgencyPersons\UpdateCustomerToAgency.cs" />
+    <Compile Include="AgencyPersons\UpdatePersonToAgencyValidator.cs" />
     <Compile Include="AppService.cs" />
     <Compile Include="AuthSession.cs" />
     <Compile Include="Currency.cs" />
-    <Compile Include="Customers\Customer.cs" />
-    <Compile Include="Customers\CustomerService.cs" />
-    <Compile Include="Customers\DeleteCustomer.cs" />
-    <Compile Include="Customers\GetCustomer.cs" />
-    <Compile Include="Customers\CreateCustomerValidator.cs" />
-    <Compile Include="Customers\UpdateCustomerValidator.cs" />
     <Compile Include="Destinations\Destination.cs" />
     <Compile Include="Destinations\DestinationService.cs" />
     <Compile Include="Destinations\CreateDestination.cs" />
     <Compile Include="Destinations\CreateDestinationValidator.cs" />
     <Compile Include="Destinations\UpdateDestination.cs" />
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
-    <Compile Include="Passengers\GetLeaders.cs" />
-    <Compile Include="Passengers\RegisterPassenger.cs" />
-    <Compile Include="PassengerType.cs" />
+    <Compile Include="Persons\GetCurrentPerson.cs" />
+    <Compile Include="Persons\GetLeaders.cs" />
+    <Compile Include="Persons\RegisterPerson.cs" />
+    <Compile Include="PersonType.cs" />
     <Compile Include="ServiceStatus.cs" />
     <Compile Include="Services\GetServiceOfTour.cs" />
     <Compile Include="Services\PassengerServiceInfo.cs" />
@@ -122,25 +123,23 @@
     <Compile Include="Services\PutServiceForPassenger.cs" />
     <Compile Include="Services\PutServiceForPassengerValidator.cs" />
     <Compile Include="Services\Service.cs" />
+    <Compile Include="Services\ServiceInfo.cs" />
     <Compile Include="Services\ServiceService.cs" />
     <Compile Include="ServiceType.cs" />
-    <Compile Include="TeamPassengers\AddPassengerToTeam.cs" />
-    <Compile Include="TeamPassengers\AddPassengerToTeamValidator.cs" />
-    <Compile Include="TeamPassengers\ChangePassengerTeam.cs" />
-    <Compile Include="TeamPassengers\ChangePassengerTeamValidator.cs" />
-    <Compile Include="TeamPassengers\GetPassengerOfTeam.cs" />
-    <Compile Include="TeamPassengers\TeamPassenger.cs" />
-    <Compile Include="Passengers\DeletePassenger.cs" />
-    <Compile Include="Customers\GetCustomers.cs" />
-    <Compile Include="Customers\CreateCustomer.cs" />
-    <Compile Include="Customers\UpdateCustomer.cs" />
+    <Compile Include="TeamPersons\AddPersonToTeam.cs" />
+    <Compile Include="TeamPersons\AddPersonsToTeamValidator.cs" />
+    <Compile Include="TeamPersons\ChangePersonsTeam.cs" />
+    <Compile Include="TeamPersons\ChangePersonsTeamValidator.cs" />
+    <Compile Include="TeamPersons\GetPersonsOfTeam.cs" />
+    <Compile Include="TeamPersons\TeamPerson.cs" />
+    <Compile Include="Persons\DeletePerson.cs" />
     <Compile Include="Destinations\GetDestinations.cs" />
-    <Compile Include="Passengers\FindPassengerInAgency.cs" />
-    <Compile Include="Passengers\FindPassengerFromNc.cs" />
-    <Compile Include="Passengers\Passenger.cs" />
-    <Compile Include="Passengers\PassengerService.cs" />
-    <Compile Include="Passengers\PostPassengerValidator.cs" />
-    <Compile Include="Passengers\PutPassengerValidatior.cs" />
+    <Compile Include="Persons\FindPersonInAgency.cs" />
+    <Compile Include="Persons\FindPassengerFromNc.cs" />
+    <Compile Include="Persons\Person.cs" />
+    <Compile Include="Persons\PersonService.cs" />
+    <Compile Include="Persons\PostPersonValidator.cs" />
+    <Compile Include="Persons\PutPersonValidatior.cs" />
     <Compile Include="Places\GetPlaces.cs" />
     <Compile Include="Places\Place.cs" />
     <Compile Include="Places\PlaceService.cs" />
@@ -150,7 +149,7 @@
     <Compile Include="Places\PutPlaceValidator.cs" />
     <Compile Include="PriceDetail.cs" />
     <Compile Include="Role.cs" />
-    <Compile Include="TeamPassengers\TeamPassengerService.cs" />
+    <Compile Include="TeamPersons\TeamPersonService.cs" />
     <Compile Include="Teams\CreateTeam.cs" />
     <Compile Include="Teams\CreateTeamValidator.cs" />
     <Compile Include="Teams\UpdateTeam.cs" />
@@ -163,6 +162,8 @@
     <Compile Include="TourDetails\UpdateTourDetailValidator.cs" />
     <Compile Include="TourDetails\TourDetail.cs" />
     <Compile Include="TourDetails\TourDetailService.cs" />
+    <Compile Include="TourineBot.cs" />
+    <Compile Include="TourineBotServices.cs" />
     <Compile Include="TourStatus.cs" />
     <Compile Include="Tours\GetRootTours.cs" />
     <Compile Include="Tours\GetTour.cs" />
@@ -175,9 +176,9 @@
     <Compile Include="Tours\TourService.cs" />
     <Compile Include="Users\GetUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Passengers\GetPassengers.cs" />
-    <Compile Include="Passengers\CreatePassenger.cs" />
-    <Compile Include="Passengers\UpdatePassenger.cs" />
+    <Compile Include="Persons\GetPersons.cs" />
+    <Compile Include="Persons\CreatePerson.cs" />
+    <Compile Include="Persons\UpdatePerson.cs" />
     <Compile Include="Users\PostUser.cs" />
     <Compile Include="Users\PostUserValidator.cs" />
     <Compile Include="Users\PutUser.cs" />

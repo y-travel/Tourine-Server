@@ -4,14 +4,14 @@ using System.Data;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using Telerik.JustMock;
 using Tourine;
 using Tourine.Common;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyCustomers;
-using Tourine.ServiceInterfaces.Customers;
 using Tourine.ServiceInterfaces.Destinations;
-using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Places;
 using Tourine.ServiceInterfaces.TeamPassengers;
 using Tourine.ServiceInterfaces.Teams;
@@ -94,9 +94,9 @@ public class GlobalFixture
         ConnectionFactory = new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider);
         var settings = new Settings();
 
-        AppHost = (AppHost)new AppHost(settings, ConnectionFactory) { TestMode = true }.Init().Start(BaseUri);
+        AppHost = (AppHost)new AppHost(settings, ConnectionFactory, Mock.Create<TourineBot>()) { TestMode = true }.Init().Start(BaseUri);
 
-        TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Passenger), typeof(Customer), typeof(TourDetail), typeof(TeamPassenger), typeof(Team), typeof(Service), typeof(AgencyCustomer) };//should be fill with tables
+        TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Person), typeof(Person), typeof(TourDetail), typeof(TeamPerson), typeof(Team), typeof(Service), typeof(AgencyPerson) };//should be fill with tables
 
         using (var db = ConnectionFactory.OpenDbConnection())
             db.CreateTables(false, TablesTypes);

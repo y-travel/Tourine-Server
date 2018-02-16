@@ -118,10 +118,9 @@
     <Compile Include="AgencyCustomerServiceTest.cs" />
     <Compile Include="AgencyServiceTest.cs" />
     <Compile Include="AuthProviderTest.cs" />
-    <Compile Include="CustomerServiceTest.cs" />
     <Compile Include="DestinationServiceTest.cs" />
     <Compile Include="InMemoryDbTest.cs" />
-    <Compile Include="PassengerServiceTest.cs" />
+    <Compile Include="PersonServiceTest.cs" />
     <Compile Include="PlaceServiceTest.cs" />
     <Compile Include="RoleTest.cs" />
     <Compile Include="ServiceTest.cs" />

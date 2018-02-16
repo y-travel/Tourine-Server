@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ServiceStack.DataAnnotations;
-using Tourine.ServiceInterfaces.Customers;
+using Tourine.ServiceInterfaces.Persons;
 
 namespace Tourine.ServiceInterfaces.Users
 {
@@ -11,10 +11,10 @@ namespace Tourine.ServiceInterfaces.Users
         public string Username { get; set; }
         public string Password { get; set; }
 
-        [References(typeof(Customer))]
-        public Guid CustomerId { get; set; }
+        [References(typeof(Person))]
+        public Guid PersonId { get; set; }
         [Reference]
-        public Customer Customer { get; set; }
+        public Person Person { get; set; }
 
         public Role Role { get; set; }
 

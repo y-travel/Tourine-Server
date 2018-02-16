@@ -10,7 +10,7 @@ CREATE TABLE [dbo].[Team]
 GO
 ALTER TABLE [dbo].[Team] ADD CONSTRAINT [PK_Team_Id] PRIMARY KEY CLUSTERED  ([Id])
 GO
-ALTER TABLE [dbo].[Team] ADD CONSTRAINT [FK_Team_Passenger_Id] FOREIGN KEY ([Buyer]) REFERENCES [dbo].[Passenger] ([Id])
+ALTER TABLE [dbo].[Team] ADD CONSTRAINT [FK_Team_Person_Id] FOREIGN KEY ([Buyer]) REFERENCES [dbo].[Person] ([Id])
 GO
 ALTER TABLE [dbo].[Team] ADD CONSTRAINT [FK_Team_Tour_Id] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
 GO

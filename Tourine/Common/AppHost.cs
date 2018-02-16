@@ -21,13 +21,16 @@ namespace Tourine.Common
         public Settings Settings { get; }
 
         public OrmLiteConnectionFactory ConnectionFactory { get; }
+        public TourineBot TourineBot { get; }
+
         public AuthSession Session { get; set; }
 
 
-        public AppHost(Settings settings, OrmLiteConnectionFactory connectionFactory) : base("Tourine Services", typeof(AppService).GetAssembly())
+        public AppHost(Settings settings, OrmLiteConnectionFactory connectionFactory, TourineBot tourineBot) : base("Tourine Services", typeof(AppService).GetAssembly())
         {
             Settings = settings;
             ConnectionFactory = connectionFactory;
+            TourineBot = tourineBot;
         }
 
         static AppHost()
@@ -74,6 +77,7 @@ namespace Tourine.Common
             container.Register<IDbConnectionFactory>(ConnectionFactory);
             container.RegisterGeneric(typeof(IValidator<>), Assembly.Load("Tourine.ServiceInterfaces"));
             container.Register(Settings);
+            container.Register(TourineBot);
             GlobalRequestFilters.Add(ValidationFilter);
             ConfigureQuartzJobs();
             Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
@@ -103,7 +107,6 @@ namespace Tourine.Common
                 })
                 { IncludeRegistrationService = false, IncludeAssignRoleServices = false, IncludeAuthMetadataProvider = false, HtmlRedirect = null }
             );
-
         }
 
         private void ValidationFilter(IRequest request, IResponse response, object dto)

@@ -4,6 +4,7 @@ using ServiceStack.Configuration;
 using ServiceStack.OrmLite;
 using ServiceStack.OrmLite.SqlServer;
 using Tourine.Common;
+using Tourine.ServiceInterfaces;
 
 namespace Tourine
 {
@@ -14,10 +15,10 @@ namespace Tourine
             var settings = new Settings(new AppSettings());
             JsConfigurator.Init();
             RunMigrations(settings.ConnectionString);
-
-            var appHost = new AppHost(settings, new OrmLiteConnectionFactory(settings.ConnectionString,
-                new SqlServer2016OrmLiteDialectProvider {StringConverter = {UseUnicode = true}}));
-            appHost.Init();
+            var connectionFactory = new OrmLiteConnectionFactory(settings.ConnectionString,
+                new SqlServer2016OrmLiteDialectProvider { StringConverter = { UseUnicode = true } });
+            var appHost = new AppHost(settings, connectionFactory, new TourineBot(connectionFactory));
+            appHost.Init(); 
         }
 
         public static void RunMigrations(string connectionString)

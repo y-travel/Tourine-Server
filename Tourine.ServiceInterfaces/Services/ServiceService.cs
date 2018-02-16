@@ -1,7 +1,7 @@
 ﻿using System;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Services
@@ -20,7 +20,7 @@ namespace Tourine.ServiceInterfaces.Services
         {
             if (!Db.Exists<Service>(new { Id = forPassenger.Service.Id }))
                 throw HttpError.NotFound("");
-            if (!Db.Exists<Passenger>(new { Id = forPassenger.Service.PassengerId }))
+            if (!Db.Exists<Person>(new { Id = forPassenger.Service.PersonId }))
                 throw HttpError.NotFound("");
             if (!Db.Exists<Tour>(new { Id = forPassenger.Service.TourId }))
                 throw HttpError.NotFound("");

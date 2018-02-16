@@ -33,10 +33,15 @@
     <GenerateSqlPackage>True</GenerateSqlPackage>
     <PackageScriptBatchExecutionStrategy>WrapInExecuteWithSingleSetNoExec</PackageScriptBatchExecutionStrategy>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <ExcludeObjectsFromSync />
+    <ExcludeObjectsFromSync>
+Table=[dbo].[VersionInfo];
+</ExcludeObjectsFromSync>
     <IncludeObjectsInDataSync />
     <DeployChangesInitialImportDone>False</DeployChangesInitialImportDone>
     <DeployChangesExecutionOrder />
+    <DeployChangesForProgrammableObjects>False</DeployChangesForProgrammableObjects>
+    <DeployOnceUseSemver>False</DeployOnceUseSemver>
+    <SemverInitialBaseline>False</SemverInitialBaseline>
   </PropertyGroup>
   <!-- READYROLL OFFLINE SCHEMA MODEL OPTIONS -->
   <PropertyGroup>
@@ -226,6 +231,11 @@
     <None Include="Schema-Model\dbo\Tables\VersionInfo.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0001_20180215-InitDatabase.sql" />
+    <None Include="Schema-Model\dbo\Tables\AgencyPerson.sql" />
+    <None Include="Schema-Model\dbo\Tables\Person.sql" />
+    <None Include="Schema-Model\dbo\Tables\TeamPerson.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0001_20180216-InitDatabase.sql" />
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ ALTER TABLE [dbo].[TourDetail] ADD CONSTRAINT [PK_TourDetail_Id] PRIMARY KEY CLU
 GO
 ALTER TABLE [dbo].[TourDetail] ADD CONSTRAINT [FK_TourDetail_Destination_Id] FOREIGN KEY ([DestinationId]) REFERENCES [dbo].[Destination] ([Id])
 GO
-ALTER TABLE [dbo].[TourDetail] ADD CONSTRAINT [FK_TourDetail_Passenger_Id] FOREIGN KEY ([LeaderId]) REFERENCES [dbo].[Passenger] ([Id])
+ALTER TABLE [dbo].[TourDetail] ADD CONSTRAINT [FK_TourDetail_Person_Id] FOREIGN KEY ([LeaderId]) REFERENCES [dbo].[Person] ([Id])
 GO
 ALTER TABLE [dbo].[TourDetail] ADD CONSTRAINT [FK_TourDetail_Place_Id] FOREIGN KEY ([PlaceId]) REFERENCES [dbo].[Place] ([Id])
 GO

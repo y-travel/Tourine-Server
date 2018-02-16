@@ -2,15 +2,11 @@
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
-using ServiceStack.Host;
 using ServiceStack.OrmLite;
-using ServiceStack.Web;
-using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyCustomers;
-using Tourine.ServiceInterfaces.Customers;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Users;
-using SessionExtensions = Tourine.ServiceInterfaces.SessionExtensions;
 
 namespace Tourine.Test
 {
@@ -23,9 +19,9 @@ namespace Tourine.Test
         [SetUp]
         public new void Setup()
         {
-            Db.Insert(new User { Id = _testUserGuid, Username = "test", Password = "test", CustomerId = _testCustomerGuid });
-            Db.Insert(new Customer { Id = _testCustomerGuid, Name = "Ali", Family = "Mrz" });
-            Db.Insert(new AgencyCustomer { AgencyId = _testAgencyGuid, CustomerId = _testCustomerGuid });
+            Db.Insert(new User { Id = _testUserGuid, Username = "test", Password = "test", PersonId = _testCustomerGuid });
+            Db.Insert(new Person { Id = _testCustomerGuid, Name = "Ali", Family = "Mrz" });
+            Db.Insert(new AgencyPerson { AgencyId = _testAgencyGuid, PersonId = _testCustomerGuid });
             Db.Insert(new Agency { Id = _testAgencyGuid , Name  = "TaHa"});
         }
 

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tourine.Test", "Tourine.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tourine", "Tourine\Tourine.csproj", "{B58020C1-7EC2-4D42-8797-A894739D2B73}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Tourine.Database", "Tourine.Database\Tourine.Database.sqlproj", "{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,15 @@ Global
 		{B58020C1-7EC2-4D42-8797-A894739D2B73}.DeployDev|Any CPU.Build.0 = DeployDev|Any CPU
 		{B58020C1-7EC2-4D42-8797-A894739D2B73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B58020C1-7EC2-4D42-8797-A894739D2B73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.DeployDev|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.DeployDev|Any CPU.Build.0 = Debug|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.DeployDev|Any CPU.Deploy.0 = Debug|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0280105-9E32-4BFC-BFA3-BDADA96C95F6}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

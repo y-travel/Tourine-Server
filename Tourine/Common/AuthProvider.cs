@@ -35,7 +35,7 @@ namespace Tourine.Common
         public override IHttpResult OnAuthenticated(IServiceBase authService, IAuthSession session, IAuthTokens tokens, Dictionary<string, string> authInfo)
         {
             session.UserAuthId = User.Id.ToString();
-            session.DisplayName = $"{User.Customer.Name} {User.Customer.Family}";
+            session.DisplayName = $"{User.Person.Name} {User.Person.Family}";
             session.Roles = User.Role.ParseRole<string>();
             return base.OnAuthenticated(authService, session, tokens, authInfo);
         }

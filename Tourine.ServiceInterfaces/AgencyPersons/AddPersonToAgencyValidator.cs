@@ -1,12 +1,14 @@
-﻿using ServiceStack.FluentValidation;
+﻿using System;
+using ServiceStack.FluentValidation;
 
-namespace Tourine.ServiceInterfaces.AgencyCustomers
+namespace Tourine.ServiceInterfaces.AgencyPersons
 {
     public class AddPersonToAgencyValidator : AbstractValidator<AddPersonToAgency>
     {
         public AddPersonToAgencyValidator()
         {
-            RuleFor(c => c.PersonId).NotEmpty();
+            RuleFor(c => c.PersonId).NotEqual(Guid.Empty);
+            RuleFor(c => c.AgencyId).NotEqual(Guid.Empty).NotNull();
         }
     }
 }

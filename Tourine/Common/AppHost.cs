@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using Funq;
+using Quartz;
+using Quartz.Impl;
 using ServiceStack;
 using ServiceStack.Admin;
 using ServiceStack.Auth;
@@ -22,7 +24,7 @@ namespace Tourine.Common
 
         public OrmLiteConnectionFactory ConnectionFactory { get; }
         public TourineBot TourineBot { get; }
-
+        public Type[] TablesTypes { get; set; }
         public AuthSession Session { get; set; }
 
 
@@ -107,6 +109,7 @@ namespace Tourine.Common
                 })
                 { IncludeRegistrationService = false, IncludeAssignRoleServices = false, IncludeAuthMetadataProvider = false, HtmlRedirect = null }
             );
+
         }
 
         private void ValidationFilter(IRequest request, IResponse response, object dto)
@@ -120,23 +123,24 @@ namespace Tourine.Common
             response.WriteToResponse(request, error);
         }
 
-        public static void ConfigureQuartzJobs()
+        private static void ConfigureQuartzJobs()
         {
-            //            ISchedulerFactory schedFact = new StdSchedulerFactory();
-            //
-            //            var sched = schedFact.GetScheduler();
-            //            sched.Start();
-            //            var job = JobBuilder.Create<Job>()
-            //                .WithIdentity("SendJob")
-            //                .Build();
-            //
-            //            var trigger = TriggerBuilder.Create()
-            //                .WithIdentity("SendTrigger")
-            //                .WithSimpleSchedule(x => x.WithIntervalInMinutes(15).RepeatForever())
-            //                .StartNow()
-            //                .Build();
-            //
-            //            sched.ScheduleJob(job, trigger);
+            ISchedulerFactory schedFact = new StdSchedulerFactory();
+
+            var sched = schedFact.GetScheduler();
+            sched.Start();
+
+            var job = JobBuilder.Create<Job>()
+                .WithIdentity("schJob")
+                .Build();
+
+            var trigger = TriggerBuilder.Create()
+                .WithIdentity("jobTrig")
+                .WithSimpleSchedule(x => x.WithIntervalInMinutes(15).RepeatForever())
+                .StartNow()
+                .Build();
+
+            sched.ScheduleJob(job, trigger);
         }
     }
 }

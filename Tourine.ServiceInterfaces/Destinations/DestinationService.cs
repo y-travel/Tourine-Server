@@ -11,10 +11,11 @@ namespace Tourine.ServiceInterfaces.Destinations
         [Authenticate]
         public object Get(GetDestinations destReq)
         {
-            var query = AutoQuery.CreateQuery(destReq, Request.GetRequestParams());
+            var query = destReq.Id.HasValue
+                ? AutoQuery.CreateQuery(destReq, Request.GetRequestParams()).Where(x => x.Id == destReq.Id)
+                : AutoQuery.CreateQuery(destReq, Request.GetRequestParams());
             return AutoQuery.Execute(destReq, query);
         }
-
         [Authenticate]
         public object Post(CreateDestination destination)
         {
@@ -27,7 +28,7 @@ namespace Tourine.ServiceInterfaces.Destinations
         public void Put(UpdateDestination destination)
         {
             if (!Db.Exists<Destination>(new { Id = destination.Destination.Id }))
-                throw HttpError.NotFound(""); 
+                throw HttpError.NotFound("");
             Db.Update(destination.Destination);
         }
     }

@@ -1,7 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ServiceStack;
-using ServiceStack.Data;
-using ServiceStack.OrmLite;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
@@ -9,31 +8,26 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.InputMessageContents;
 using Telegram.Bot.Types.ReplyMarkups;
-using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Tours;
-using Service = Tourine.ServiceInterfaces.Services.Service;
 
 namespace Tourine.ServiceInterfaces
 {
     public class TourineBot
     {
         private readonly string _machineName = "\r\n(" + System.Environment.MachineName + ")";
-        private IDbConnectionFactory ConnectionFactory { get; set; }
 
-        private readonly TelegramBotClient _bot = new TelegramBotClient("546328065:AAE0wviYKqxhAGCW7HAIlKU3LVlcvw7Ogbc");
-
-        public TourineBot(IDbConnectionFactory connectionFactory)
+        private readonly TelegramBotClient _bot;
+        public readonly TourineBotCmdService CmdService;
+        public TourineBot(TourineBotCmdService cmdService,string telegramToken)
         {
-            ConnectionFactory = connectionFactory;
+            CmdService = cmdService;
+            _bot = new TelegramBotClient(telegramToken);
             _bot.OnMessage += BotOnMessageReceived;
             _bot.OnMessageEdited += BotOnMessageReceived;
             _bot.OnCallbackQuery += BotOnCallbackQueryReceived;
             _bot.OnInlineQuery += BotOnInlineQueryReceived;
             _bot.OnInlineResultChosen += BotOnChosenInlineResultReceived;
             _bot.OnReceiveError += BotOnReceiveError;
-            //var me = _bot.GetMeAsync().Result;
             _bot.StartReceiving();
-            //Bot.StopReceiving();
         }
 
         public void Stop()
@@ -64,103 +58,150 @@ namespace Tourine.ServiceInterfaces
 
         private async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
+            var finalKeyboard = new ReplyKeyboardMarkup();
+            finalKeyboard.Keyboard =
+                new[]
+                {
+                    new KeyboardButton[]
+                    {
+                        new KeyboardButton("مشخصات_سفر_من"),
+                        new KeyboardButton("اعضای_تیم")
+                    },
 
-            string msg;
+                    new KeyboardButton[]
+                    {
+                        new KeyboardButton("گزارش_کلی_تور")
+                    },
+
+                    new KeyboardButton[]
+                    {
+                        new KeyboardButton("ریز_گزارش_تور")
+                    }
+                };
+            finalKeyboard.ResizeKeyboard = true;
+
             var message = messageEventArgs.Message;
+            if (message.Type == MessageType.ContactMessage)
+            {
+                if (!CmdService.IsRegistered(message))
+                {
+                    var res = CmdService.Register(message);
+                    switch (res)
+                    {
+                        case TourineCmdStatus.ContactTypeError:
+                            break;
+                        case TourineCmdStatus.NumberError:
+                            await _bot.SendTextMessageAsync(
+                                                        message.Chat.Id,
+                                                        message.Contact.FirstName + " " + message.Contact.LastName + "\r\n" + " عزیز، شماره شما در سامانه تورینه موجود نمی باشد " + "\r\n" +
+                                                        _machineName,
+                                                        replyMarkup: new ReplyKeyboardRemove());
+                            break;
+                        case TourineCmdStatus.MultipleNumber:
+                            break;
+                        case TourineCmdStatus.Registered:
+
+                            await _bot.SendTextMessageAsync(
+                                message.Chat.Id,
+                                "شماره شما با موفقیت در سامانه تورینه ثبت شد" +
+                                _machineName,
+                                replyMarkup: finalKeyboard);
+
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+                else
+                {
+                    await _bot.SendTextMessageAsync(
+                        message.Chat.Id,
+                        "شماره شما قبلا در سامانه تورینه ثبت شده است" + _machineName,
+                        replyMarkup: new ReplyKeyboardRemove());
+                }
+            }
+            if (!CmdService.IsRegistered(message))
+            {
+                var requestNumber = new ReplyKeyboardMarkup
+                {
+                    Keyboard = new[]
+                    {
+                                    new[]
+                                    {
+                                        new KeyboardButton("اجازه دسترسی به شماره ام را می دهم")
+                                        {
+                                            RequestContact = true
+                                        }
+                                    }
+                                }
+                };
+                requestNumber.ResizeKeyboard = true;
+                requestNumber.OneTimeKeyboard = true;
+
+                await _bot.SendTextMessageAsync(
+                    message.Chat.Id,
+                    message.Chat.FirstName + " عزیز " + "\r\n" +
+                    "ربات اطلاع رسان تورینه ورود شما را به جمع خانواده تورینه خوش آمد می گوید" + _machineName);
+
+                await _bot.SendTextMessageAsync(
+                    message.Chat.Id,
+                    "برای احراز هویت، شماره تلفن خود را انتخاب کنید" + _machineName,
+                    replyMarkup: requestNumber);
+            }
+
             if (message == null || message.Type == MessageType.TextMessage)
             {
                 switch (Enumerable.First(message.Text.Split(' ')))
                 {
-                    // send inline keyboard
-                    case "/start":
-                        using (var db = ConnectionFactory.OpenDbConnection())
-                        {
-                            if (db.Exists<Person>(x => x.ChatId == message.Chat.Id))
-                            {
-                                var requestReplyKeyboard = new ReplyKeyboardMarkup();
-                                var person = db.Single<Person>(x => x.ChatId == message.Chat.Id);
-                                if (person.Type.Is(PersonType.Customer))
-                                {
-                                    msg = "سلام " + person.Name + " " + person.Family +
-                                          " شما به عنوان مشتری وارد سیستم شدید";
-                                }
-                                else if (person.Type.Is(PersonType.Leader))
-                                {
-                                    msg = "سلام " + person.Name + " " + person.Family +
-                                          " شما به عنوان لیدر وارد سیستم شدید";
-                                    requestReplyKeyboard = new ReplyKeyboardMarkup(new[]
-                                    {
-                                        new KeyboardButton("اعضای سفر من")
-                                    });
-                                }
-                                else
-                                {
-                                    msg = "سلام " + person.Name + " " + person.Family +
-                                          " شما به عنوان مسافر وارد سیستم شدید";
-                                    requestReplyKeyboard = new ReplyKeyboardMarkup(new[]
-                                    {
-                                        new KeyboardButton("مشخصات_سفر_من")
-                                    });
-                                }
-
-                                await _bot.SendTextMessageAsync(
-                                    person.ChatId,
-                                    msg + _machineName,
-                                    replyMarkup: requestReplyKeyboard);
-                            }
-                            else
-                            {
-                                var requestNumber = new ReplyKeyboardMarkup
-                                {
-                                    Keyboard = new[]
-                                    {
-                                        new[]
-                                        {
-                                            new KeyboardButton("اجازه دسترسی به شماره ام را می دهم")
-                                            {
-                                                RequestContact = true
-                                            }
-                                        }
-                                    }
-                                };
-
-                                await _bot.SendTextMessageAsync(
-                                    message.Chat.Id,
-                                    "برای احراز هویت، شماره تلفن خود را انتخاب کنید" + _machineName,
-                                    replyMarkup: requestNumber);
-                            }
-                        }
-                        break;
 
                     case "مشخصات_سفر_من":
+                        await _bot.SendTextMessageAsync(
+                            message.Chat.Id,
+                            "مشخصات سفر شما به شرح زیر می باشد " + "\r\n" +
+                            _machineName);
+                        break;
+                    case "اعضای_تیم":
+                        await _bot.SendTextMessageAsync(
+                            message.Chat.Id,
+                            "مشخصات تیم شما به شرح زیر می باشد " + "\r\n" +
+                            _machineName);
+                        break;
+                    case "گزارش_کلی_تور":
+                        await _bot.SendTextMessageAsync(
+                            message.Chat.Id,
+                            "گزارش کلی تور به شرح زیر می باشد " + "\r\n" +
+                            _machineName);
+                        break;
+
+                    case "ریز_گزارش_تور":
+                        await _bot.SendTextMessageAsync(
+                            message.Chat.Id,
+                            "ریز گزارش تور به شرح زیر می باشد " + "\r\n" +
+                            _machineName);
+                        break;
+
+                    default:
+                        if (CmdService.IsRegistered(message))
+                        {
+
+                            await _bot.SendTextMessageAsync(
+                                message.Chat.Id,
+                                "ربات تورینه در خدمت شماست..." +
+                                _machineName,
+                                replyMarkup: finalKeyboard);
+
+                            var role = CmdService.RegisteredAs(message);
+                            if (role.Is(PersonType.Passenger))
+                            {
+                            }
+                            if (role.Is(PersonType.Leader))
+                            {
+                            }
+                        }
+
                         break;
                 }
-            }
-            if (message.Type == MessageType.ContactMessage)
-            {
-                using (var db = ConnectionFactory.OpenDbConnection())
-                {
-                    var person = db.Single<Person>(x => x.SocialNumber == message.Contact.PhoneNumber);
-                    if (person != null)
-                    {
-                        person.ChatId = message.Chat.Id;
-                        db.Update(person);
 
-                        await _bot.SendTextMessageAsync(
-                            message.Chat.Id,
-                            person.Name + " " + person.Family + "\r\n" + " عزیز، شماره شما در سامانه تورینه ثبت شد " +
-                            _machineName,
-                            replyMarkup: new ReplyKeyboardRemove());
-                    }
-                    else
-                    {
-                        await _bot.SendTextMessageAsync(
-                            message.Chat.Id,
-                            message.Contact.FirstName + " " + message.Contact.FirstName + "\r\n" + " عزیز، شماره شما در سامانه تورینه موجود نمی باشد " + "\r\n" +
-                            _machineName,
-                            replyMarkup: new ReplyKeyboardRemove());
-                    }
-                }
             }
         }
         private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
@@ -222,19 +263,4 @@ namespace Tourine.ServiceInterfaces
         }
 
     }
-}
-public class _services
-{
-    public string destination { get; set; }
-    public string agency { get; set; }
-    public string date { get; set; }
-    public string type { get; set; }
-    public string status { get; set; }
-}
-
-public class PersonService
-{
-    public Service Service { get; set; }
-    public Tour Tour { get; set; }
-    //public Agency Agency { get; set; }
 }

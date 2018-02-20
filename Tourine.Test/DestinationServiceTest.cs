@@ -2,82 +2,72 @@
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
-using ServiceStack.OrmLite;
-using Tourine.ServiceInterfaces;
+using ServiceStack.FluentValidation.TestHelper;
 using Tourine.ServiceInterfaces.Destinations;
 
 namespace Tourine.Test
 {
-    public class DestinationServiceTest : ServiceTest
+    public class DestinationServiceTest : ServiceTest<DestinationService>
     {
         private readonly Guid _testDestGuid = Guid.NewGuid();
+        private readonly Destination _destination = new Destination();
         [SetUp]
         public new void Setup()
         {
             CreateDestination();
-            AppHost.Session = new AuthSession { TestMode = true };
         }
 
         [Test]
         public void GetDestinations_should_return_result()
         {
-            var res = Client.Get(new GetDestinations());
-            res.Results.Count.Should().Be(1);
+            var results = (QueryResponse<Destination>)MockService.Get(new GetDestinations { Id = _destination.Id });
+            results.Results.Count.Should().Be(1);
+            results.Results[0].ShouldBeEquivalentTo(_destination);
         }
 
         [Test]
-        public void PostDestination_should_throw_exception()
+        public void GetDestinations_should_return_results()
         {
-            Client.Invoking(d => d.Post(new CreateDestination
-            {
-                Destination = new Destination
-                {
-                    Name = "1"
-                }
-            })).ShouldThrow<WebServiceException>();
+            var results = (QueryResponse<Destination>)MockService.Get(new GetDestinations());
+            results.Results.Count.Should().Be(1);
+            results.Results[0].ShouldBeEquivalentTo(_destination);
         }
 
         [Test]
-        public void PostDestination_should_not_throw_exception()
+        public void UpdateDestination_should_not_throw_exception()
         {
-            Client.Invoking(d => d.Post(new CreateDestination
-            {
-                Destination = new Destination
-                {
-                    Name = "123"
-                }
-            })).ShouldNotThrow();
+            new Action(() => MockService.Put(new UpdateDestination{ Destination = _destination}))
+                .ShouldNotThrow<HttpError>();
         }
 
         [Test]
-        public void PutDestination_should_not_throw_exception()
+        public void UpdateDestination_should_throw_exception()
         {
-            Client.Invoking(d => d.Put(new UpdateDestination
-            {
-                Destination = new Destination
-                {
-                    Id = _testDestGuid,
-                    Name = "123"
-                }
-            })).ShouldNotThrow();
-        }
-
-        [Test]
-        public void PutDestination_should_throw_exception()
-        {
-            Client.Invoking(d => d.Put(new UpdateDestination
-            {
-                Destination = new Destination
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "33"
-                }
-            })).ShouldThrow<WebServiceException>();
+            _destination.Id = Guid.NewGuid();
+            new Action(() => MockService.Put(new UpdateDestination { Destination = _destination }))
+                .ShouldThrow<HttpError>();
         }
 
         public void CreateDestination()
         {
-            Db.Insert(new Destination { Id = _testDestGuid, Name = "Karbala" });
+            InsertDb(_destination);
+        }
+    }
+
+    public class DestinationValidationTest
+    {
+        [Test]
+        public void CreateDestinationValidator_should_throw_error()
+        {
+            var destination = new CreateDestinationValidator();
+            destination.ShouldHaveValidationErrorFor(x => x.Destination.Name, "x");
+        }
+
+        [Test]
+        public void CreateDestinationValidator_should_not_throw_error()
+        {
+            var destination = new CreateDestinationValidator();
+            destination.ShouldNotHaveValidationErrorFor(x => x.Destination.Name, "any");
         }
     }
 }

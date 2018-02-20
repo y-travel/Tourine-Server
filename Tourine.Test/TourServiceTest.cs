@@ -13,7 +13,7 @@ using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
-    public class TourServiceTest : ServiceTest
+    public class TourServiceTest : ServiceTest<TourService>
     {
         private readonly Guid _testTourId = Guid.NewGuid();
         private readonly Guid _testTourDetaiGuid = Guid.NewGuid();

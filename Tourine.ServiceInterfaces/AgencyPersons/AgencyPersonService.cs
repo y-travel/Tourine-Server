@@ -4,7 +4,7 @@ using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Persons;
 
-namespace Tourine.ServiceInterfaces.AgencyCustomers
+namespace Tourine.ServiceInterfaces.AgencyPersons
 {
     public class AgencyPersonService : AppService
     {
@@ -40,7 +40,7 @@ namespace Tourine.ServiceInterfaces.AgencyCustomers
         }
 
         [Authenticate]
-        public void Put(UpdateCustomerToAgency toAgency)
+        public void Put(UpdatePersonToAgency toAgency)
         {
             if (!Db.Exists<Agency>(new { Id = toAgency.AgencyId }))
                 throw HttpError.NotFound("");

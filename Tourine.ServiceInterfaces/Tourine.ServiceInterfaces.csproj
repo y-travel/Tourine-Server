@@ -100,7 +100,7 @@
     <Compile Include="AgencyPersons\AgencyPersonService.cs" />
     <Compile Include="AgencyPersons\GetPersonOfAgency.cs" />
     <Compile Include="AgencyPersons\AddPersonToAgency.cs" />
-    <Compile Include="AgencyPersons\UpdateCustomerToAgency.cs" />
+    <Compile Include="AgencyPersons\UpdatePersonToAgency.cs" />
     <Compile Include="AgencyPersons\UpdatePersonToAgencyValidator.cs" />
     <Compile Include="AppService.cs" />
     <Compile Include="AuthSession.cs" />
@@ -135,7 +135,7 @@
     <Compile Include="Persons\DeletePerson.cs" />
     <Compile Include="Destinations\GetDestinations.cs" />
     <Compile Include="Persons\FindPersonInAgency.cs" />
-    <Compile Include="Persons\FindPassengerFromNc.cs" />
+    <Compile Include="Persons\FindPersonFromNc.cs" />
     <Compile Include="Persons\Person.cs" />
     <Compile Include="Persons\PersonService.cs" />
     <Compile Include="Persons\PostPersonValidator.cs" />
@@ -163,7 +163,9 @@
     <Compile Include="TourDetails\TourDetail.cs" />
     <Compile Include="TourDetails\TourDetailService.cs" />
     <Compile Include="TourineBot.cs" />
+    <Compile Include="TourineBotCmdService.cs" />
     <Compile Include="TourineBotServices.cs" />
+    <Compile Include="TourineCmdStatus.cs" />
     <Compile Include="TourStatus.cs" />
     <Compile Include="Tours\GetRootTours.cs" />
     <Compile Include="Tours\GetTour.cs" />

@@ -2,107 +2,97 @@
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
-using ServiceStack.OrmLite;
-using Tourine.ServiceInterfaces;
+using ServiceStack.FluentValidation.Results;
+using ServiceStack.FluentValidation.TestHelper;
 using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.AgencyPersons;
+using Tourine.ServiceInterfaces.Persons;
+using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
-    public class AgencyServiceTest : ServiceTest
+    public class AgencyServiceTest : ServiceTest<AgencyService>
     {
         private readonly Guid _testAgencyGuid = Guid.NewGuid();
+
+        private readonly Person _person = new Person();
+        private readonly Agency _agency = new Agency();
+        private readonly AgencyPerson _agencyPerson = new AgencyPerson();
 
         [SetUp]
         public new void Setup()
         {
             CreateAgency();
-            AppHost.Session = new AuthSession { TestMode = true };
         }
 
         [Test]
         public void GetAgency_should_return_result()
         {
-            var item = Client.Get(new GetAgency { Id = _testAgencyGuid });
-            item.Name.Should().Be("TaHa");
+            var item = (Agency)MockService.Get(new GetAgency { Id = _agency.Id });
+            item.Id.Should().Be(_agency.Id);
         }
 
         [Test]
         public void GetAgency_should_throw_exception()
         {
-            Client.Invoking(a => a.Get(new GetAgency { Id = Guid.NewGuid() }))
-                .ShouldThrow<WebServiceException>();
+            new Action(() => MockService.Get(new GetAgency { Id = Guid.NewGuid() }))
+                .ShouldThrow<HttpError>();
         }
 
         [Test]
         public void GetAgencies_should_return_results()
         {
-            var results = Client.Get(new GetAgencies());
+            var results = (QueryResponse<Agency>)MockService.Get(new GetAgencies());
             results.Results.Count.Should().Be(1);
-        }
-
-        [Test]
-        public void CreateAgency_should_throw_exception()
-        {
-            Client.Invoking(a => a.Post(new CreateAgency
-            {
-                Agency = new Agency
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "1",
-                    PhoneNumber = "validNum"
-                }
-            }))
-                .ShouldThrow<WebServiceException>();
-        }
-
-        [Test]
-        public void CreateAgency_should_not_throw_exception()
-        {
-            Client.Invoking(a => a.Post(new CreateAgency
-            {
-                Agency = new Agency
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Eram",
-                    PhoneNumber = "validNum"
-                }
-            }))
-                .ShouldNotThrow<WebServiceException>();
         }
 
         [Test]
         public void UpdateAgency_should_throw_exception()
         {
-            Client.Invoking(a => a.Put(new UpdateAgency
-            {
-                Agency = new Agency
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Raja",
-                    PhoneNumber = "validNum"
-                }
-            }))
-                .ShouldThrow<WebServiceException>();
+            _agency.Id = Guid.NewGuid();
+            new Action(() => MockService.Put(new UpdateAgency { Agency = _agency }))
+                .ShouldThrow<HttpError>();
         }
 
         [Test]
         public void UpdateAgency_should_not_throw_exception()
         {
-            Client.Invoking(a => a.Put(new UpdateAgency
-            {
-                Agency = new Agency
-                {
-                    Id = _testAgencyGuid,
-                    Name = "Raja",
-                    PhoneNumber = "validNum"
-                }
-            }))
-                .ShouldNotThrow<WebServiceException>();
+
+            new Action(() => MockService.Put(new UpdateAgency { Agency = _agency }))
+                .ShouldNotThrow<HttpError>();
         }
+
+//        [Test]
+//        public void CreateAgency_should_return_inserted_result()
+//        {
+//            _agency.Id = Guid.NewGuid();
+//            var agency = (Agency)MockService.Post(new CreateAgency { Agency = _agency });
+//            agency.ShouldBeEquivalentTo(_agency);
+//        }
 
         private void CreateAgency()
         {
-            Db.Insert(new Agency { Id = _testAgencyGuid, Name = "TaHa", PhoneNumber = "021356478" });
+            _agencyPerson.AgencyId = _agency.Id;
+            _agencyPerson.PersonId = _person.Id;
+
+            InsertDb(_person);
+            InsertDb(new User { PersonId = _person.Id }, true);
+            InsertDb(_agency, true);
+            InsertDb(_agencyPerson);
+        }
+
+    }
+
+    public class AgencyValidationTest
+    {
+        [Test]
+        public void CreateAgencyValidator_should_throw_error()
+        {
+            var _agency = new Agency {Name = "",PhoneNumber = ""};
+            var createAgency = new CreateAgency {Agency = _agency};
+            var validator = new CreateAgencyValidator();
+            var results = validator.Validate(createAgency);
+            Assert.False(results.IsValid);
         }
     }
 }

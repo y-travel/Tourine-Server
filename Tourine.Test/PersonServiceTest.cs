@@ -1,152 +1,120 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using ServiceStack.Text;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.AgencyPersons;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.TeamPassengers;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.Tours;
+using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
-    public class PersonServiceTest : ServiceTest
+    public class PersonServiceTest : ServiceTest<PersonService>
     {
+        private readonly Guid _testUserGuid = Guid.NewGuid();
         private readonly Guid _testPersonGuid = Guid.NewGuid();
         private readonly Guid _testTeamGuid = Guid.NewGuid();
         private readonly Guid _testTourGuid = Guid.NewGuid();
         private readonly Guid _testAgencyGuid = Guid.NewGuid();
 
+        private readonly Person _person = new Person { NationalCode = "0123456789" , Family = "any"};
+        private readonly Agency _agency = new Agency();
         [SetUp]
         public new void Setup()
         {
             CreatePerson();
-            AppHost.Session = new AuthSession { TestMode = true };
+            //            AppHost.Session = new AuthSession
+            //            {
+            //                TestMode = true,
+            //                User = new User { Id = _testUserGuid ,PersonId = _testPersonGuid , Username = "testu"}
+            //            };
         }
 
         [Test]
-        public void GetPassengers_should_return_result()
+        public void GetPersons_should_return_result()
         {
-            var res = Client.Get(new GetPersons());
-            res.Results.Count.Should().Be(1);
-            res.Results[0].Name.Should().Be("emaN");
+            var res = (QueryResponse<Person>)MockService.Get(new GetPersons { Id = _person.Id });
+            res.Results[0].ShouldBeEquivalentTo(_person);
         }
 
         [Test]
-        public void DeletePassenger_should_not_throw_exception()
+        public void GetPersons_should_return_results()
         {
-            Client.Invoking(x => x.Delete(new DeletePerson { Id = _testPersonGuid }))
-                .ShouldNotThrow<WebServiceException>();
+            var res = (QueryResponse<Person>)MockService.Get(new GetPersons());
+            res.Results[0].ShouldBeEquivalentTo(_person);
         }
 
         [Test]
-        public void DeletePassenger_should_throw_exeption()
+        public void DeletePerson_should_not_throw_exception()
         {
-            Client.Invoking(x => x.Delete(new DeletePerson { Id = Guid.NewGuid() }))
-                .ShouldThrow<WebServiceException>();
+            new Action(() => MockService.Delete(new DeletePerson { Id = _person.Id }))
+                .ShouldNotThrow<HttpError>();
         }
 
         [Test]
-        public void UpdatePassenger_should_not_return_exception()
+        public void DeletePerson_should_throw_exeption()
         {
-            var it = new Person
-            {
-                Id = _testPersonGuid,
-                BirthDate = DateTime.Now,
-                PassportExpireDate = DateTime.Now,
-                NationalCode = "123456",
-                PassportNo = "456789",
-                Family = "Mrz",
-                MobileNumber = "45678987",
-                Name = "Ali"
-            };
-            Client.Invoking(x => x.Put(new UpdatePerson
-            {
-                Person = it
-            })).ShouldNotThrow<WebServiceException>();
+            new Action(() => MockService.Delete(new DeletePerson { Id = Guid.NewGuid() }))
+                .ShouldThrow<HttpError>();
         }
 
         [Test]
-        public void UpdatePassenger_should_throw_exception()
+        public void UpdatePerson_should_not_return_exception()
         {
-            Client.Invoking(x => x.Put(new UpdatePerson
-            {
-                Person = new Person
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "emaN",
-                    Family = "fdj",
-                    MobileNumber = "09125412164",
-                    BirthDate = DateTime.Now,
-                    NationalCode = "123456789",
-                    PassportExpireDate = DateTime.Now,
-                    PassportNo = "123456879"
-                }
-            }))
-            .ShouldThrow<WebServiceException>();
+            new Action(() => MockService.Put(new UpdatePerson { Person = _person }))
+                .ShouldNotThrow<HttpError>();
         }
 
         [Test]
-        public void CreatePassenger_should_not_return_exception()
+        public void UpdatePerson_should_throw_exception()
         {
-
-            Client.Invoking(x => x.Post(new CreatePerson
-            {
-                Person = new Person
-                {
-                    Name = "emaN",
-                    Family = "fdj",
-                    MobileNumber = "09125412162",
-                    BirthDate = DateTime.Today,
-                    NationalCode = "1234567890",
-                    PassportExpireDate = DateTime.MaxValue,
-                    PassportNo = "12345689",
-                    Gender = true,
-                    Type = PersonType.Passenger
-                }
-            })).ShouldNotThrow<WebServiceException>();
+            _person.Id = Guid.NewGuid();
+            new Action(() => MockService.Put(new UpdatePerson { Person = _person }))
+                .ShouldThrow<HttpError>();
         }
 
         [Test]
-        public void CreatePassenger_should_return_exception()
+        public void CreatePerson_should_return_inserted_object()
         {
-
-            Client.Invoking(x => x.Post(new CreatePerson
-            {
-                Person = new Person
-                {
-                    Name = "emaN",
-                    Family = "fdj",
-                    MobileNumber = "09125412162",
-                    BirthDate = DateTime.Today,
-                    NationalCode = "1234567890",
-                    PassportExpireDate = DateTime.MaxValue
-                }
-            })).ShouldThrow<WebServiceException>();
+            _person.Id = Guid.NewGuid();
+            var person = (Person)MockService.Post(new CreatePerson { Person = _person });
+            person.ShouldBeEquivalentTo(_person);
         }
 
         [Test]
-        public void FindPassengerFromNc_should_retuen_result()
+        public void CreatePerson_should_return_exception()
         {
-            var item = Client.Get(new FindPassengerFromNc { NationalCode = "0012234567" });
-            item.Name.Should().Be("emaN");
+            new Action(() => MockService.Post(new CreatePerson { Person = _person }))
+                .ShouldThrow<SQLiteException>();
         }
 
         [Test]
-        public void FindPassengerFromNc_should_throw_exception()
+        public void FindPersonFromNc_should_retuen_result()
         {
-            Client.Invoking(x => x.Get(new FindPassengerFromNc { NationalCode = "000000000" }))
-                .ShouldThrow<WebServiceException>();
+            var item = (Person)MockService.Get(new FindPersonFromNc { NationalCode = "0123456789" });
+            item.ShouldBeEquivalentTo(_person);
         }
 
         [Test]
-        public void FindPassengerInAgency_should_return_result()
+        public void FindPersonFromNc_should_throw_exception()
         {
-            var item = Client.Get(new FindPersonInAgency { Str = "r", AgencyId = _testAgencyGuid });
-            item.Results.Count.Should().Be(1);
+            new Action(() => MockService.Get(new FindPersonFromNc { NationalCode = "0" }))
+                .ShouldThrow<HttpError>();
+        }
+
+        [Test]
+        public void FindPersonInAgency_should_return_result()
+        {
+            var person = (QueryResponse<Person>)MockService.Get(new FindPersonInAgency {Str = "n", AgencyId = _agency.Id});
+            person.Results[0].ShouldBeEquivalentTo(_person);
         }
 
         [Test]
@@ -178,8 +146,8 @@ namespace Tourine.Test
             Guid id2 = Guid.NewGuid();
             psId.Add(id1);
             psId.Add(id2);
-            var p1 = new Person {Id = id1, Name = "p1", NationalCode = "123456789", Type = 0,};
-            var p2 = new Person {Id = id1, Name = "p1", NationalCode = "123456789", Type = 0,};
+            var p1 = new Person { Id = id1, Name = "p1", NationalCode = "123456789", Type = 0, };
+            var p2 = new Person { Id = id1, Name = "p1", NationalCode = "123456789", Type = 0, };
 
             var team = Client.Post(new RegisterPerson
             {
@@ -188,7 +156,7 @@ namespace Tourine.Test
                 PassengersId = psId
             });
             team.BuyerId.Should().Be(_testPersonGuid);
-            team.Count.Should().Be(psId.Count+1);
+            team.Count.Should().Be(psId.Count + 1);
         }
 
         [Test]
@@ -210,49 +178,66 @@ namespace Tourine.Test
             })).ShouldThrow<WebServiceException>();
         }
 
+        [Test]
+        public void GetCurrentPerson_should_return_result()
+        {
+            var person = (Person)MockService.Get(new GetCurrentPerson());
+            person.Should().NotBeNull();
+            person.Id.Should().Be(_testPersonGuid);
+            person.Name.Should().Be("testu");
+        }
         public void CreatePerson()
         {
-            Db.Insert(new Person
-            {
-                Id = _testPersonGuid,
-                Name = "emaN",
-                Family = "Bghr",
-                MobileNumber = "09125412168",
-                NationalCode = "0012234567",
-                Type = PersonType.Leader
-            });
-
-            Db.Insert(new Team
-            {
-                Id = _testTeamGuid,
-                TourId = _testTourGuid,
-                Count = 2,
-                Price = 12,
-                SubmitDate = DateTime.Now
-            });
-
-            Db.Insert(new TeamPerson
-            {
-                Id = Guid.NewGuid(),
-                PersonId = _testPersonGuid,
-                TeamId = _testTeamGuid
-            });
-
-
-            Db.Insert(new Agency
-            {
-                Id = _testAgencyGuid,
-                Name = "Taha",
-                PhoneNumber = "132456789"
-            });
-
-            Db.Insert(new Tour
-            {
-                Id = _testTourGuid,
-                AgencyId = _testAgencyGuid,
-                Status = TourStatus.Created,
-                TourDetailId = Guid.NewGuid()
-            });
+            var _agencyPerson = new AgencyPerson { AgencyId = _agency.Id, PersonId = _person.Id };
+            InsertDb(_person);
+            InsertDb(_agency);
+            InsertDb(_agencyPerson);
+            //            Db.Insert(new User
+            //            {
+            //                Id = _testUserGuid,
+            //                PersonId = _testPersonGuid
+            //            });
+            //            Db.Insert(new Person
+            //            {
+            //                Id = _testPersonGuid,
+            //                Name = "emaN",
+            //                Family = "Bghr",
+            //                MobileNumber = "09125412168",
+            //                NationalCode = "0012234567",
+            //                Type = PersonType.Leader
+            //            });
+            //
+            //            Db.Insert(new Team
+            //            {
+            //                Id = _testTeamGuid,
+            //                TourId = _testTourGuid,
+            //                Count = 2,
+            //                Price = 12,
+            //                SubmitDate = DateTime.Now
+            //            });
+            //
+            //            Db.Insert(new TeamPerson
+            //            {
+            //                Id = Guid.NewGuid(),
+            //                PersonId = _testPersonGuid,
+            //                TeamId = _testTeamGuid
+            //            });
+            //
+            //
+            //            Db.Insert(new Agency
+            //            {
+            //                Id = _testAgencyGuid,
+            //                Name = "Taha",
+            //                PhoneNumber = "132456789"
+            //            });
+            //
+            //            Db.Insert(new Tour
+            //            {
+            //                Id = _testTourGuid,
+            //                AgencyId = _testAgencyGuid,
+            //                Status = TourStatus.Created,
+            //                TourDetailId = Guid.NewGuid()
+            //            });
         }
     }
 }

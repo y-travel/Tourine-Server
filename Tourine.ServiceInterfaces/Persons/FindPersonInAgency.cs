@@ -1,13 +1,11 @@
 ﻿using System;
 using ServiceStack;
-using Tourine.ServiceInterfaces.TeamPassengers;
-using Tourine.ServiceInterfaces.Teams;
-using Tourine.ServiceInterfaces.Tours;
+using Tourine.ServiceInterfaces.AgencyPersons;
 
 namespace Tourine.ServiceInterfaces.Persons
 {
     [Route("/persons/{AgencyId}/{Str}", "GET")]
-    public class FindPersonInAgency : QueryDb<Person> , IJoin<Person, TeamPerson, Team, Tour>
+    public class FindPersonInAgency : QueryDb<Person> , IJoin<Person, AgencyPerson>
     {
         public Guid AgencyId { get; set; }
         public string Str { get; set; }

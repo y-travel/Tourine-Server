@@ -20,9 +20,10 @@ namespace Tourine.ServiceInterfaces.Agencies
         }
 
         [Authenticate]
-        public void Post(CreateAgency agency )
+        public object Post(CreateAgency agency )
         {
             Db.Insert(agency.Agency);
+            return Db.SingleById<Agency>(agency.Agency.Id);
         }
         
         [Authenticate]

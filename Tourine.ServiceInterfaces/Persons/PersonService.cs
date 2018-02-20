@@ -1,5 +1,6 @@
 ﻿using System;
 using ServiceStack;
+using ServiceStack.FluentValidation.Attributes;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.TeamPassengers;
@@ -11,10 +12,12 @@ namespace Tourine.ServiceInterfaces.Persons
     public class PersonService : AppService
     {
         public IAutoQueryDb AutoQuery { get; set; }
+
         [Authenticate]
-        public void Post(CreatePerson createPerson)
+        public object Post(CreatePerson createPerson)
         {
             Db.Insert(createPerson.Person);
+            return Db.SingleById<Person>(createPerson.Person.Id);
         }
 
         [Authenticate]
@@ -28,7 +31,9 @@ namespace Tourine.ServiceInterfaces.Persons
         [Authenticate]
         public object Get(GetPersons getPerson)
         {
-            var query = AutoQuery.CreateQuery(getPerson, Request.GetRequestParams());
+            var query = getPerson.Id.HasValue
+                ? AutoQuery.CreateQuery(getPerson, Request.GetRequestParams()).Where(x => x.Id == getPerson.Id)
+                : AutoQuery.CreateQuery(getPerson, Request.GetRequestParams());
             return AutoQuery.Execute(getPerson, query);
         }
 
@@ -43,7 +48,7 @@ namespace Tourine.ServiceInterfaces.Persons
         }
 
         [Authenticate]
-        public object Get(FindPassengerFromNc fromNc)
+        public object Get([Validator(typeof(FindPersonFromNc))]FindPersonFromNc fromNc)
         {
             if (!Db.Exists<Person>(new { NationalCode = fromNc.NationalCode }))
                 throw HttpError.NotFound("");
@@ -59,8 +64,7 @@ namespace Tourine.ServiceInterfaces.Persons
                 p.Name.Contains(persons.Str) ||
                 p.Family.Contains(persons.Str) ||
                 p.MobileNumber.Contains(persons.Str));
-            var it = AutoQuery.Execute(persons, item);
-            return it;
+            return AutoQuery.Execute(persons, item);
         }
 
         [Authenticate]
@@ -74,9 +78,9 @@ namespace Tourine.ServiceInterfaces.Persons
         [Authenticate]
         public object Post(RegisterPerson regCmd)
         {
-            if (!Db.Exists<Tour>(new { Id = regCmd.TourId}))
+            if (!Db.Exists<Tour>(new { Id = regCmd.TourId }))
                 throw HttpError.NotFound("");
-       
+
             var teamId = Guid.NewGuid();
             Db.Insert(new Team
             {

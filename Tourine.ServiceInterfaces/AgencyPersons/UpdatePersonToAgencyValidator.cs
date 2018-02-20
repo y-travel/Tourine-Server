@@ -1,8 +1,8 @@
 ﻿using ServiceStack.FluentValidation;
 
-namespace Tourine.ServiceInterfaces.AgencyCustomers
+namespace Tourine.ServiceInterfaces.AgencyPersons
 {
-    public class UpdatePersonToAgencyValidator : AbstractValidator<UpdateCustomerToAgency>
+    public class UpdatePersonToAgencyValidator : AbstractValidator<UpdatePersonToAgency>
     {
         public UpdatePersonToAgencyValidator()
         {

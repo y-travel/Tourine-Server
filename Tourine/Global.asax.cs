@@ -17,7 +17,7 @@ namespace Tourine
             RunMigrations(settings.ConnectionString);
             var connectionFactory = new OrmLiteConnectionFactory(settings.ConnectionString,
                 new SqlServer2016OrmLiteDialectProvider { StringConverter = { UseUnicode = true } });
-            var appHost = new AppHost(settings, connectionFactory, new TourineBot(connectionFactory));
+            var appHost = new AppHost(settings, connectionFactory, new TourineBot(new TourineBotCmdService(connectionFactory),settings.TelegramToken));
             appHost.Init(); 
         }
 

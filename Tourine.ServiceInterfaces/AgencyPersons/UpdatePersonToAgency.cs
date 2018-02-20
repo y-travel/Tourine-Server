@@ -1,10 +1,10 @@
 ﻿using System;
 using ServiceStack;
 
-namespace Tourine.ServiceInterfaces.AgencyCustomers
+namespace Tourine.ServiceInterfaces.AgencyPersons
 {
     [Route("/agencies/persons", "PUT")]
-    public class UpdateCustomerToAgency : IReturn
+    public class UpdatePersonToAgency : IReturn
     {
         public Guid Id { get; set; }
         public Guid AgencyId { get; set; }

@@ -11,21 +11,16 @@ using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
-    public class TeamPassengerServiceTest : ServiceTest
+    public class TeamPersonServiceTest : ServiceTest<TeamPersonService>
     {
         private readonly Guid _testTeamGuid = Guid.NewGuid();
-        private readonly Guid _testPassengerGuid = Guid.NewGuid();
-        private readonly Guid _testTeamPassengerGuid = Guid.NewGuid();
+        private readonly Guid _testPersonGuid = Guid.NewGuid();
+        private readonly Guid _testTeamPersonGuid = Guid.NewGuid();
 
         [SetUp]
         public new void Setup()
         {
-            CreateTeamPassenger();
-            AppHost.Session = new AuthSession
-            {
-                TestMode = true,
-                User = new User { Id = Guid.NewGuid() }
-            };
+            CreateTeamPerson();
         }
 
         [Test]
@@ -35,7 +30,7 @@ namespace Tourine.Test
             {
                 TeamPerson = new TeamPerson
                 {
-                    PersonId = _testPassengerGuid,
+                    PersonId = _testPersonGuid,
                     TeamId = _testTeamGuid
                 }
             })).ShouldNotThrow<WebServiceException>();
@@ -61,8 +56,8 @@ namespace Tourine.Test
             {
                 TeamPerson = new TeamPerson
                 {
-                    Id = _testTeamPassengerGuid,
-                    PersonId = _testPassengerGuid,
+                    Id = _testTeamPersonGuid,
+                    PersonId = _testPersonGuid,
                     TeamId = _testTeamGuid
                 }
             })).ShouldNotThrow<WebServiceException>();
@@ -75,7 +70,7 @@ namespace Tourine.Test
             {
                 TeamPerson = new TeamPerson
                 {
-                    Id = _testTeamPassengerGuid,
+                    Id = _testTeamPersonGuid,
                     PersonId = Guid.NewGuid(),
                     TeamId = _testTeamGuid
                 }
@@ -89,11 +84,11 @@ namespace Tourine.Test
             passengers.Results.Count.Should().Be(1);
         }
 
-        public void CreateTeamPassenger()
+        public void CreateTeamPerson()
         {
             Db.Insert(new Person
             {
-                Id = _testPassengerGuid,
+                Id = _testPersonGuid,
                 Name = "aii",
                 Family = "mirza",
                 Gender = true,
@@ -109,8 +104,8 @@ namespace Tourine.Test
             });
             Db.Insert(new TeamPerson
             {
-                Id = _testTeamPassengerGuid,
-                PersonId = _testPassengerGuid,
+                Id = _testTeamPersonGuid,
+                PersonId = _testPersonGuid,
                 TeamId = _testTeamGuid
             });
         }

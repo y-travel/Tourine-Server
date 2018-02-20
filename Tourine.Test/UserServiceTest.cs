@@ -9,7 +9,7 @@ using Tourine.ServiceInterfaces.Users;
 
 namespace Tourine.Test
 {
-    public class UserServiceTest : ServiceTest
+    public class UserServiceTest : ServiceTest<UserService>
     {
         private readonly Guid _testUserId = Guid.NewGuid();
         private readonly Guid _testCustomerGuid = Guid.NewGuid();

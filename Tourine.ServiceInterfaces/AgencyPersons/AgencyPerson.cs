@@ -3,7 +3,7 @@ using ServiceStack.DataAnnotations;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Persons;
 
-namespace Tourine.ServiceInterfaces.AgencyCustomers
+namespace Tourine.ServiceInterfaces.AgencyPersons
 {
     public class AgencyPerson
     {

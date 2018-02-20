@@ -6,7 +6,7 @@ namespace Tourine.ServiceInterfaces.Destinations
     {
         public CreateDestinationValidator()
         {
-            RuleFor(d => d.Destination.Name).NotEmpty();
+//            RuleFor(d => d.Destination.Name).NotNull();
             RuleFor(d => d.Destination.Name.Length).GreaterThanOrEqualTo(2);
         }
     }

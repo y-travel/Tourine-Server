@@ -104,6 +104,7 @@
     <Compile Include="AgencyPersons\UpdatePersonToAgencyValidator.cs" />
     <Compile Include="AppService.cs" />
     <Compile Include="AuthSession.cs" />
+    <Compile Include="Bot.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="Destinations\Destination.cs" />
     <Compile Include="Destinations\DestinationService.cs" />

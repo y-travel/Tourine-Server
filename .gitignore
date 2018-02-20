@@ -159,3 +159,6 @@ $RECYCLE.BIN/
 
 # Webstorm files
 .idea
+
+# Redgate work file
+*.jfm

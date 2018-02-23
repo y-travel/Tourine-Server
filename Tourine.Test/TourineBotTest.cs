@@ -12,7 +12,7 @@ namespace Tourine.Test
         [Test]
         public void BuyerTeamList_should_return_result()
         {
-            
+
         }
     }
 }

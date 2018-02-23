@@ -1,6 +1,7 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
 using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Places;
 
 namespace Tourine.ServiceInterfaces.TourDetails
@@ -28,5 +29,10 @@ namespace Tourine.ServiceInterfaces.TourDetails
         public int RoomPrice { get; set; }
         public int FoodPrice { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
+
+        [References(typeof(Person))]
+        public Guid LeaderId { get; set; }
+        [Reference]
+        public Person Person { get; set; }
     }
 }

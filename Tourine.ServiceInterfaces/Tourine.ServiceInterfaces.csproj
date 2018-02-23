@@ -111,6 +111,7 @@
     <Compile Include="Destinations\CreateDestinationValidator.cs" />
     <Compile Include="Destinations\UpdateDestination.cs" />
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
+    <Compile Include="PersonServiceReport.cs" />
     <Compile Include="Persons\GetCurrentPerson.cs" />
     <Compile Include="Persons\GetLeaders.cs" />
     <Compile Include="Persons\RegisterPerson.cs" />

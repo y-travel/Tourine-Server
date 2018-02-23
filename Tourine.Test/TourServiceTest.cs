@@ -142,7 +142,7 @@ namespace Tourine.Test
         {
             var testDId = Guid.NewGuid();
             var testPId = Guid.NewGuid();
-            Db.Insert(new Place { Id = testPId, Name = "Hotel" });
+            Db.Insert(new Place { Id = testPId, Name = "Bed" });
             Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
             Db.Insert(new TourDetail
             {

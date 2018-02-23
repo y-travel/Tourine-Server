@@ -235,7 +235,4 @@ Table=[dbo].[VersionInfo];
     <None Include="Schema-Model\dbo\Tables\Person.sql" />
     <None Include="Schema-Model\dbo\Tables\TeamPerson.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0001_20180216-InitDatabase.sql" />
-  </ItemGroup>
 </Project>

@@ -11,7 +11,9 @@ CREATE TABLE [dbo].[Person]
 [Gender] [bit] NOT NULL,
 [Type] [tinyint] NOT NULL,
 [SocialNumber] [varchar] (15) NULL,
-[ChatId] [bigint] NULL
+[ChatId] [bigint] NULL,
+[IsUnder5] [bit] NULL,
+[IsInfant] [bit] NULL
 )
 GO
 ALTER TABLE [dbo].[Person] ADD CONSTRAINT [PK_Person_Id] PRIMARY KEY CLUSTERED  ([Id])

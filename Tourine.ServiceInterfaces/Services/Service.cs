@@ -21,5 +21,7 @@ namespace Tourine.ServiceInterfaces.Services
 
         public ServiceType Type { get; set; }
         public ServiceStatus Status { get; set; }
+
+        public bool IsGateSettelled { get; set; }
     }
 }

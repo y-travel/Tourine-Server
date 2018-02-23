@@ -17,7 +17,7 @@ namespace Tourine.ServiceInterfaces
 
         private readonly TelegramBotClient _bot;
         public readonly TourineBotCmdService CmdService;
-        public TourineBot(TourineBotCmdService cmdService,string telegramToken)
+        public TourineBot(TourineBotCmdService cmdService, string telegramToken)
         {
             CmdService = cmdService;
             _bot = new TelegramBotClient(telegramToken);
@@ -70,7 +70,7 @@ namespace Tourine.ServiceInterfaces
 
                     new KeyboardButton[]
                     {
-                        new KeyboardButton("گزارش_کلی_تور")
+                        new KeyboardButton("گزارش_افراد_زیر_5_سال")
                     },
 
                     new KeyboardButton[]
@@ -151,6 +151,7 @@ namespace Tourine.ServiceInterfaces
 
             if (message == null || message.Type == MessageType.TextMessage)
             {
+                var leaderId = Guid.Parse("cdaf2353-b68d-4f0f-8056-5e37e51d70aa");
                 switch (Enumerable.First(message.Text.Split(' ')))
                 {
 
@@ -166,18 +167,64 @@ namespace Tourine.ServiceInterfaces
                             "مشخصات تیم شما به شرح زیر می باشد " + "\r\n" +
                             _machineName);
                         break;
-                    case "گزارش_کلی_تور":
-                        await _bot.SendTextMessageAsync(
-                            message.Chat.Id,
-                            "گزارش کلی تور به شرح زیر می باشد " + "\r\n" +
-                            _machineName);
+
+                    case "گزارش_افراد_زیر_5_سال":
+
+                        if (CmdService.IsLeader(message.Chat.Id))//@TODO: ugly - should get from sessin
+                        {
+                            var lastTour = CmdService.GetLeaderLastRunningTour(leaderId);
+                            var tourUnder5ServiceCount = CmdService.GetTourServiceCountForUnder5(lastTour.Id);
+                            var under5ServiceList = CmdService.GetTourUnder5PersonListAndService(tourUnder5ServiceCount.Tour.Id);
+
+                            string strU5 = "";
+                            for (var i = 0; i < under5ServiceList.Count; i++)
+                            {
+                                strU5 += (i + 1).ToString("00") + ". " + under5ServiceList[i].serviceSum.GetEmojis();
+                                strU5 += under5ServiceList[i].Family + "," + under5ServiceList[i].Name;
+                                strU5 += "\r\n";
+                            }
+                            string msg = "گزارش افراد زیر 5 سال به شرح زیر می باشد: " + "\r\n\r\n" +
+                                tourUnder5ServiceCount.GetTelegramView() + "\r\n" + "لیست افراد" + "\r\n" +
+                                strU5 + _machineName;
+
+                            await _bot.SendTextMessageAsync(
+                                message.Chat.Id, msg);
+
+                        }
+                        else
+                        {
+                            await _bot.SendTextMessageAsync(
+                                message.Chat.Id, "شما در هیچ توری به عوان سرگروه نمی باشید");
+                        }
+
                         break;
 
                     case "ریز_گزارش_تور":
-                        await _bot.SendTextMessageAsync(
-                            message.Chat.Id,
-                            "ریز گزارش تور به شرح زیر می باشد " + "\r\n" +
-                            _machineName);
+                        if (CmdService.IsLeader(message.Chat.Id)) //@TODO: ugly - should get from sessin
+                        {
+                            //@TODO: leader id is PersonId in session
+                            var lastTourAllPerson = CmdService.GetLeaderLastRunningTour(leaderId);
+                            var tourAllPersonCount = CmdService.GetTourServiceCount(lastTourAllPerson.Id);
+                            var personList = CmdService.GetTourPersonList(tourAllPersonCount.Tour.Id);
+
+                            string str = "";
+                            for (var i = 0; i < personList.Count; i++)
+                            {
+                                str += (i + 1).ToString("00") + ". " + personList[i].GetTelegramView();
+                                str += personList[i].IsLeader ? "(سرگروه)" : " ";
+                                str += "\r\n";
+                            }
+                            await _bot.SendTextMessageAsync(
+                                message.Chat.Id,
+                                "ریز گزارش تور به شرح زیر می باشد: " + "\r\n\r\n" +
+                                tourAllPersonCount.GetTelegramView() + "\r\n" + "لیست افراد" + "\r\n" + str +
+                                _machineName);
+                        }
+                        else
+                        {
+                            await _bot.SendTextMessageAsync(
+                                message.Chat.Id, "شما در هیچ توری به عوان سرگروه نمی باشید");
+                        }
                         break;
 
                     default:
@@ -263,4 +310,9 @@ namespace Tourine.ServiceInterfaces
         }
 
     }
+}
+
+public static class StringExtensions
+{
+    public static string GetLeftToRight(this string str) => '\u200e' + str;
 }

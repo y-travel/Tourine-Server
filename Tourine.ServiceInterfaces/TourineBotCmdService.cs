@@ -9,6 +9,8 @@ using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Destinations;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Services;
+using Tourine.ServiceInterfaces.TeamPassengers;
+using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
 
@@ -96,15 +98,53 @@ namespace Tourine.ServiceInterfaces
                                        && detail.LeaderId == leaderId).OrderByDescending<TourDetail>(x => x.StartDate).Take(1);
                 var tour = db.Single(q);
 
-                return FillTour(tour.Id);
+                return tour == null ? null : FillTour(tour.Id);
             }
         }
+
+        public Tour GetBuyerLastTour(Guid buyerId)
+        {
+            using (var db = ConnectionFactory.OpenDbConnection())
+            {
+                var q = db.From<Tour, Team>((t, team) => t.Id == team.TourId && team.BuyerId == buyerId)
+                    .Join<TourDetail>((tour1, detail) => tour1.TourDetailId == detail.Id)
+                    .OrderByDescending<TourDetail>(td => td.StartDate);
+
+                var tour = db.Single(q);
+
+                return tour == null ? null : FillTour(tour.Id);
+            }
+        }
+
+        public Team GetBuyerLastTeam(Guid buyerId)
+        {
+            using (var db = ConnectionFactory.OpenDbConnection())
+            {
+                var q = db.From<Tour, Team>((t, t1) => t.Id == t1.TourId && t1.BuyerId == buyerId)
+                    .Join<TourDetail>((tour1, detail) => tour1.TourDetailId == detail.Id)
+                    .OrderByDescending<TourDetail>(td => td.StartDate)
+                    .Select<Team>(t => new { t.Id, t.BuyerId, t.TourId, t.Price, t.Count, t.SubmitDate })
+                    .Take(1);
+
+                Team team = db.Single<Team>(q);
+                if (team == null)
+                    return null;
+                team.Buyer = db.SingleById<Person>(team.BuyerId);
+                team.Leader = db.SingleById<Person>(team.LeaderId);
+                team.Tour = db.SingleById<Tour>(team.TourId);
+                return team;
+            }
+        }
+
 
         public Tour FillTour(Guid tourId)
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
                 var tour = db.SingleById<Tour>(tourId);
+                if (tour == null)
+                    return null;
+
                 tour.Agency = db.SingleById<Agency>(tour.AgencyId);
                 tour.TourDetail = db.SingleById<TourDetail>(tour.TourDetailId);
                 tour.TourDetail.Destination = db.SingleById<Destination>(tour.TourDetail.DestinationId);
@@ -155,12 +195,27 @@ namespace Tourine.ServiceInterfaces
                 return item;
             }
         }
+
+        public List<PersonServiceReport> GetTeamPersonAndServices(Guid TourId, Guid teamId)
+        {
+            using (var db = ConnectionFactory.OpenDbConnection())
+            {
+                var q = db.From<Person, Service>((p, s) => p.Id == s.PersonId && s.TourId == TourId)
+                    .Join<TeamPerson>((p, tp) => p.Id == tp.PersonId && tp.TeamId == teamId)
+                    .GroupBy<Person>(person => new { person.Id, person.Family, person.Name })
+                    .OrderBy<Person>(person => new { person.Family, person.Name })
+                    .Select(x => new { x.Family, x.Name, serviceSum = Sql.Sum("Service.Type") });
+                var item = db.Select<PersonServiceReport>(q);
+                return item;
+            }
+        }
+
         public TourInfo GetLeaderLastRunnungTourServiceCount(Guid leaderId)
         {
             var tour = GetLeaderLastRunningTour(leaderId);
             var services = NumberOfTourServices(tour.Id);
 
-            var t = new TourInfo {Tour = tour};
+            var t = new TourInfo { Tour = tour };
             t.Tour.TourDetail = tour.TourDetail;
             foreach (var s in services)
             {
@@ -174,7 +229,7 @@ namespace Tourine.ServiceInterfaces
             var tour = GetLeaderLastRunningTour(leaderId);
             var services = NumberOfTourUnder5Services(tour.Id);
 
-            var t = new TourInfo {Tour = tour};
+            var t = new TourInfo { Tour = tour };
             foreach (var s in services)
             {
                 t.SerivceCounts.Add(new TourInfo.SerivceCount { ServiceType = s.Key, ServiceCount = s.Value });
@@ -230,7 +285,7 @@ namespace Tourine.ServiceInterfaces
                 else if (Gender)
                     res += "👨🏻";
                 else
-                    res += "🌈";  
+                    res += "🌈";
 
                 res += " " + Family + "," + Name + " ";
                 if (IsInfant)
@@ -272,6 +327,12 @@ namespace Tourine.ServiceInterfaces
         public bool IsLeader(long chatId)
         {
             return true;
+        }
+
+        public class TeamInfo
+        {
+            public Person Person { get; set; }
+            public PersonService ServiceCount { get; set; }
         }
     }
 }

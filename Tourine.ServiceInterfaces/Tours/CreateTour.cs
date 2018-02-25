@@ -1,9 +1,12 @@
 ﻿using ServiceStack;
+using ServiceStack.FluentValidation.Attributes;
 using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
     [Route("/tours/", "POST")]
+    [Validator(typeof(CreateTourValidator))]
+    [Api("ww",2,IsRequired = true)]
     public class CreateTour : IReturn<Tour>
     {
         public int Capacity { get; set; }

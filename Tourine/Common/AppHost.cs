@@ -82,7 +82,7 @@ namespace Tourine.Common
             container.Register(TourineBot);
             GlobalRequestFilters.Add(ValidationFilter);
             ConfigureQuartzJobs();
-            Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
+            Plugins.Add(new AutoQueryFeature { MaxLimit = 100 , IncludeTotal = true});
             Plugins.Add(new AdminFeature());
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new CorsFeature());

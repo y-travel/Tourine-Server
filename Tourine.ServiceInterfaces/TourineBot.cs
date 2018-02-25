@@ -47,7 +47,7 @@ namespace Tourine.ServiceInterfaces
             return true;
         }
 
-        public void Send(string str, string chatId)
+        public void Send(string str, long chatId)
         {
             str += _machineName;
             _bot.SendTextMessageAsync(
@@ -64,19 +64,15 @@ namespace Tourine.ServiceInterfaces
                 {
                     new KeyboardButton[]
                     {
-                        new KeyboardButton("مشخصات_سفر_من"),
-                        new KeyboardButton("اعضای_تیم")
+                        new KeyboardButton("سفر_من")
                     },
 
                     new KeyboardButton[]
                     {
-                        new KeyboardButton("گزارش_افراد_زیر_5_سال")
-                    },
-
-                    new KeyboardButton[]
-                    {
+                        new KeyboardButton("گزارش_افراد_زیر_5_سال"),
                         new KeyboardButton("ریز_گزارش_تور")
-                    }
+                    },
+
                 };
             finalKeyboard.ResizeKeyboard = true;
 
@@ -151,20 +147,28 @@ namespace Tourine.ServiceInterfaces
 
             if (message == null || message.Type == MessageType.TextMessage)
             {
-                var leaderId = Guid.Parse("cdaf2353-b68d-4f0f-8056-5e37e51d70aa");
+                var leaderId = Guid.Parse("070d5d34-2723-4e48-bfe4-b07838e480f1");
                 switch (Enumerable.First(message.Text.Split(' ')))
                 {
 
-                    case "مشخصات_سفر_من":
+                    case "سفر_من":
+                        //@TODO: get buyer id from session
+                        var buyerId = Guid.Parse("0cdf3854-efa5-4cca-b659-921a9309c60b");
+
+                        var buyerLastTour = CmdService.GetBuyerLastTour(buyerId);
+                        var buyerLastTeam = CmdService.GetBuyerLastTeam(buyerId);
+                        var teamServices = CmdService.GetTeamPersonAndServices(buyerLastTeam.TourId,buyerLastTeam.Id);
+                        string strMyTeam = "";
+                        for (var i = 0; i < teamServices.Count; i++)
+                        {
+                            strMyTeam += (i + 1).ToString("00") + ". " + teamServices[i].serviceSum.GetEmojis();
+                            strMyTeam += teamServices[i].Family + "," + teamServices[i].Name;
+                            strMyTeam += "\r\n";
+                        }
                         await _bot.SendTextMessageAsync(
                             message.Chat.Id,
-                            "مشخصات سفر شما به شرح زیر می باشد " + "\r\n" +
-                            _machineName);
-                        break;
-                    case "اعضای_تیم":
-                        await _bot.SendTextMessageAsync(
-                            message.Chat.Id,
-                            "مشخصات تیم شما به شرح زیر می باشد " + "\r\n" +
+                            "مشخصات سفر شما به شرح زیر می باشد " + "\r\n" +buyerLastTour.TourDetail.StartDate.ToString("yyyy/MM/dd") + "\r\n" 
+                            + buyerLastTour.TourDetail.Destination.Name +"\r\n" +strMyTeam+
                             _machineName);
                         break;
 

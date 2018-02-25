@@ -111,11 +111,16 @@
     <Compile Include="Destinations\CreateDestinationValidator.cs" />
     <Compile Include="Destinations\UpdateDestination.cs" />
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
+    <Compile Include="Notifies\NotifyService.cs" />
+    <Compile Include="Notifies\SendNotifyToTourBuyers.cs" />
+    <Compile Include="Notifies\SendNotifyToTourLeader.cs" />
+    <Compile Include="Notifies\SendNotifyToTourPassengers.cs" />
     <Compile Include="PersonServiceReport.cs" />
     <Compile Include="Persons\GetCurrentPerson.cs" />
     <Compile Include="Persons\GetLeaders.cs" />
     <Compile Include="Persons\RegisterPerson.cs" />
     <Compile Include="PersonType.cs" />
+    <Compile Include="Notifies\SendNotifyToTourAgencies.cs" />
     <Compile Include="ServiceStatus.cs" />
     <Compile Include="Services\GetServiceOfTour.cs" />
     <Compile Include="Services\PassengerServiceInfo.cs" />

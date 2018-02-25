@@ -59,12 +59,12 @@ GO
 -- Dumping data for table [User]
 --
 INSERT dbo.[User] VALUES ('01455fa2-4171-4db4-9a8e-3a0ecf3156c2', N'Emad', N'1234', 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa', 4)
-INSERT dbo.[User] VALUES ('9fbd8acb-029f-4fdf-8130-3a644c82018b', N'Alirzl', N'1234', 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa', 127)
+INSERT dbo.[User] VALUES ('9fbd8acb-029f-4fdf-8130-3a644c82018b', N'Alirzl', N'1234', 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa', 255)
 INSERT dbo.[User] VALUES ('fd6ec66b-68ba-4a90-a6f5-48330e35f3dc', N'zoz.zozm', N'1234', '070d5d34-2723-4e48-bfe4-b07838e480f1', 255)
 INSERT dbo.[User] VALUES ('c84b8e27-fdfd-4753-8cb3-715390048432', N'Saeid', N'1234', 'e2d864ca-19eb-40d6-adea-f5bfc7989846', 4)
 INSERT dbo.[User] VALUES ('ef1d50dd-3376-4d84-9821-991734723133', N'Majid', N'1234', '5f05a5dc-3aee-4572-beba-a7d5a5fc3e64', 4)
-INSERT dbo.[User] VALUES ('b88bc928-7330-4120-bac8-cc7ff29ba85c', N'Happiness', N'1234', '0cdf3854-efa5-4cca-b659-921a9309c60b', 127)
-INSERT dbo.[User] VALUES ('fdc52981-fac4-48a7-9aa4-f0f7b0835ccb', N'Aziz', N'1234', 'f0905b1f-9221-4e4e-ac60-0617427602e7', 64)
+INSERT dbo.[User] VALUES ('b88bc928-7330-4120-bac8-cc7ff29ba85c', N'Happiness', N'1234', '0cdf3854-efa5-4cca-b659-921a9309c60b', 255)
+INSERT dbo.[User] VALUES ('fdc52981-fac4-48a7-9aa4-f0f7b0835ccb', N'Aziz', N'1234', 'f0905b1f-9221-4e4e-ac60-0617427602e7', 255)
 GO
 -- 
 -- Dumping data for table AgencyPerson

@@ -1,4 +1,5 @@
 ﻿using System;
+using ServiceStack;
 using ServiceStack.DataAnnotations;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.TourDetails;

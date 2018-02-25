@@ -31,8 +31,8 @@ namespace Tourine.ServiceInterfaces.TourDetails
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
         [References(typeof(Person))]
-        public Guid LeaderId { get; set; }
+        public Guid? LeaderId { get; set; }
         [Reference]
-        public Person Person { get; set; }
+        public Person Leader { get; set; }
     }
 }

@@ -5,8 +5,6 @@ using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineQueryResults;
-using Telegram.Bot.Types.InputMessageContents;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Tourine.ServiceInterfaces
@@ -23,10 +21,6 @@ namespace Tourine.ServiceInterfaces
             _bot = new TelegramBotClient(telegramToken);
             _bot.OnMessage += BotOnMessageReceived;
             _bot.OnMessageEdited += BotOnMessageReceived;
-            _bot.OnCallbackQuery += BotOnCallbackQueryReceived;
-            _bot.OnInlineQuery += BotOnInlineQueryReceived;
-            _bot.OnInlineResultChosen += BotOnChosenInlineResultReceived;
-            _bot.OnReceiveError += BotOnReceiveError;
             _bot.StartReceiving();
         }
 
@@ -58,23 +52,23 @@ namespace Tourine.ServiceInterfaces
 
         private async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
-            var finalKeyboard = new ReplyKeyboardMarkup();
-            finalKeyboard.Keyboard =
-                new[]
+            var finalKeyboard = new ReplyKeyboardMarkup
+            {
+                Keyboard = new[]
                 {
-                    new KeyboardButton[]
+                    new[]
                     {
                         new KeyboardButton("سفر_من")
                     },
 
-                    new KeyboardButton[]
+                    new[]
                     {
                         new KeyboardButton("گزارش_افراد_زیر_5_سال"),
                         new KeyboardButton("ریز_گزارش_تور")
                     },
-
-                };
-            finalKeyboard.ResizeKeyboard = true;
+                },
+                ResizeKeyboard = true
+            };
 
             var message = messageEventArgs.Message;
             if (message.Type == MessageType.ContactMessage)
@@ -255,64 +249,6 @@ namespace Tourine.ServiceInterfaces
 
             }
         }
-        private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
-        {
-            await _bot.AnswerCallbackQueryAsync(
-                callbackQueryEventArgs.CallbackQuery.Id,
-                $"Received {callbackQueryEventArgs.CallbackQuery.Data}");
-        }
-
-        private async void BotOnInlineQueryReceived(object sender, InlineQueryEventArgs inlineQueryEventArgs)
-        {
-            System.Diagnostics.Debug.WriteLine($"Received inline query from: {inlineQueryEventArgs.InlineQuery.From.Id}");
-
-            InlineQueryResult[] results = {
-                        new InlineQueryResultLocation
-                        {
-                            Id = "1",
-                            Latitude = 40.7058316f, // displayed result
-                            Longitude = -74.2581888f,
-                            Title = "New York",
-                            InputMessageContent = new InputLocationMessageContent // message if result is selected
-                            {
-                                Latitude = 40.7058316f,
-                                Longitude = -74.2581888f,
-                            }
-                        },
-
-                        new InlineQueryResultLocation
-                        {
-                            Id = "2",
-                            Longitude = 52.507629f, // displayed result
-                            Latitude = 13.1449577f,
-                            Title = "Berlin",
-                            InputMessageContent = new InputLocationMessageContent // message if result is selected
-                            {
-                                Longitude = 52.507629f,
-                                Latitude = 13.1449577f
-                            }
-                        }
-                    };
-
-            await _bot.AnswerInlineQueryAsync(
-                inlineQueryEventArgs.InlineQuery.Id,
-                results,
-                isPersonal: true,
-                cacheTime: 0);
-        }
-
-        private void BotOnChosenInlineResultReceived(object sender, ChosenInlineResultEventArgs chosenInlineResultEventArgs)
-        {
-            System.Diagnostics.Debug.WriteLine($"Received inline result: {chosenInlineResultEventArgs.ChosenInlineResult.ResultId}");
-        }
-
-        private void BotOnReceiveError(object sender, ReceiveErrorEventArgs receiveErrorEventArgs)
-        {
-            System.Diagnostics.Debug.WriteLine("Received error: {0} — {1}",
-                receiveErrorEventArgs.ApiRequestException.ErrorCode,
-                receiveErrorEventArgs.ApiRequestException.Message);
-        }
-
     }
 }
 

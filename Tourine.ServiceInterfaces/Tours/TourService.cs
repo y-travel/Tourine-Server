@@ -21,7 +21,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public object Get(GetTours reqTours)
         {
             var query = AutoQuery.CreateQuery(reqTours, Request)
-                .Where(tour => !tour.ParentId.HasValue);
+                .Where(tour => tour.AgencyId == Session.Agency.Id);
             return AutoQuery.Execute(reqTours, query);
         }
 

@@ -1,5 +1,6 @@
 ﻿using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
@@ -21,7 +22,8 @@ namespace Tourine.ServiceInterfaces.Tours
         public object Get(GetTours reqTours)
         {
             var query = AutoQuery.CreateQuery(reqTours, Request)
-                .Where(tour => tour.AgencyId == Session.Agency.Id);
+                .Where(tour => tour.AgencyId == Session.Agency.Id)
+                .OrderByDescending<TourDetail>(td => td.CreationDate);
             return AutoQuery.Execute(reqTours, query);
         }
 
@@ -73,9 +75,21 @@ namespace Tourine.ServiceInterfaces.Tours
         [Authenticate]
         public object Get(GetRootTours tours)
         {
-            var query = AutoQuery.CreateQuery(tours, Request)
+            var query = AutoQuery.CreateQuery(tours, Request.GetRequestParams())
                 .Where(tour => tour.ParentId == null);
             return AutoQuery.Execute(tours, query);
+        }
+
+        [Authenticate]
+        public object Get(GetBlocks blocks)
+        {
+            var query = AutoQuery.CreateQuery(blocks, Request.GetRequestParams())
+                .Where(tour => tour.ParentId == blocks.TourId);
+            var results = AutoQuery.Execute(blocks, query);
+            var mainTour = Db.SingleById<Tour>(blocks.TourId);
+            results.Results.Insert(0, mainTour);
+            results.Total = results.Results.Count;
+            return results;
         }
     }
 }

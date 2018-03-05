@@ -173,6 +173,7 @@
     <Compile Include="TourineBotServices.cs" />
     <Compile Include="TourineCmdStatus.cs" />
     <Compile Include="TourStatus.cs" />
+    <Compile Include="Tours\GetBlocks.cs" />
     <Compile Include="Tours\GetRootTours.cs" />
     <Compile Include="Tours\GetTour.cs" />
     <Compile Include="Tours\GetTours.cs" />

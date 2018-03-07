@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="Agencies\Agency.cs" />
     <Compile Include="Agencies\AgencyService.cs" />
+    <Compile Include="Agencies\FindAgency.cs" />
     <Compile Include="Agencies\GetAgencies.cs" />
     <Compile Include="Agencies\GetAgency.cs" />
     <Compile Include="Agencies\CreateAgency.cs" />

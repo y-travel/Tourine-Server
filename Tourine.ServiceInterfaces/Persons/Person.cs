@@ -9,8 +9,8 @@ namespace Tourine.ServiceInterfaces.Persons
         public string Family { get; set; }
         public string MobileNumber { get; set; }
         public string NationalCode { get; set; }
-        public DateTime BirthDate { get; set; }
-        public DateTime PassportExpireDate { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public DateTime? PassportExpireDate { get; set; }
         public string PassportNo { get; set; }
         public bool Gender { get; set; }
         public PersonType Type { get; set; } = PersonType.Passenger;

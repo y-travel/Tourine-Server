@@ -1,4 +1,5 @@
 ﻿using ServiceStack;
+using Tourine.ServiceInterfaces.Persons;
 
 namespace Tourine.ServiceInterfaces.Agencies
 {
@@ -6,5 +7,6 @@ namespace Tourine.ServiceInterfaces.Agencies
     public class CreateAgency : IReturn<Agency>
     {
         public Agency Agency { get; set; }
+        public Person Person { get; set; }
     }
 }

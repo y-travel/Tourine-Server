@@ -79,7 +79,7 @@ namespace Tourine.ServiceInterfaces.Tours
                 .Where(tour => tour.ParentId == null);
             return AutoQuery.Execute(tours, query);
         }
-
+     
         [Authenticate]
         public object Get(GetBlocks blocks)
         {

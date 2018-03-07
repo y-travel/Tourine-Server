@@ -7,7 +7,8 @@ namespace Tourine.ServiceInterfaces.Agencies
         public CreateAgencyValidator()
         {
             RuleFor(agency => agency.Agency.Name.Length).GreaterThanOrEqualTo(2);
-            RuleFor(agency => agency.Agency.PhoneNumber).NotEmpty();
+            RuleFor(agency => agency.Person.Name.Length).GreaterThanOrEqualTo(2);
+            RuleFor(agency => agency.Person.Family).NotEmpty();
         }
     }
 }

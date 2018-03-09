@@ -6,7 +6,7 @@
         {
             public string Family { get; set; }
             public string Name { get; set; }
-            public ServiceType serviceSum { get; set; }
+            public OptionType serviceSum { get; set; }
         }
     }
 }

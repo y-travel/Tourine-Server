@@ -19,7 +19,7 @@ namespace Tourine.ServiceInterfaces.Services
         [Reference]
         public Tour Tour { get; set; }
 
-        public ServiceType Type { get; set; }
+        public OptionType Type { get; set; }
         public ServiceStatus Status { get; set; }
     }
 }

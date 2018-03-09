@@ -1,7 +1,7 @@
 CREATE TABLE [dbo].[TourService]
 (
 [Id] [uniqueidentifier] NOT NULL ROWGUIDCOL CONSTRAINT [DF_Service_Id] DEFAULT (newid()),
-[ServiceType] [tinyint] NULL,
+[OptionType] [tinyint] NULL,
 [Price] [bigint] NULL,
 [Status] [tinyint] NULL,
 [TourDetailId] [uniqueidentifier] NOT NULL

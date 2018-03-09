@@ -35,9 +35,9 @@ namespace Tourine.Test.ServerTest
         }
 
         [Test,TestCaseSource(nameof(_toBeAuthenticatedDtos))]
-        public void should_be_use_authenticate_attribute(string methodName,Type serviceType, Type dtoType)
+        public void should_be_use_authenticate_attribute(string methodName,Type optionType, Type dtoType)
         {
-            var methodInfo = serviceType.GetMethod(methodName, new [] { dtoType });
+            var methodInfo = optionType.GetMethod(methodName, new [] { dtoType });
             var attributes = methodInfo.GetCustomAttributes(typeof(AuthenticateAttribute), true);
             Assert.IsTrue(attributes.Any(), "No AuthorizeAttribute found on {0}", dtoType.Name);
         }

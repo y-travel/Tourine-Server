@@ -61,7 +61,7 @@ namespace Tourine.ServiceInterfaces
             }
         }
 
-        public Dictionary<ServiceType, int> NumberOfTourServices(Guid tourId)
+        public Dictionary<OptionType, int> NumberOfTourServices(Guid tourId)
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
@@ -69,12 +69,12 @@ namespace Tourine.ServiceInterfaces
                     .Where(s => s.TourId == tourId)
                     .GroupBy(x => x.Type)
                     .Select(x => new { x.Type, serviceCount = Sql.Count("*") });
-                var results = db.Dictionary<ServiceType, int>(q);
+                var results = db.Dictionary<OptionType, int>(q);
                 return results;
             }
         }
 
-        public Dictionary<ServiceType, int> NumberOfTourUnder5Services(Guid tourId)
+        public Dictionary<OptionType, int> NumberOfTourUnder5Services(Guid tourId)
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
@@ -83,7 +83,7 @@ namespace Tourine.ServiceInterfaces
                     .Where(s => s.TourId == tourId)
                     .GroupBy(x => x.Type)
                     .Select(x => new { x.Type, serviceCount = Sql.Count("*") });
-                var results = db.Dictionary<ServiceType, int>(q);
+                var results = db.Dictionary<OptionType, int>(q);
                 return results;
             }
         }
@@ -219,7 +219,7 @@ namespace Tourine.ServiceInterfaces
             t.Tour.TourDetail = tour.TourDetail;
             foreach (var s in services)
             {
-                t.SerivceCounts.Add(new TourInfo.SerivceCount { ServiceType = s.Key, ServiceCount = s.Value });
+                t.SerivceCounts.Add(new TourInfo.SerivceCount { OptionType = s.Key, ServiceCount = s.Value });
             }
             return t;
         }
@@ -232,7 +232,7 @@ namespace Tourine.ServiceInterfaces
             var t = new TourInfo { Tour = tour };
             foreach (var s in services)
             {
-                t.SerivceCounts.Add(new TourInfo.SerivceCount { ServiceType = s.Key, ServiceCount = s.Value });
+                t.SerivceCounts.Add(new TourInfo.SerivceCount { OptionType = s.Key, ServiceCount = s.Value });
             }
             return t;
         }
@@ -241,7 +241,7 @@ namespace Tourine.ServiceInterfaces
         {
             public class SerivceCount
             {
-                public ServiceType ServiceType { get; set; }
+                public OptionType OptionType { get; set; }
                 public int ServiceCount { get; set; }
             }
             public Tour Tour { get; set; }
@@ -255,7 +255,7 @@ namespace Tourine.ServiceInterfaces
                 string servicesStr = "";
                 foreach (var service in SerivceCounts)
                 {
-                    servicesStr += " " + service.ServiceType.GetEmoji() + service.ServiceType.GetDescription() + " : " + service.ServiceCount + " نفر " + "\r\n";
+                    servicesStr += " " + service.OptionType.GetEmoji() + service.OptionType.GetDescription() + " : " + service.ServiceCount + " نفر " + "\r\n";
                 }
                 string stringView = "مقصد:" + dest + "\r\n" + "تاریخ:" +
                     startDate + "\r\n" + "سرویس ها:" + "\r\n" + servicesStr;
@@ -307,7 +307,7 @@ namespace Tourine.ServiceInterfaces
             var t = new TourInfo { Tour = tour };
             foreach (var s in services)
             {
-                t.SerivceCounts.Add(new TourInfo.SerivceCount { ServiceType = s.Key, ServiceCount = s.Value });
+                t.SerivceCounts.Add(new TourInfo.SerivceCount { OptionType = s.Key, ServiceCount = s.Value });
             }
             return t;
         }
@@ -319,7 +319,7 @@ namespace Tourine.ServiceInterfaces
             var t = new TourInfo { Tour = tour };
             foreach (var s in services)
             {
-                t.SerivceCounts.Add(new TourInfo.SerivceCount { ServiceType = s.Key, ServiceCount = s.Value });
+                t.SerivceCounts.Add(new TourInfo.SerivceCount { OptionType = s.Key, ServiceCount = s.Value });
             }
             return t;
         }

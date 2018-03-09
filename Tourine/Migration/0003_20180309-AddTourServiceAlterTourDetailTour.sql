@@ -22,28 +22,28 @@ GO
 INSERT INTO PassengerList 
   SELECT * FROM [Service]  sv
 GO
-PRINT N'Creating [dbo].[TourService]'
+PRINT N'Creating [dbo].[TourOption]'
 GO
-CREATE TABLE [dbo].[TourService]
+CREATE TABLE [dbo].[TourOption]
 (
-[Id] [uniqueidentifier] NOT NULL ROWGUIDCOL CONSTRAINT [DF_Service_Id] DEFAULT (newid()),
-[ServiceType] [tinyint] NULL,
+[Id] [uniqueidentifier] NOT NULL ROWGUIDCOL CONSTRAINT [DF_Option_Id] DEFAULT (newid()),
+[OptionType] [tinyint] NULL,
 [Price] [bigint] NULL,
 [Status] [tinyint] NULL,
 [TourId] [uniqueidentifier] NOT NULL
 )
 GO
 
-insert INTO TourService ( ServiceType, Price,Status, TourId)
+insert INTO TourOption ( OptionType, Price,Status, TourId)
   SELECT 1,BusPrice,1,Tour.Id FROM TourDetail INNER JOIN tour ON TourDetail.Id=tour.TourDetailId AND ParentId IS not null
 GO
- insert INTO TourService ( ServiceType, Price,Status, TourId)
+ insert INTO TourOption ( OptionType, Price,Status, TourId)
     SELECT 2,FoodPrice,2,Tour.Id FROM TourDetail INNER JOIN tour ON TourDetail.Id=tour.TourDetailId AND ParentId IS not null
 GO
- insert INTO TourService ( ServiceType, Price,Status, TourId)
+ insert INTO TourOption ( OptionType, Price,Status, TourId)
     SELECT 4,RoomPrice,1,Tour.Id FROM TourDetail INNER JOIN tour ON TourDetail.Id=tour.TourDetailId AND ParentId IS not null
 Go
-PRINT N'Copying prices from [dbo].[Service] to [TourService]'
+PRINT N'Copying prices from [dbo].[Service] to [TourOption]'
 GO
 PRINT N'Dropping foreign keys from [dbo].[Service]'
 GO
@@ -84,11 +84,11 @@ ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [FK_PassengerList_Person_Id] FO
 GO
 ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [FK_PassengerList_Tour_Id] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
 GO
-PRINT N'Adding foreign keys to [dbo].[TourService]'
+PRINT N'Adding foreign keys to [dbo].[TourOption]'
 GO
-ALTER TABLE [dbo].[TourService] ADD CONSTRAINT [FK_Service_Tour] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
+ALTER TABLE [dbo].[TourOption] ADD CONSTRAINT [FK_Option_Tour] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
 GO
-PRINT N'Creating primary key [PK_Service_Id] on [dbo].[TourService]'
+PRINT N'Creating primary key [PK_Option_Id] on [dbo].[TourOption]'
 GO
-ALTER TABLE [dbo].[TourService] ADD CONSTRAINT [PK_Service_Id] PRIMARY KEY CLUSTERED  ([Id])
+ALTER TABLE [dbo].[TourOption] ADD CONSTRAINT [PK_Option_Id] PRIMARY KEY CLUSTERED  ([Id])
 GO

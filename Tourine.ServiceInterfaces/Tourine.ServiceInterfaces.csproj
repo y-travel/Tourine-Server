@@ -129,9 +129,9 @@
     <Compile Include="Services\PostServiceForPassengerValidator.cs" />
     <Compile Include="Services\PutServiceForPassenger.cs" />
     <Compile Include="Services\PutServiceForPassengerValidator.cs" />
-    <Compile Include="Services\Service.cs" />
-    <Compile Include="Services\ServiceInfo.cs" />
-    <Compile Include="Services\ServiceService.cs" />
+    <Compile Include="Services\PassengerList.cs" />
+    <Compile Include="Services\PassengerListInfo.cs" />
+    <Compile Include="Services\PassengerListService.cs" />
     <Compile Include="ServiceType.cs" />
     <Compile Include="TeamPersons\AddPersonToTeam.cs" />
     <Compile Include="TeamPersons\AddPersonsToTeamValidator.cs" />
@@ -182,6 +182,7 @@
     <Compile Include="Tours\CreateTour.cs" />
     <Compile Include="Tours\CreateTourValidator.cs" />
     <Compile Include="Tours\ReserveBlock.cs" />
+    <Compile Include="Tours\TourOption.cs" />
     <Compile Include="Tours\UpdateTour.cs" />
     <Compile Include="Tours\UpdateTourValidator.cs" />
     <Compile Include="Tours\Tour.cs" />

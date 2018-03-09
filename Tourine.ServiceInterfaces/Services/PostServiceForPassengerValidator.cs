@@ -6,10 +6,10 @@ namespace Tourine.ServiceInterfaces.Services
     {
         public PostServiceForPassengerValidator()
         {
-            RuleFor(s => s.Service.PersonId).NotEmpty();
-            RuleFor(s => s.Service.TourId).NotEmpty();
-            RuleFor(s => s.Service.Type).NotEmpty();
-            RuleFor(s => s.Service.Status).NotEmpty();
+            RuleFor(s => s.PassengerList.PersonId).NotEmpty();
+            RuleFor(s => s.PassengerList.TourId).NotEmpty();
+            RuleFor(s => s.PassengerList.Type).NotEmpty();
+            RuleFor(s => s.PassengerList.Status).NotEmpty();
         }
     }
 }

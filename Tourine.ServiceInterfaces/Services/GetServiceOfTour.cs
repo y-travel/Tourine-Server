@@ -5,7 +5,7 @@ using Tourine.ServiceInterfaces.Persons;
 namespace Tourine.ServiceInterfaces.Services
 {
     [Route("/service/{TourId}")]
-    public class GetServiceOfTour : QueryDb<Service, Person> 
+    public class GetServiceOfTour : QueryDb<PassengerList, Person> 
     {
         public Guid TourId { get; set; }
     }

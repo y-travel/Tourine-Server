@@ -6,25 +6,25 @@ using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Services
 {
-    public class ServiceService : AppService
+    public class PassengerListService : AppService
     {
         public IAutoQueryDb AutoQueryDb { get; set; }
         public object Post(PostServiceForPassenger forPassenger)
         {
-            forPassenger.Service.Id = Guid.NewGuid();
-            Db.Insert(forPassenger.Service);
-            return Db.SingleById<Service>(forPassenger.Service.Id);
+            forPassenger.PassengerList.Id = Guid.NewGuid();
+            Db.Insert(forPassenger.PassengerList);
+            return Db.SingleById<PassengerList>(forPassenger.PassengerList.Id);
         }
 
         public void Put(PutServiceForPassenger forPassenger)
         {
-            if (!Db.Exists<Service>(new { Id = forPassenger.Service.Id }))
+            if (!Db.Exists<PassengerList>(new { Id = forPassenger.PassengerList.Id }))
                 throw HttpError.NotFound("");
-            if (!Db.Exists<Person>(new { Id = forPassenger.Service.PersonId }))
+            if (!Db.Exists<Person>(new { Id = forPassenger.PassengerList.PersonId }))
                 throw HttpError.NotFound("");
-            if (!Db.Exists<Tour>(new { Id = forPassenger.Service.TourId }))
+            if (!Db.Exists<Tour>(new { Id = forPassenger.PassengerList.TourId }))
                 throw HttpError.NotFound("");
-            Db.Update(forPassenger.Service);
+            Db.Update(forPassenger.PassengerList);
         }
 
         public object Get(GetServiceOfTour serviceOfTour)

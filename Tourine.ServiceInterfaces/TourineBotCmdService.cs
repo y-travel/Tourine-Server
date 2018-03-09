@@ -65,7 +65,7 @@ namespace Tourine.ServiceInterfaces
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
-                var q = db.From<Service>()
+                var q = db.From<PassengerList>()
                     .Where(s => s.TourId == tourId)
                     .GroupBy(x => x.Type)
                     .Select(x => new { x.Type, serviceCount = Sql.Count("*") });
@@ -78,7 +78,7 @@ namespace Tourine.ServiceInterfaces
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
-                var q = db.From<Service>()
+                var q = db.From<PassengerList>()
                     .Join<Person>((s, p) => s.PersonId == p.Id && (p.IsInfant || p.IsUnder5))
                     .Where(s => s.TourId == tourId)
                     .GroupBy(x => x.Type)
@@ -160,7 +160,7 @@ namespace Tourine.ServiceInterfaces
                     detail.Id == tour.TourDetailId && tour.Id == tourId));
                 var leader = db.SingleById<Person>(tourDetail.LeaderId);
 
-                var q = db.From<Person, Service>((p, s) => p.Id == s.PersonId && s.TourId == tourId)
+                var q = db.From<Person, PassengerList>((p, s) => p.Id == s.PersonId && s.TourId == tourId)
                     .GroupBy<Person>(person => new { person.Id, person.Family, person.Name, person.IsInfant, person.IsUnder5, person.Gender })
                     .OrderBy<Person>(person => new { person.Family, person.Name })
                     .Select(p => new { p.Family, p.Name, p.IsInfant, p.IsUnder5, p.Gender });
@@ -174,10 +174,10 @@ namespace Tourine.ServiceInterfaces
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
-                var q = db.From<Person, Service>((p, s) => p.Id == s.PersonId && s.TourId == tourId)
+                var q = db.From<Person, PassengerList>((p, s) => p.Id == s.PersonId && s.TourId == tourId)
                     .GroupBy<Person>(person => new { person.Id, person.Family, person.Name })
                     .OrderBy<Person>(person => new { person.Family, person.Name })
-                    .Select(x => new { x.Family, x.Name, serviceSum = Sql.Sum("Service.Type") });
+                    .Select(x => new { x.Family, x.Name, serviceSum = Sql.Sum("PassengerList.Type") });
                 var item = db.Select<PersonServiceReport>(q);
                 return item;
             }
@@ -187,10 +187,10 @@ namespace Tourine.ServiceInterfaces
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
-                var q = db.From<Person, Service>((p, s) => p.Id == s.PersonId && s.TourId == TourId && (p.IsInfant || p.IsUnder5))
+                var q = db.From<Person, PassengerList>((p, s) => p.Id == s.PersonId && s.TourId == TourId && (p.IsInfant || p.IsUnder5))
                     .GroupBy<Person>(person => new { person.Id, person.Family, person.Name })
                     .OrderBy<Person>(person => new { person.Family, person.Name })
-                    .Select(x => new { x.Family, x.Name, serviceSum = Sql.Sum("Service.Type") });
+                    .Select(x => new { x.Family, x.Name, serviceSum = Sql.Sum("PassengerList.Type") });
                 var item = db.Select<PersonServiceReport>(q);
                 return item;
             }
@@ -200,11 +200,11 @@ namespace Tourine.ServiceInterfaces
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
-                var q = db.From<Person, Service>((p, s) => p.Id == s.PersonId && s.TourId == TourId)
+                var q = db.From<Person, PassengerList>((p, s) => p.Id == s.PersonId && s.TourId == TourId)
                     .Join<TeamPerson>((p, tp) => p.Id == tp.PersonId && tp.TeamId == teamId)
                     .GroupBy<Person>(person => new { person.Id, person.Family, person.Name })
                     .OrderBy<Person>(person => new { person.Family, person.Name })
-                    .Select(x => new { x.Family, x.Name, serviceSum = Sql.Sum("Service.Type") });
+                    .Select(x => new { x.Family, x.Name, serviceSum = Sql.Sum("PassengerList.Type") });
                 var item = db.Select<PersonServiceReport>(q);
                 return item;
             }

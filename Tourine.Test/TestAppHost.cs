@@ -81,7 +81,7 @@ namespace Tourine.Test
             container.RegisterAutoWired<DestinationService>();
             container.RegisterAutoWired<PersonService>();
             container.RegisterAutoWired<PlaceService>();
-            container.RegisterAutoWired<ServiceService>();
+            container.RegisterAutoWired<PassengerListService>();
             container.RegisterAutoWired<TeamPersonService>();
             container.RegisterAutoWired<TeamService>();
             container.RegisterAutoWired<TourDetailService>();

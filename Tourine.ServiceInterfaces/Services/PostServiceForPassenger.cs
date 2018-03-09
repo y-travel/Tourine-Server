@@ -3,8 +3,8 @@
 namespace Tourine.ServiceInterfaces.Services
 {
     [Route("/service", "POST")]
-    public class PostServiceForPassenger : IReturn<Service>
+    public class PostServiceForPassenger : IReturn<PassengerList>
     {
-        public Service Service { get; set; }
+        public PassengerList PassengerList { get; set; }
     }
 }

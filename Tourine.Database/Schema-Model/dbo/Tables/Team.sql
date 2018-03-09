@@ -2,7 +2,7 @@ CREATE TABLE [dbo].[Team]
 (
 [Id] [uniqueidentifier] NOT NULL CONSTRAINT [DF__Team__Id__440B1D61] DEFAULT (newid()),
 [TourId] [uniqueidentifier] NOT NULL,
-[Price] [bigint] NULL,
+[MoneyReceived] [bigint] NULL,
 [Buyer] [uniqueidentifier] NOT NULL,
 [Count] [int] NULL,
 [SubmitDate] [datetime] NOT NULL

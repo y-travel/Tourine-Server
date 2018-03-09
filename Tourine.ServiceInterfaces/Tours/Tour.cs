@@ -29,5 +29,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public Guid AgencyId { get; set; }
         [Reference]
         public Agency Agency { get; set; }
+
+        public long InfantPrice { get; set; }
     }
 }

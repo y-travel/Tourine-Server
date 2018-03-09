@@ -24,10 +24,6 @@ namespace Tourine.ServiceInterfaces.TourDetails
         public Place Place { get; set; }
 
         public bool IsFlight { get; set; }
-        public int InfantPrice { get; set; }
-        public int BusPrice { get; set; }
-        public int RoomPrice { get; set; }
-        public int FoodPrice { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
         [References(typeof(Person))]

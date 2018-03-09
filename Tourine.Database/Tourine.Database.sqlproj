@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -33,15 +33,15 @@
     <GenerateSqlPackage>True</GenerateSqlPackage>
     <PackageScriptBatchExecutionStrategy>WrapInExecuteWithSingleSetNoExec</PackageScriptBatchExecutionStrategy>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <ExcludeObjectsFromSync>
-Table=[dbo].[VersionInfo];
-</ExcludeObjectsFromSync>
     <IncludeObjectsInDataSync />
     <DeployChangesInitialImportDone>False</DeployChangesInitialImportDone>
     <DeployChangesExecutionOrder />
     <DeployChangesForProgrammableObjects>False</DeployChangesForProgrammableObjects>
-    <DeployOnceUseSemver>False</DeployOnceUseSemver>
-    <SemverInitialBaseline>False</SemverInitialBaseline>
+    <DeployOnceUseSemver>True</DeployOnceUseSemver>
+    <SemverInitialBaseline>True</SemverInitialBaseline>
+    <ExcludeObjectsFromSync>
+Table=[dbo].[VersionInfo];
+</ExcludeObjectsFromSync>
   </PropertyGroup>
   <!-- READYROLL OFFLINE SCHEMA MODEL OPTIONS -->
   <PropertyGroup>
@@ -206,6 +206,7 @@ Table=[dbo].[VersionInfo];
     <Folder Include="Schema-Model\" />
     <Folder Include="Schema-Model\dbo\" />
     <Folder Include="Schema-Model\dbo\Tables\" />
+    <Folder Include="Migrations\0.0.2" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pre-Deployment\01_Create_Database.sql" />
@@ -234,5 +235,17 @@ Table=[dbo].[VersionInfo];
     <None Include="Schema-Model\dbo\Tables\AgencyPerson.sql" />
     <None Include="Schema-Model\dbo\Tables\Person.sql" />
     <None Include="Schema-Model\dbo\Tables\TeamPerson.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\001_20180309-InitDatabase.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Schema-Model\dbo\Tables\PassengerList.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Schema-Model\dbo\Tables\TourService.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\002_20180309-AddTourServiceAlterTourDetail,Tour.sql" />
   </ItemGroup>
 </Project>

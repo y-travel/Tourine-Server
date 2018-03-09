@@ -6,10 +6,6 @@ CREATE TABLE [dbo].[TourDetail]
 [StartDate] [datetime] NULL,
 [PlaceId] [uniqueidentifier] NOT NULL,
 [IsFlight] [bit] NULL,
-[InfantPrice] [bigint] NULL,
-[BusPrice] [bigint] NULL,
-[RoomPrice] [bigint] NULL,
-[FoodPrice] [bigint] NULL,
 [CreationDate] [datetime] NOT NULL,
 [LeaderId] [uniqueidentifier] NULL
 )

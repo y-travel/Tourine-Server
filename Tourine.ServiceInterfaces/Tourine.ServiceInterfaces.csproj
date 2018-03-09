@@ -177,9 +177,11 @@
     <Compile Include="Tours\GetBlocks.cs" />
     <Compile Include="Tours\GetRootTours.cs" />
     <Compile Include="Tours\GetTour.cs" />
+    <Compile Include="Tours\GetTourFreespace.cs" />
     <Compile Include="Tours\GetTours.cs" />
     <Compile Include="Tours\CreateTour.cs" />
     <Compile Include="Tours\CreateTourValidator.cs" />
+    <Compile Include="Tours\ReserveBlock.cs" />
     <Compile Include="Tours\UpdateTour.cs" />
     <Compile Include="Tours\UpdateTourValidator.cs" />
     <Compile Include="Tours\Tour.cs" />

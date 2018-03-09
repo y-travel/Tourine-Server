@@ -1,6 +1,7 @@
 ﻿using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.TourDetails;
+using Service = Tourine.ServiceInterfaces.Services.Service;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
@@ -79,7 +80,7 @@ namespace Tourine.ServiceInterfaces.Tours
                 .Where(tour => tour.ParentId == null);
             return AutoQuery.Execute(tours, query);
         }
-     
+
         [Authenticate]
         public object Get(GetBlocks blocks)
         {
@@ -90,6 +91,28 @@ namespace Tourine.ServiceInterfaces.Tours
             results.Results.Insert(0, mainTour);
             results.Total = results.Results.Count;
             return results;
+        }
+
+        [Authenticate]
+        public object Get(GetTourFreespace tour)
+        {
+            //@TODO: read from database
+            return "500";
+        }
+
+        [Authenticate]
+        public object Post(ReserveBlock block)
+        {
+            //@TODO ughly
+            var temp = new Tour
+            {
+                BasePrice = block.BasePrice,
+                Capacity = block.Capacity,
+                ParentId = block.TourId,
+                Id = Guid.NewGuid(),
+                AgencyId = Session.Agency.Id
+            };
+            return temp;
         }
     }
 }

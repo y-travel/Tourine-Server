@@ -2,7 +2,7 @@
 
 namespace Tourine.Migration
 {
-    [Migration(00220180309)]
+    [Migration(000320180309)]
     public class AddTourServiceAlterTourDetailTour:Common.MigrationBase
     {
     }

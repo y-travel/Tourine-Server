@@ -1,4 +1,5 @@
-﻿using ServiceStack;
+﻿using System;
+using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.TourDetails;
 using Service = Tourine.ServiceInterfaces.Services.Service;

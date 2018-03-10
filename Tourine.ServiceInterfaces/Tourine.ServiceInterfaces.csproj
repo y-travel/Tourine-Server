@@ -182,7 +182,10 @@
     <Compile Include="Tours\CreateTour.cs" />
     <Compile Include="Tours\CreateTourValidator.cs" />
     <Compile Include="Tours\ReserveBlock.cs" />
+    <Compile Include="Tours\ReserveBlockValidator.cs" />
     <Compile Include="Tours\TourOption.cs" />
+    <Compile Include="Tours\UpdateBlock.cs" />
+    <Compile Include="Tours\UpdateBlockValidator.cs" />
     <Compile Include="Tours\UpdateTour.cs" />
     <Compile Include="Tours\UpdateTourValidator.cs" />
     <Compile Include="Tours\Tour.cs" />

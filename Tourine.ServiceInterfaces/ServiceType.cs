@@ -7,7 +7,7 @@ namespace Tourine.ServiceInterfaces
     public enum OptionType : long
     {
         Empty = 0,
-        Bed = 1,
+        Room = 1,
         Bus = 2,
         Food = 4
     }
@@ -33,7 +33,7 @@ namespace Tourine.ServiceInterfaces
             {
                 switch (t)
                 {
-                    case OptionType.Bed:
+                    case OptionType.Room:
                         emojies += "🛏"; break;
                     case OptionType.Bus:
                         emojies += "🚌"; break;
@@ -52,7 +52,7 @@ namespace Tourine.ServiceInterfaces
 
             switch (OptionType)
             {
-                case OptionType.Bed:
+                case OptionType.Room:
                     return "🛏";
                 case OptionType.Bus:
                     return "🚌";
@@ -68,7 +68,7 @@ namespace Tourine.ServiceInterfaces
 
             switch (OptionType)
             {
-                case OptionType.Bed:
+                case OptionType.Room:
                     return "( تخت )";
                 case OptionType.Bus:
                     return "(صندلی)";

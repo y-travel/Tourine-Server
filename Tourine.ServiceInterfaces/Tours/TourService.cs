@@ -1,6 +1,7 @@
 ﻿using System;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
@@ -46,7 +47,7 @@ namespace Tourine.ServiceInterfaces.Tours
 
         [Authenticate]
         [RequiredRole(nameof(Role.Admin))]
-        public void Put(UpdateTour updateTour)
+        public object Put(UpdateTour updateTour)
         {
             if (!Db.Exists<Tour>(new { Id = updateTour.Tour.Id }))
                 throw HttpError.NotFound("");
@@ -71,6 +72,7 @@ namespace Tourine.ServiceInterfaces.Tours
                     tour.AgencyId
                 }
                 , @where: tour => tour.Code == updateTour.Tour.Code);
+            return Db.SingleById<Tour>(updateTour.Tour.Id);
         }
 
         [Authenticate]
@@ -96,23 +98,119 @@ namespace Tourine.ServiceInterfaces.Tours
         [Authenticate]
         public object Get(GetTourFreespace tour)
         {
-            //@TODO: read from database
-            return "500";
+            if (Db.Exists<Tour>(x => x.Id == tour.TourId))
+            {
+                //@TODO: read from database
+                return "500";
+            }
+            throw HttpError.NotFound("");
         }
 
         [Authenticate]
         public object Post(ReserveBlock block)
         {
-            //@TODO ughly
-            var temp = new Tour
+            if (!Db.Exists<Tour>(x => x.Id == block.ParentId))
+                throw HttpError.NotFound("");
+            if (!Db.Exists<Agency>(x => x.Id == block.AgencyId))
+                throw HttpError.NotFound("");
+
+            var tour = Db.SingleById<Tour>(block.ParentId);
+
+            var newBlock = new Tour
             {
+                AgencyId = block.AgencyId,
                 BasePrice = block.BasePrice,
                 Capacity = block.Capacity,
-                ParentId = block.TourId,
-                Id = Guid.NewGuid(),
-                AgencyId = Session.Agency.Id
+                InfantPrice = block.InfantPrice,
+                ParentId = block.ParentId,
+                TourDetailId = tour.TourDetailId,
+                Status = TourStatus.Created,
             };
-            return temp;
+
+            //@TODO limited and unlimited inserted manually, should be read from parent tour
+            var roomOption = new TourOption
+            {
+                TourId = newBlock.Id,
+                OptionType = OptionType.Room,
+                Price = block.RoomPrice,
+                Status = OptionStatus.Limited
+            };
+            var busOoption = new TourOption
+            {
+                TourId = newBlock.Id,
+                OptionType = OptionType.Bus,
+                Price = block.BusPrice,
+                Status = OptionStatus.Limited
+            };
+            var foodOption = new TourOption
+            {
+                TourId = newBlock.Id,
+                OptionType = OptionType.Food,
+                Price = block.FoodPrice,
+                Status = OptionStatus.Unlimited
+            };
+
+            Db.Insert(newBlock);
+            Db.Insert(roomOption);
+            Db.Insert(busOoption);
+            Db.Insert(foodOption);
+
+            return Db.SingleById<Tour>(newBlock.Id);
+        }
+
+        [Authenticate]
+        public object Put(UpdateBlock block)
+        {
+            if (!Db.Exists<Tour>(x => x.Id == block.ParentId))
+                throw HttpError.NotFound("");
+            if (!Db.Exists<Agency>(x => x.Id == block.AgencyId))
+                throw HttpError.NotFound("");
+
+            Db.UpdateOnly(new Tour
+            {
+                Id = block.Id,
+                AgencyId = block.AgencyId,
+                BasePrice = block.BasePrice,
+                Capacity = block.Capacity,
+                InfantPrice = block.InfantPrice,
+            }
+                , onlyFields: tour => new
+                {
+                    tour.Capacity,
+                    tour.BasePrice,
+                    tour.InfantPrice,
+                    tour.AgencyId
+                }
+                , @where: tour => tour.Id == block.Id);
+
+            Db.UpdateOnly(new TourOption
+            {
+                Price = block.BusPrice,
+            },  onlyFields: option => new
+            {
+                option.Price
+            }
+            ,where: p => p.TourId == block.Id && p.OptionType == OptionType.Bus);
+
+            Db.UpdateOnly(new TourOption
+                {
+                    Price = block.RoomPrice,
+                }, onlyFields: option => new
+                {
+                    option.Price
+                }
+                , where: p => p.TourId == block.Id && p.OptionType == OptionType.Room);
+
+            Db.UpdateOnly(new TourOption
+                {
+                    Price = block.FoodPrice,
+                }, onlyFields: option => new
+                {
+                    option.Price
+                }
+                , where: p => p.TourId == block.Id && p.OptionType == OptionType.Food);
+
+            return Db.SingleById<Tour>(block.Id);
         }
     }
 }

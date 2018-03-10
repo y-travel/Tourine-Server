@@ -8,8 +8,8 @@ namespace Tourine.ServiceInterfaces.Tours
 {
     public class TourOption
     {
-        public Guid Id { get; set; }
-        public OptionType Type { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public OptionType OptionType { get; set; }
         public long Price { get; set; }
         public OptionStatus Status { get; set; }
         public Guid TourId { get; set; }

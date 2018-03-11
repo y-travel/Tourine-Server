@@ -67,8 +67,8 @@ namespace Tourine.ServiceInterfaces
             {
                 var q = db.From<PassengerList>()
                     .Where(s => s.TourId == tourId)
-                    .GroupBy(x => x.Type)
-                    .Select(x => new { x.Type, serviceCount = Sql.Count("*") });
+                    .GroupBy(x => x.OptionType)
+                    .Select(x => new { Type = x.OptionType, serviceCount = Sql.Count("*") });
                 var results = db.Dictionary<OptionType, int>(q);
                 return results;
             }
@@ -81,8 +81,8 @@ namespace Tourine.ServiceInterfaces
                 var q = db.From<PassengerList>()
                     .Join<Person>((s, p) => s.PersonId == p.Id && (p.IsInfant || p.IsUnder5))
                     .Where(s => s.TourId == tourId)
-                    .GroupBy(x => x.Type)
-                    .Select(x => new { x.Type, serviceCount = Sql.Count("*") });
+                    .GroupBy(x => x.OptionType)
+                    .Select(x => new { Type = x.OptionType, serviceCount = Sql.Count("*") });
                 var results = db.Dictionary<OptionType, int>(q);
                 return results;
             }
@@ -123,14 +123,13 @@ namespace Tourine.ServiceInterfaces
                 var q = db.From<Tour, Team>((t, t1) => t.Id == t1.TourId && t1.BuyerId == buyerId)
                     .Join<TourDetail>((tour1, detail) => tour1.TourDetailId == detail.Id)
                     .OrderByDescending<TourDetail>(td => td.StartDate)
-                    .Select<Team>(t => new { t.Id, t.BuyerId, t.TourId, t.Price, t.Count, t.SubmitDate })
+                    .Select<Team>(t => new { t.Id, t.BuyerId, t.TourId, t.Count, t.SubmitDate })
                     .Take(1);
 
                 Team team = db.Single<Team>(q);
                 if (team == null)
                     return null;
                 team.Buyer = db.SingleById<Person>(team.BuyerId);
-                team.Leader = db.SingleById<Person>(team.LeaderId);
                 team.Tour = db.SingleById<Tour>(team.TourId);
                 return team;
             }

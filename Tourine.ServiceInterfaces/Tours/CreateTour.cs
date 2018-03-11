@@ -1,4 +1,5 @@
-﻿using ServiceStack;
+﻿using System.Collections.Generic;
+using ServiceStack;
 using ServiceStack.FluentValidation.Attributes;
 using Tourine.ServiceInterfaces.TourDetails;
 
@@ -11,6 +12,8 @@ namespace Tourine.ServiceInterfaces.Tours
     {
         public int Capacity { get; set; }
         public int BasePrice { get; set; }
+        public int InfantPrice { get; set; }
+        public List<TourOption> Options { get; set; }
         public TourDetail TourDetail { get; set; }
     }
 }

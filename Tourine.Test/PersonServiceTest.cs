@@ -85,14 +85,14 @@ namespace Tourine.Test
         public void CreatePerson_should_return_inserted_object()
         {
             _person.Id = Guid.NewGuid();
-            var person = (Person)MockService.Post(new CreatePerson { Person = _person });
+            var person = (Person)MockService.Post(new AddNewPerson { Person = _person });
             person.ShouldBeEquivalentTo(_person);
         }
 
         [Test]
         public void CreatePerson_should_return_exception()
         {
-            new Action(() => MockService.Post(new CreatePerson { Person = _person }))
+            new Action(() => MockService.Post(new AddNewPerson { Person = _person }))
                 .ShouldThrow<SQLiteException>();
         }
 

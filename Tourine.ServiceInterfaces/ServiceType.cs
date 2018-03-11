@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces
 {
@@ -13,6 +14,20 @@ namespace Tourine.ServiceInterfaces
     }
     public static class OptionTypeExtension
     {
+        public static OptionStatus GetDefaultStatus(this OptionType optionType)
+        {
+            switch (optionType)
+            {
+                case OptionType.Room:
+                    return OptionStatus.Limited;
+                case OptionType.Bus:
+                    return OptionStatus.Limited;
+                case OptionType.Food:
+                    return OptionStatus.Unlimited;
+                default:
+                    return OptionStatus.Limited;
+            }
+        }
         public static string GetEmojis(this OptionType OptionType)
         {
             string emojies = "";
@@ -65,7 +80,6 @@ namespace Tourine.ServiceInterfaces
         }
         public static string GetDescription(this OptionType OptionType)
         {
-
             switch (OptionType)
             {
                 case OptionType.Room:

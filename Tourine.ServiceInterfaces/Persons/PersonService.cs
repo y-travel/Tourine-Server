@@ -14,10 +14,10 @@ namespace Tourine.ServiceInterfaces.Persons
         public IAutoQueryDb AutoQuery { get; set; }
 
         [Authenticate]
-        public object Post(CreatePerson createPerson)
+        public object Post(AddNewPerson addNewPerson)
         {
-            Db.Insert(createPerson.Person);
-            return Db.SingleById<Person>(createPerson.Person.Id);
+            Db.Insert(addNewPerson.Person);
+            return Db.SingleById<Person>(addNewPerson.Person.Id);
         }
 
         [Authenticate]
@@ -48,7 +48,7 @@ namespace Tourine.ServiceInterfaces.Persons
         }
 
         [Authenticate]
-        public object Get([Validator(typeof(FindPersonFromNc))]FindPersonFromNc fromNc)
+        public object Get(FindPersonFromNc fromNc)
         {
             if (!Db.Exists<Person>(new { NationalCode = fromNc.NationalCode }))
                 throw HttpError.NotFound("");
@@ -58,8 +58,12 @@ namespace Tourine.ServiceInterfaces.Persons
         [Authenticate]
         public object Get(FindPersonInAgency persons)
         {
+            if (!persons.AgencyId.HasValue)
+                persons.AgencyId = Session.Agency.Id;
+
             if (!Db.Exists<Agency>(new { Id = persons.AgencyId }))
                 throw HttpError.NotFound("");
+
             var item = AutoQuery.CreateQuery(persons, Request.GetRequestParams()).Where(p =>
                 p.Name.Contains(persons.Str) ||
                 p.Family.Contains(persons.Str) ||

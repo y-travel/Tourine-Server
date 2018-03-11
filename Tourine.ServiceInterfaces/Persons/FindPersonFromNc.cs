@@ -2,7 +2,7 @@
 
 namespace Tourine.ServiceInterfaces.Persons
 {
-    [Route("/persons/{NationalCode}", "GET")]
+    [Route("/persons/nc/{NationalCode}", "GET")]
     public class FindPersonFromNc : IReturn<Person>
     {
         public string NationalCode { get; set; }

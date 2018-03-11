@@ -8,7 +8,8 @@ CREATE TABLE [dbo].[Tour]
 [Status] [tinyint] NOT NULL,
 [TourDetailId] [uniqueidentifier] NULL,
 [AgencyId] [uniqueidentifier] NULL,
-[InfantPrice] [bigint] NULL
+[InfantPrice] [bigint] NULL,
+[CreationDate] [datetime] NULL
 )
 GO
 ALTER TABLE [dbo].[Tour] ADD CONSTRAINT [PK_Tour_Id] PRIMARY KEY CLUSTERED  ([Id])

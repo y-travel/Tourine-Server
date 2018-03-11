@@ -2,11 +2,10 @@
 
 namespace Tourine.ServiceInterfaces.Persons
 {
-    public class PutPersonValidatior : AbstractValidator<UpdatePerson>
+    public class AddNewPersonValidator : AbstractValidator<AddNewPerson>
     {
-        public PutPersonValidatior()
+        public AddNewPersonValidator()
         {
-            RuleFor(p => p.Person.Id).NotEmpty();
             RuleFor(p => p.Person.BirthDate).NotEmpty();
             RuleFor(p => p.Person.Family).NotEmpty();
             RuleFor(p => p.Person.MobileNumber).NotEmpty();

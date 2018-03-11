@@ -2,7 +2,7 @@
 
 namespace Tourine.ServiceInterfaces.Persons
 {
-    [Route("/leaders","GET")]
+    [Route("/persons/leaders","GET")]
     public class GetLeaders : QueryDb<Person>
     {
     }

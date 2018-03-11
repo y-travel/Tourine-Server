@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Data;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
+using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.Services;
 using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
@@ -31,5 +34,24 @@ namespace Tourine.ServiceInterfaces.Tours
         public Agency Agency { get; set; }
 
         public long InfantPrice { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.Now;
+    }
+
+    public static class TourExtensions
+    {
+        public static int getBlocksCapacity(this Tour tour, IDbConnection Db)
+        {
+            var tourReserved = Db.Scalar<Tour, int>(
+                t => Sql.Sum(t.Capacity),
+                t => t.ParentId == tour.Id
+            );
+            return tourReserved;
+        }
+        public static int getCurrentPassengerCount(this Tour tour, IDbConnection Db)
+        {
+            var count = Db.Scalar<PassengerList, int>(x => Sql.CountDistinct(x.PersonId), x => x.TourId == tour.Id);
+            return count;
+        }
+
     }
 }

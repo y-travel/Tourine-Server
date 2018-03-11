@@ -3,9 +3,9 @@ CREATE TABLE [dbo].[PassengerList]
 [Id] [uniqueidentifier] NOT NULL CONSTRAINT [DF__PassengerList__Id__4D94879B] DEFAULT (newid()),
 [PersonId] [uniqueidentifier] NOT NULL,
 [TourId] [uniqueidentifier] NOT NULL,
-[Type] [bigint] NOT NULL,
-[Status] [tinyint] NOT NULL,
-[Price] [bigint] NOT NULL,
+[OptionType] [bigint] NOT NULL,
+[IncomeStatus] [tinyint] NOT NULL,
+[ReceivedMoney] [bigint] NOT NULL,
 [CurrencyFactor] [float] NOT NULL
 )
 GO

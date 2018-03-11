@@ -8,8 +8,8 @@ namespace Tourine.ServiceInterfaces.Services
         {
             RuleFor(s => s.PassengerList.PersonId).NotEmpty();
             RuleFor(s => s.PassengerList.TourId).NotEmpty();
-            RuleFor(s => s.PassengerList.Type).NotEmpty();
-            RuleFor(s => s.PassengerList.Status).NotEmpty();
+            RuleFor(s => s.PassengerList.OptionType).NotEmpty();
+            RuleFor(s => s.PassengerList.IncomeStatus).NotEmpty();
         }
     }
 }

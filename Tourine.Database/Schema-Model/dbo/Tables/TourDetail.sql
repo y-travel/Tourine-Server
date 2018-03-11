@@ -6,7 +6,6 @@ CREATE TABLE [dbo].[TourDetail]
 [StartDate] [datetime] NULL,
 [PlaceId] [uniqueidentifier] NOT NULL,
 [IsFlight] [bit] NULL,
-[CreationDate] [datetime] NOT NULL,
 [LeaderId] [uniqueidentifier] NULL
 )
 GO

@@ -11,7 +11,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public Guid Id { get; set; } = Guid.NewGuid();
         public OptionType OptionType { get; set; }
         public long Price { get; set; }
-        public OptionStatus Status { get; set; }
+        public OptionStatus OptionStatus { get; set; }
         public Guid TourId { get; set; }
     }
 

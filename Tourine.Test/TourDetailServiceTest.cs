@@ -41,8 +41,7 @@ namespace Tourine.Test
                 TourDetail = new TourDetail
                 {
                     Id = Guid.NewGuid(),
-                    DestinationId = _testDestinationGuid,
-                    CreationDate = DateTime.Now
+                    DestinationId = _testDestinationGuid
                 }
             })).ShouldThrow<WebServiceException>();
         }
@@ -55,8 +54,7 @@ namespace Tourine.Test
                 TourDetail = new TourDetail
                 {
                     Id = _testTourDetailGuid,
-                    DestinationId = _testDestinationGuid,
-                    CreationDate = DateTime.Now
+                    DestinationId = _testDestinationGuid
                 }
             })).ShouldNotThrow<WebServiceException>();
         }
@@ -67,7 +65,6 @@ namespace Tourine.Test
             {
                 Id = _testTourDetailGuid,
                 DestinationId = _testDestinationGuid,
-                CreationDate = DateTime.Today,
                 PlaceId = Guid.NewGuid(),
             });
 

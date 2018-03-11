@@ -7,7 +7,7 @@ namespace Tourine.ServiceInterfaces.Teams
 {
     public class Team
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [References(typeof(Tour))]
         public Guid TourId { get; set; }
@@ -15,13 +15,7 @@ namespace Tourine.ServiceInterfaces.Teams
         public Tour Tour { get; set; }
 
         public int Count { get; set; }
-        public int  Price { get; set; }
-        public DateTime SubmitDate { get; set; }
-
-        [References(typeof(Person))]
-        public Guid LeaderId { get; set; }
-        [Reference]
-        public Person Leader { get; set; }
+        public DateTime SubmitDate { get; set; } = DateTime.Now;
 
         [References(typeof(Person))]
         public Guid BuyerId { get; set; }

@@ -24,7 +24,6 @@ namespace Tourine.ServiceInterfaces.TourDetails
         public Place Place { get; set; }
 
         public bool IsFlight { get; set; }
-        public DateTime CreationDate { get; set; } = DateTime.Now;
 
         [References(typeof(Person))]
         public Guid? LeaderId { get; set; }

@@ -6,9 +6,9 @@ namespace Tourine.ServiceInterfaces.Teams
     {
         public CreateTeamValidator()
         {
-            RuleFor(t => t.Team.Id).Empty();
-            RuleFor(t => t.Team.TourId).NotEmpty();
-            RuleFor(t => t.Team.SubmitDate).NotEmpty();
+            RuleFor(t => t.TourId).NotEmpty().NotNull();
+            RuleFor(t => t.Buyer.PersonId).NotNull().NotEmpty();
+            RuleFor(t => t.Buyer.PersonIncomes.Count).Equal(3);
         }
     }
 }

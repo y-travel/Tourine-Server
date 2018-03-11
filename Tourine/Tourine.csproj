@@ -222,6 +222,10 @@
     <Compile Include="Migration\0001_20180216-InitDatabase.cs" />
     <Compile Include="Migration\0002_20180216-DevSeed.cs" />
     <Compile Include="Migration\0003_20180309-AddTourServiceAlterTourDetailTour.cs" />
+    <Compile Include="Migration\0003_20180311-MoveCreationDateToTour.cs" />
+    <Compile Include="Migration\0004_20180312-ChangePassengerListFieldName.cs" />
+    <Compile Include="Migration\0005_20180312-RemovePriceFromTeam.cs" />
+    <Compile Include="Migration\0006_20180312-ChangeBuyerToBuyerId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +238,15 @@
     </Content>
     <EmbeddedResource Include="Migration\0001_20180216-InitDatabase.sql">
       <DependentUpon>0001_20180216-InitDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\0003_20180311-MoveCreationDateToTour.sql">
+      <DependentUpon>0003_20180311-MoveCreationDateToTour.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\005_20180312-RemovePriceFromTeam.sql">
+      <DependentUpon>0005_20180312-RemovePriceFromTeam.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\006_20180312-ChangeBuyerToBuyerId.sql">
+      <DependentUpon>0006_20180312-ChangeBuyerToBuyerId.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -249,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migration\0003_20180309-AddTourServiceAlterTourDetailTour.sql">
       <DependentUpon>0003_20180309-AddTourServiceAlterTourDetailTour.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\004_20180312-ChangePassengerListFieldName.sql">
+      <DependentUpon>0004_20180312-ChangePassengerListFieldName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

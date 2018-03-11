@@ -8,7 +8,6 @@ namespace Tourine.ServiceInterfaces.TourDetails
         {
             RuleFor(t => t.TourDetail.Id).NotEmpty();
             RuleFor(t => t.TourDetail.DestinationId).NotEmpty();
-            RuleFor(t => t.TourDetail.CreationDate).NotEmpty();
         }
     }
 }

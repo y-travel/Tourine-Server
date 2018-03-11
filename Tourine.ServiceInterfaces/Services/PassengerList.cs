@@ -19,9 +19,9 @@ namespace Tourine.ServiceInterfaces.Services
         [Reference]
         public Tour Tour { get; set; }
 
-        public OptionType Type { get; set; }
-        public ServiceStatus Status { get; set; }
-
-        public bool IsGateSettelled { get; set; }
+        public OptionType OptionType { get; set; }
+        public long ReceivedMoney { get; set; }
+        public double CurrencyFactor { get; set; }
+        public IncomeStatus IncomeStatus { get; set; }
     }
 }

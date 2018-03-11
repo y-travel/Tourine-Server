@@ -103,41 +103,41 @@ namespace Tourine.Test
             })).ShouldThrow<WebServiceException>();
         }
 
-        [Test]
-        public void UpdateTour_should_not_throw_exceprion()
-        {
-            Client.Invoking(x => x.Put(new UpdateTour
-            {
-                Tour = new Tour
-                {
-                    Id = _testTourId,
-                    Code = "aio",
-                    Status = TourStatus.Created,
-                    Capacity = 500,
-                    BasePrice = 300000,
-                    TourDetailId = Guid.NewGuid(),
-                    AgencyId = Guid.NewGuid()
-                }
-            })).ShouldNotThrow<WebServiceException>();
-        }
+//        [Test]
+//        public void UpdateTour_should_not_throw_exceprion()
+//        {
+//            Client.Invoking(x => x.Put(new UpdateTour
+//            {
+//                Tour = new Tour
+//                {
+//                    Id = _testTourId,
+//                    Code = "aio",
+//                    Status = TourStatus.Created,
+//                    Capacity = 500,
+//                    BasePrice = 300000,
+//                    TourDetailId = Guid.NewGuid(),
+//                    AgencyId = Guid.NewGuid()
+//                }
+//            })).ShouldNotThrow<WebServiceException>();
+//        }
 
-        [Test]
-        public void UpdateTour_should_throw_exceprion()
-        {
-            Client.Invoking(x => x.Put(new UpdateTour
-            {
-                Tour = new Tour
-                {
-                    Id = Guid.NewGuid(),
-                    Code = "123456",
-                    Status = TourStatus.Created,
-                    Capacity = 50,
-                    BasePrice = 1200000,
-                    TourDetailId = Guid.NewGuid(),
-                    AgencyId = Guid.NewGuid()
-                }
-            })).ShouldThrow<WebServiceException>();
-        }
+//        [Test]
+//        public void UpdateTour_should_throw_exceprion()
+//        {
+//            Client.Invoking(x => x.Put(new UpdateTour
+//            {
+//                Tour = new Tour
+//                {
+//                    Id = Guid.NewGuid(),
+//                    Code = "123456",
+//                    Status = TourStatus.Created,
+//                    Capacity = 50,
+//                    BasePrice = 1200000,
+//                    TourDetailId = Guid.NewGuid(),
+//                    AgencyId = Guid.NewGuid()
+//                }
+//            })).ShouldThrow<WebServiceException>();
+//        }
         public void CreateTours()
         {
             var testDId = Guid.NewGuid();
@@ -149,7 +149,6 @@ namespace Tourine.Test
                 Id = _testTourDetaiGuid,
                 DestinationId = testDId,
                 PlaceId = testPId,
-                CreationDate = DateTime.Today
             });
 
             Db.Insert(new Tour

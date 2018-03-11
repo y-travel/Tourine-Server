@@ -248,4 +248,19 @@ Table=[dbo].[VersionInfo];
   <ItemGroup>
     <None Include="Migrations\0.0.2\002_20180309-AddTourServiceAlterTourDetail,Tour.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Schema-Model\dbo\Tables\TourOption.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\003_20180311-MoveCreationDateToTour.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\004_20180312-ChangePassengerListFieldName.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\005_20180312-RemovePriceFromTeam.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\006_20180312-ChangeBuyerToBuyerId.sql" />
+  </ItemGroup>
 </Project>

@@ -343,13 +343,11 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "DeployDev" (
-  if not exist $(SolutionDir)..\SyncBuild mkdir $(SolutionDir)..\SyncBuild
-  xcopy "$(TargetDir)*.dll" "$(TargetDir)..\..\..\SyncBuild\Tourine\bin\" /E /Y /C /Exclude:$(TargetDir)..\ExcludeDeployFiles.txt<!--@TODO workaround-->
-  xcopy "$(TargetDir)..\404.html" "$(TargetDir)..\..\..\SyncBuild\Tourine\"  /Y /C
-  xcopy "$(TargetDir)..\web.config" "$(TargetDir)..\..\..\SyncBuild\Tourine\"  /Y /C
-  xcopy "$(TargetDir)..\Global.asax" "$(TargetDir)..\..\..\SyncBuild\Tourine\"  /Y /C
-  xcopy "$(TargetDir)..\Global.asax.cs" "$(TargetDir)..\..\..\SyncBuild\Tourine\"  /Y /C
-  echo ++ "Copied files to $(SolutionDir)SyncBuild\$(ProjectName)\"
+  xcopy "$(TargetDir)*.dll" "$(SyncBuildPath)" /E /Y /C /Exclude:$(TargetDir)..\ExcludeDeployFiles.txt<!--@TODO workaround-->
+  xcopy "$(TargetDir)..\404.html" "$(SyncBuildPath)"  /Y /C
+  xcopy "$(TargetDir)..\web.config" "$(SyncBuildPath)"  /Y /C
+  xcopy "$(TargetDir)..\Global.asax" "$(SyncBuildPath)"  /Y /C
+  echo ++ "Copied files to $(SyncBuildPath)"
 ) ELSE (
   echo ++ "Don't Sync with server, because your not in 'DeployDev' mode."
 )

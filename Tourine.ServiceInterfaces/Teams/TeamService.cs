@@ -46,6 +46,8 @@ namespace Tourine.ServiceInterfaces.Teams
                             IncomeStatus = personIncome.IncomeStatus,
                             ReceivedMoney = personIncome.ReceivedMoney,
                             OptionType = personIncome.OptionType,
+                            PassportDelivered = passenger.PassportDelivered,
+                            VisaDelivered = passenger.VisaDelivered
                         });
                     }
                     Db.Insert(new TeamPerson

@@ -39,13 +39,13 @@ GO
 -- 
 -- Dumping data for table Person
 --
-INSERT dbo.Person VALUES ('f0905b1f-9221-4e4e-ac60-0617427602e7', N'عزیز', N'وظیفه دل', N'032156498', N'123678901', '1988-08-01', '2018-01-31', N'1324564', CONVERT(bit, 'True'), 0, N'989352222289', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'False'))
-INSERT dbo.Person VALUES ('cdaf2353-b68d-4f0f-8056-5e37e51d70aa', N'عماد', N'باقری', N'12315645', N'455642211', '2008-01-17', '2018-01-30', NULL, CONVERT(bit, 'True'), 0, N'989353860767', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'False'))
-INSERT dbo.Person VALUES ('cd689574-7a50-448a-8724-688ca5291777', N'علیرضا', N'زنده دل', N'032156498', N'123678901', '1989-07-01', '2018-01-31', N'1324564', CONVERT(bit, 'False'), 0, N'989355113008', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'))
-INSERT dbo.Person VALUES ('0cdf3854-efa5-4cca-b659-921a9309c60b', N'محمد', N'فرهمند زاد', N'032156498', N'123678901', '1989-09-01', '2018-01-31', N'1324564', CONVERT(bit, 'True'), 0, N'989385015211', 99851678, CONVERT(bit, 'True'), CONVERT(bit, 'False'))
-INSERT dbo.Person VALUES ('5f05a5dc-3aee-4572-beba-a7d5a5fc3e64', N'مجید', N'شاملو', N'021000000', N'012345678', '1988-01-08', NULL, NULL, CONVERT(bit, 'True'), 1, N'989192480767', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'False'))
-INSERT dbo.Person VALUES ('070d5d34-2723-4e48-bfe4-b07838e480f1', N'علی', N'میرزایی', N'032156498', N'123678901', '1989-08-01', '2018-01-31', N'1324564', CONVERT(bit, 'False'), 1, N'989125412164', 91847133, CONVERT(bit, 'False'), CONVERT(bit, 'False'))
-INSERT dbo.Person VALUES ('e2d864ca-19eb-40d6-adea-f5bfc7989846', N'سعید', N'شاملو', N'032156498', N'123678901', '1989-08-01', '2018-01-31', N'1324564', CONVERT(bit, 'False'), 0, N'989195804336', NULL, CONVERT(bit, 'True'), CONVERT(bit, 'False'))
+INSERT dbo.Person VALUES ('f0905b1f-9221-4e4e-ac60-0617427602e7', N'عزیز', N'وظیفه دل', N'032156498', N'123678901', '1988-08-01', '2018-01-31', N'1324564', CONVERT(bit, 'True'), 2, N'989352222289', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'False'))
+INSERT dbo.Person VALUES ('cdaf2353-b68d-4f0f-8056-5e37e51d70aa', N'عماد', N'باقری', N'12315645', N'455642211', '2008-01-17', '2018-01-30', NULL, CONVERT(bit, 'True'), 7, N'989353860767', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'False'))
+INSERT dbo.Person VALUES ('cd689574-7a50-448a-8724-688ca5291777', N'علیرضا', N'زنده دل', N'032156498', N'123678901', '1989-07-01', '2018-01-31', N'1324564', CONVERT(bit, 'False'), 5, N'989355113008', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'))
+INSERT dbo.Person VALUES ('0cdf3854-efa5-4cca-b659-921a9309c60b', N'محمد', N'فرهمند زاد', N'032156498', N'123678901', '1989-09-01', '2018-01-31', N'1324564', CONVERT(bit, 'True'), 6, N'989385015211', 99851678, CONVERT(bit, 'True'), CONVERT(bit, 'False'))
+INSERT dbo.Person VALUES ('5f05a5dc-3aee-4572-beba-a7d5a5fc3e64', N'مجید', N'شاملو', N'021000000', N'012345678', '1988-01-08', NULL, NULL, CONVERT(bit, 'True'),2, N'989192480767', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'False'))
+INSERT dbo.Person VALUES ('070d5d34-2723-4e48-bfe4-b07838e480f1', N'علی', N'میرزایی', N'032156498', N'123678901', '1989-08-01', '2018-01-31', N'1324564', CONVERT(bit, 'False'), 7, N'989125412164', 91847133, CONVERT(bit, 'False'), CONVERT(bit, 'False'))
+INSERT dbo.Person VALUES ('e2d864ca-19eb-40d6-adea-f5bfc7989846', N'سعید', N'شاملو', N'032156498', N'123678901', '1989-08-01', '2018-01-31', N'1324564', CONVERT(bit, 'False'),1, N'989195804336', NULL, CONVERT(bit, 'True'), CONVERT(bit, 'False'))
 GO
 -- 
 -- Dumping data for table Place
@@ -77,26 +77,20 @@ GO
 -- 
 -- Dumping data for table TourDetail
 --
-INSERT dbo.TourDetail VALUES ('d93bae8e-ad1b-4bb6-9d99-43089ce9d3e0', 'a21e41d9-be48-4e53-b6ee-5b55d47cfb33', 5, '2018-02-01 18:20:35.303', '9a6822c4-3f1d-44ef-98e7-56f40c37ff33', CONVERT(bit, 'False'), 200, 20, 2000, 200000, '2018-01-31 18:20:47.523', NULL)
 INSERT dbo.TourDetail VALUES ('8a54103e-7655-428e-b547-4fd190506f7d', 'bfc8684b-0a99-406e-9c56-00f3398f72bd', 10, '2018-03-02 18:19:20.873', '834c9273-52fd-4b84-94c5-638d883b1ce4', CONVERT(bit, 'False'), 120000, 60000, 182000, 85000, '2018-01-31 18:19:44.723', 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa')
 INSERT dbo.TourDetail VALUES ('4beef3e3-c112-4a90-a0c3-651858f32195', '37132bd5-297f-4208-89cb-586e546d1bb7', 10, '2018-02-02 18:20:01.817', '834c9273-52fd-4b84-94c5-638d883b1ce4', NULL, NULL, NULL, NULL, NULL, '2018-01-31 18:20:24.733', 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa')
-INSERT dbo.TourDetail VALUES ('ed64d601-6557-4263-b936-8dc57129e453', 'a21e41d9-be48-4e53-b6ee-5b55d47cfb33', 5, '2018-02-01 18:20:35.303', '9a6822c4-3f1d-44ef-98e7-56f40c37ff33', CONVERT(bit, 'False'), 200, 20, 2000, 200000, '2018-01-31 18:20:47.523', NULL)
-INSERT dbo.TourDetail VALUES ('2e4b0d34-64b8-4b9a-9ff3-c31a09a9680b', 'a21e41d9-be48-4e53-b6ee-5b55d47cfb33', 5, '2018-02-28 18:20:35.303', '9a6822c4-3f1d-44ef-98e7-56f40c37ff33', NULL, NULL, NULL, NULL, NULL, '2018-01-31 18:20:47.523', NULL)
-INSERT dbo.TourDetail VALUES ('c31294e5-cce3-4ece-b2ac-cfa159611f76', 'a21e41d9-be48-4e53-b6ee-5b55d47cfb33', 0, '2018-01-02 18:20:47.000', '9a6822c4-3f1d-44ef-98e7-56f40c37ff33', CONVERT(bit, 'False'), 0, 0, 0, 0, '2018-02-10 17:56:18.970', NULL)
-INSERT dbo.TourDetail VALUES ('7136e265-b3d3-4912-86c7-f58269d16d91', 'a21e41d9-be48-4e53-b6ee-5b55d47cfb33', 5, '2018-02-23 18:20:35.303', '9a6822c4-3f1d-44ef-98e7-56f40c37ff33', CONVERT(bit, 'False'), 200, 20, 2000, 200000, '2018-01-31 18:20:47.523', NULL)
-INSERT dbo.TourDetail VALUES ('e95a0165-0418-4393-920f-fbb68ec696cb', 'a21e41d9-be48-4e53-b6ee-5b55d47cfb33', 5, '2018-02-15 18:20:35.303', '9a6822c4-3f1d-44ef-98e7-56f40c37ff33', CONVERT(bit, 'False'), 200, 20, 2000, 200000, '2018-01-31 18:20:47.523', NULL)
 GO
 -- 
 -- Dumping data for table Tour
 --
-INSERT dbo.Tour VALUES ('c17496cf-7a71-451f-91da-1d10b165be13', 20, 1600000, 'c17496cf-7a71-451f-91da-1d10b165be13', N'bagh20180131', 2, '8a54103e-7655-428e-b547-4fd190506f7d', '5d0fd190-3c6a-45d9-9987-f698b700cd43')
-INSERT dbo.Tour VALUES ('443237f8-7eec-413f-9858-97bfd99ebc2b', 50, 750000, NULL, N'kar20180131', 2, '4beef3e3-c112-4a90-a0c3-651858f32195', '5d0fd190-3c6a-45d9-9987-f698b700cd43')
+INSERT dbo.Tour VALUES ('c17496cf-7a71-451f-91da-1d10b165be13', 55, 1600000, NULL, N'bagh20180131', 2, '8a54103e-7655-428e-b547-4fd190506f7d', '5d0fd190-3c6a-45d9-9987-f698b700cd43')
+INSERT dbo.Tour VALUES ('443237f8-7eec-413f-9858-97bfd99ebc2b', 12, 1750000, 'c17496cf-7a71-451f-91da-1d10b165be13', N'kar20180131', 2, '8a54103e-7655-428e-b547-4fd190506f7d', '4c5ee6a3-c80c-436c-983c-a72b207a8925')
 INSERT dbo.Tour VALUES ('30a9c61b-9dde-4c3d-b681-9ecb1bafedf1', 50, 850000, NULL, N'naj20180113', 2, '4beef3e3-c112-4a90-a0c3-651858f32195', '5d0fd190-3c6a-45d9-9987-f698b700cd43')
 GO
 -- 
 -- Dumping data for table PriceDetail
 --
-INSERT dbo.PriceDetail VALUES ('6fa90ed7-c05c-4a4b-83de-3bfccf417d19', 60000, 2, '30a9c61b-9dde-4c3d-b681-9ecb1bafedf1', N'mechanic')
+INSERT dbo.PriceDetail VALUES ('6fa90ed7-c05c-4a4b-83de-3bfccf417d19', 60000, 2, 'c17496cf-7a71-451f-91da-1d10b165be13', N'mechanic')
 INSERT dbo.PriceDetail VALUES ('5f81088d-422f-4d82-824c-80ef6994fcec', 120000, 2, 'c17496cf-7a71-451f-91da-1d10b165be13', N'no')
 GO
 -- 

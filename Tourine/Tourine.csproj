@@ -226,6 +226,8 @@
     <Compile Include="Migration\0004_20180312-ChangePassengerListFieldName.cs" />
     <Compile Include="Migration\0005_20180312-RemovePriceFromTeam.cs" />
     <Compile Include="Migration\0006_20180312-ChangeBuyerToBuyerId.cs" />
+    <Compile Include="Migration\0007_20180314-AddVisaPassDelivered.cs" />
+    <Compile Include="Migration\0008_20180314-AllowNcToBeNull.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +250,9 @@
     <EmbeddedResource Include="Migration\006_20180312-ChangeBuyerToBuyerId.sql">
       <DependentUpon>0006_20180312-ChangeBuyerToBuyerId.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migration\007_20180314-AddVisaPassDelivered.sql">
+      <DependentUpon>0007_20180314-AddVisaPassDelivered.cs</DependentUpon>
+    </EmbeddedResource>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -265,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migration\004_20180312-ChangePassengerListFieldName.sql">
       <DependentUpon>0004_20180312-ChangePassengerListFieldName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\008_20180314-AllowNcToBeNull.sql">
+      <DependentUpon>0008_20180314-AllowNcToBeNull.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -343,7 +351,7 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "DeployDev" (
-  xcopy "$(TargetDir)*.dll" "$(SyncBuildPath)" /E /Y /C /Exclude:$(TargetDir)..\ExcludeDeployFiles.txt<!--@TODO workaround-->
+  xcopy "$(TargetDir)*.dll" "$(SyncBuildPath)\bin\" /E /Y /C /Exclude:$(TargetDir)..\ExcludeDeployFiles.txt<!--@TODO workaround-->
   xcopy "$(TargetDir)..\404.html" "$(SyncBuildPath)"  /Y /C
   xcopy "$(TargetDir)..\web.config" "$(SyncBuildPath)"  /Y /C
   xcopy "$(TargetDir)..\Global.asax" "$(SyncBuildPath)"  /Y /C

@@ -263,4 +263,10 @@ Table=[dbo].[VersionInfo];
   <ItemGroup>
     <None Include="Migrations\0.0.2\006_20180312-ChangeBuyerToBuyerId.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\007_20180314-AddVisaPassDelivered.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\008_20180314-AllowNcToBeNull.sql" />
+  </ItemGroup>
 </Project>

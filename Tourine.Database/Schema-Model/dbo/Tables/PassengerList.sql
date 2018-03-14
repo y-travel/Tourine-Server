@@ -6,7 +6,9 @@ CREATE TABLE [dbo].[PassengerList]
 [OptionType] [bigint] NOT NULL,
 [IncomeStatus] [tinyint] NOT NULL,
 [ReceivedMoney] [bigint] NOT NULL,
-[CurrencyFactor] [float] NOT NULL
+[CurrencyFactor] [float] NOT NULL,
+[PassportDelivered] [bit] NULL,
+[VisaDelivered] [bit] NULL
 )
 GO
 ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [PK_PassengerList_Id] PRIMARY KEY CLUSTERED  ([Id])

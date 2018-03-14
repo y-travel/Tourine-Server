@@ -23,5 +23,7 @@ namespace Tourine.ServiceInterfaces.Services
         public long ReceivedMoney { get; set; }
         public double CurrencyFactor { get; set; }
         public IncomeStatus IncomeStatus { get; set; }
+        public  bool VisaDelivered { get; set; }
+        public bool PassportDelivered { get; set; }
     }
 }

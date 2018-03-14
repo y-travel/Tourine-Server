@@ -11,6 +11,8 @@ namespace Tourine.ServiceInterfaces.Teams
     {
         public Guid PersonId { get; set; }
         public List<PersonIncome> PersonIncomes { get; set; }
+        public bool VisaDelivered { get; set; }
+        public bool PassportDelivered { get; set; }
     }
 
     public class PersonIncome

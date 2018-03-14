@@ -21,11 +21,12 @@ namespace Tourine.ServiceInterfaces.Persons
         }
 
         [Authenticate]
-        public void Put(UpdatePerson updatePerson)
+        public object Put(UpdatePerson updatePerson)
         {
             if (!Db.Exists<Person>(new { Id = updatePerson.Person.Id }))
                 throw HttpError.NotFound("");
             Db.Update(updatePerson.Person);
+            return Db.SingleById<Person>(updatePerson.Person.Id);
         }
 
         [Authenticate]

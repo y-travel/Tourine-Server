@@ -9,7 +9,7 @@ using ServiceStack.Web;
 namespace Tourine.ServiceInterfaces.Tours
 {
     [Route("/tours/{TourId}/freespace","GET")]
-    public class GetTourFreespace : IReturn<string>
+    public class GetTourFreeSpace : IReturn<string>
     {
         [QueryDbField(Field = "Id")]
         public Guid TourId { get; set; }

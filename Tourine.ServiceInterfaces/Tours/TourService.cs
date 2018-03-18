@@ -147,7 +147,7 @@ namespace Tourine.ServiceInterfaces.Tours
         }
 
         [Authenticate]
-        public object Get(GetTourFreespace tour)
+        public object Get(GetTourFreeSpace tour)
         {
             if (Db.Exists<Tour>(x => x.Id == tour.TourId))
             {

@@ -12,8 +12,6 @@ namespace Tourine.ServiceInterfaces.Persons
             RuleFor(p => p.Person.MobileNumber).NotEmpty();
             RuleFor(p => p.Person.Name).NotEmpty().NotNull();
             RuleFor(p => p.Person.NationalCode).NotEmpty();
-            RuleFor(p => p.Person.PassportExpireDate).NotEmpty();
-            RuleFor(p => p.Person.PassportNo).NotEmpty();
         }
     }
 }

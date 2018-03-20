@@ -158,14 +158,14 @@ namespace Tourine.ServiceInterfaces.Tours
         }
 
         [Authenticate]
-        public object Get(GetTourFreeSpace tour)
+        public object Get(GetTourFreeSpace getTourFreeSpace)
         {
-            if (Db.Exists<Tour>(x => x.Id == tour.TourId))
+            if (Db.Exists<Tour>(x => x.Id == getTourFreeSpace.TourId))
             {
-                var mainTour = Db.SingleById<Tour>(tour.TourId);
-                var mainTourPassengers = mainTour.getCurrentPassengerCount(Db);
-                var tourReserved = mainTour.getBlocksCapacity(Db);
-                return (mainTour.Capacity - tourReserved - mainTourPassengers).ToString();
+                var tour = Db.SingleById<Tour>(getTourFreeSpace.TourId);
+                var passengerCount = tour.getCurrentPassengerCount(Db);
+                var tourBlocksCapacity = tour.getBlocksCapacity(Db);
+                return (tour.Capacity - tourBlocksCapacity - passengerCount).ToString();
             }
             throw HttpError.NotFound("");
         }
@@ -244,7 +244,7 @@ namespace Tourine.ServiceInterfaces.Tours
             var tourReserved = parentTour.getBlocksCapacity(Db);
             var tourPassengers = oldBlock.getCurrentPassengerCount(Db);
 
-            if (parentTour.Capacity - tourReserved - tourPassengers - oldBlock.Capacity < block.Capacity)
+            if (parentTour.Capacity - tourReserved - tourPassengers + oldBlock.Capacity < block.Capacity)
                 throw HttpError.NotFound("freeSpace");
 
             Db.UpdateOnly(new Tour

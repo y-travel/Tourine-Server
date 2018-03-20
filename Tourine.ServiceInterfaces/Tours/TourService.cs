@@ -35,6 +35,17 @@ namespace Tourine.ServiceInterfaces.Tours
         }
 
         [Authenticate]
+        public object Get(GetTourOptions getTourOptions)
+        {
+            if (getTourOptions.TourId == Guid.Empty)
+                throw HttpError.NotFound("");
+            return AutoQuery.Execute(
+                getTourOptions,
+                AutoQuery.CreateQuery(getTourOptions, Request)
+            );
+        }
+
+        [Authenticate]
         [RequiredRole(nameof(Role.Admin))]
         public object Post(CreateTour createReq)
         {

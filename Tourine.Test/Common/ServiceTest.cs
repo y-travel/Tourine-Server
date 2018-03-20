@@ -1,21 +1,28 @@
-using System;
 using System.Data;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.Common;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Users;
-using Tourine.Test.Common;
-using Tourine.Test.ServerTest;
 
-namespace Tourine.Test
+namespace Tourine.Test.Common
 {
     [TestFixture]
-    public abstract class ServiceTest<T> where T :AppService
+    public abstract class ServiceTest<T> where T : AppService
     {
-        public static TestAppHost AppHost { get; set; }
+        public AuthSession Session => AppHost.Session;
+        public Agency CurrentAgency => AppHost.CurrentAgency;
+        public User CurrentUser => AppHost.CurrentUser;
+
+        private static TestAppHost _appHost;
+
+        public static TestAppHost AppHost
+        {
+            get => _appHost;
+            set => _appHost = value;
+        }
+
         protected JsonServiceClient Client { get; private set; }
         protected T MockService { get; set; }
         protected IDbConnection Db { get; set; }
@@ -37,7 +44,7 @@ namespace Tourine.Test
         public void OneTimeSetup()
         {
             TestAppHost.RegisterLicense();
-            AppHost = (TestAppHost) new TestAppHost().Init();
+            AppHost = (TestAppHost)new TestAppHost().Init();
         }
         [OneTimeTearDown]
         public void OneTimeTearDown()

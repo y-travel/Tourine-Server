@@ -1,4 +1,5 @@
 ﻿using System;
+using ServiceStack.DataAnnotations;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
@@ -8,6 +9,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public OptionType OptionType { get; set; }
         public long Price { get; set; }
         public OptionStatus OptionStatus { get; set; }
+        [References(typeof(Tour))]
         public Guid TourId { get; set; }
     }
 

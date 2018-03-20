@@ -3,7 +3,7 @@ using System.Data;
 using System.Linq;
 using ServiceStack.OrmLite;
 
-namespace Tourine.Test
+namespace Tourine.Test.Common
 {
     public class InsertHelper<T>
     {

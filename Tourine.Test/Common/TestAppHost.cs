@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Data;
-using System.Reflection;
 using Funq;
-using NUnit.Framework;
-using Quartz;
-using Quartz.Impl;
 using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.Data;
@@ -13,7 +8,6 @@ using ServiceStack.Testing;
 using ServiceStack.Text;
 using ServiceStack.Web;
 using Telerik.JustMock;
-using Tourine.Common;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyPersons;
@@ -29,7 +23,7 @@ using Tourine.ServiceInterfaces.Users;
 using AuthProvider = Tourine.Common.AuthProvider;
 using Service = ServiceStack.Service;
 
-namespace Tourine.Test
+namespace Tourine.Test.Common
 {
     //@TODO should be change to BasicAppHost if we could
     public class TestAppHost : AppSelfHostBase
@@ -43,11 +37,13 @@ namespace Tourine.Test
         public AuthSession Session { get; set; }
 
         public AuthProvider mockAuthProvider = Mock.Create<Tourine.Common.AuthProvider>();
+        public Agency CurrentAgency { get; set; } = new Agency();
+        public User CurrentUser { get; set; } = new User();
         public TestAppHost() : base("test", typeof(AppService).Assembly)
         {
             TestMode = true;
             ConnectionFactory = new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider);
-            Session = new AuthSession { Agency = Mock.Create<Agency>(), User = Mock.Create<User>() };
+            Session = new AuthSession { Agency = CurrentAgency, User = CurrentUser };
         }
 
         private class MyNet40PclExport : Net40PclExport
@@ -75,7 +71,7 @@ namespace Tourine.Test
             //            });
             container.Register<IDbConnectionFactory>(ConnectionFactory);
             container.Register<TourineBot>(MockBot);
-            container.RegisterFactory<IAuthSession>(() => Mock.Create<AuthUserSession>());
+            container.RegisterFactory<IAuthSession>(() => Session);
             container.RegisterAutoWired<AgencyService>();
             container.RegisterAutoWired<AgencyPersonService>();
             container.RegisterAutoWired<DestinationService>();
@@ -96,10 +92,19 @@ namespace Tourine.Test
 
         public void InitDb()
         {
-            TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place), typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Person), typeof(Person), typeof(TourDetail), typeof(TeamPerson), typeof(Team), typeof(Service), typeof(AgencyPerson) };//should be fill with tables
+            TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place),
+                typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Person),
+                typeof(Person), typeof(TourDetail), typeof(TeamPerson), typeof(Team),
+                typeof(Service), typeof(AgencyPerson),typeof(TourOption) };//should be fill with tables
 
             using (var db = ConnectionFactory.OpenDbConnection())
+            {
                 db.CreateTables(false, TablesTypes);
+                //                db.Insert(new object[] { CurrentAgency, CurrentUser });
+                db.Insert(CurrentAgency);
+                db.Insert(CurrentUser);
+            }
+
         }
 
         public static void RegisterLicense()

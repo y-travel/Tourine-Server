@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Linq;
-using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
-using ServiceStack.Auth;
-using ServiceStack.OrmLite;
 using Telerik.JustMock;
-using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyPersons;
-using Tourine.ServiceInterfaces.Destinations;
-using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Users;
 using AuthProvider = Tourine.Common.AuthProvider;
 
-namespace Tourine.Test.ServerTest
+namespace Tourine.Test.Common
 {
     public class AuthProviderTest 
     {

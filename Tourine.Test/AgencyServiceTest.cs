@@ -8,6 +8,7 @@ using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyPersons;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Users;
+using Tourine.Test.Common;
 
 namespace Tourine.Test
 {

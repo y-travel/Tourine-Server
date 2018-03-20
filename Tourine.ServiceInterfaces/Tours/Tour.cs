@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
@@ -35,6 +36,10 @@ namespace Tourine.ServiceInterfaces.Tours
 
         public long InfantPrice { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
+
+        [Ignore]
+        public List<TourOption> TourOptions { get; set; }
+
     }
 
     public static class TourExtensions

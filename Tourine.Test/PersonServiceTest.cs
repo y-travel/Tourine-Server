@@ -14,6 +14,7 @@ using Tourine.ServiceInterfaces.TeamPassengers;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.Tours;
 using Tourine.ServiceInterfaces.Users;
+using Tourine.Test.Common;
 
 namespace Tourine.Test
 {

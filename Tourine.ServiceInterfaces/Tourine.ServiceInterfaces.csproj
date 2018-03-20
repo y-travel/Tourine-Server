@@ -180,6 +180,7 @@
     <Compile Include="Tours\GetRootTours.cs" />
     <Compile Include="Tours\GetTour.cs" />
     <Compile Include="Tours\GetTourFreespace.cs" />
+    <Compile Include="Tours\GetTourOptions.cs" />
     <Compile Include="Tours\GetTours.cs" />
     <Compile Include="Tours\CreateTour.cs" />
     <Compile Include="Tours\CreateTourValidator.cs" />

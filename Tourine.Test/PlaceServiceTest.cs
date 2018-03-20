@@ -6,6 +6,7 @@ using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Places;
 using Tourine.ServiceInterfaces.Users;
+using Tourine.Test.Common;
 
 namespace Tourine.Test
 {

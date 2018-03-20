@@ -1,4 +1,5 @@
-﻿using ServiceStack;
+﻿using System.Net;
+using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Destinations;
 
@@ -9,17 +10,24 @@ namespace Tourine.ServiceInterfaces.TourDetails
         [Authenticate]
         public object Get(GetTourDetail detail)
         {
-            return Db.SingleById<TourDetail>(detail.Id);
+            var tour = Db.SingleById<TourDetail>(detail.Id);
+            if (tour == null)
+                throw HttpError.NotFound("");
+
+            return tour;
         }
 
         [Authenticate]
         public void Put(UpdateTourDetail detail)
         {
-            if (!Db.Exists<TourDetail>(new { Id = detail.TourDetail.Id}))
+            if (!Db.Exists<TourDetail>(new { Id = detail.TourDetail.Id }))
                 throw HttpError.NotFound("");
             if (!Db.Exists<Destination>(new { Id = detail.TourDetail.DestinationId }))
                 throw HttpError.NotFound("");
             Db.Update(detail.TourDetail);
         }
     }
+
+   
 }
+

@@ -7,7 +7,10 @@ namespace Tourine.ServiceInterfaces
         private AuthSession _session;
         public AuthSession Session
         {
-            get => _session ?? (_session = Request.GetAuthSession(Db));
+            get => _session ??
+                (_session = ServiceStackHost.Instance.TestMode ?
+                Request.SessionAs<AuthSession>() :
+                Request.GetAuthSession(Db));
             set => _session = value;
         }
     }

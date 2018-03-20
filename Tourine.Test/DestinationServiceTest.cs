@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.FluentValidation.TestHelper;
 using Tourine.ServiceInterfaces.Destinations;
+using Tourine.Test.Common;
 
 namespace Tourine.Test
 {

@@ -7,6 +7,7 @@ using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Destinations;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Users;
+using Tourine.Test.Common;
 
 namespace Tourine.Test
 {
@@ -29,7 +30,8 @@ namespace Tourine.Test
         [Test]
         public void GetTourDetail_should_return_result()
         {
-            var item = Client.Get(new GetTourDetail {Id = _testTourDetailGuid});
+            var item = (TourDetail)MockService.Get(new GetTourDetail {Id = _testTourDetailGuid});
+
             item.DestinationId.Should().Be(_testDestinationGuid);
         }
 

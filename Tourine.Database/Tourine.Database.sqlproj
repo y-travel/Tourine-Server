@@ -269,4 +269,7 @@ Table=[dbo].[VersionInfo];
   <ItemGroup>
     <None Include="Migrations\0.0.2\008_20180314-AllowNcToBeNull.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\009_20180322-DeleteTeamPerson.sql" />
+  </ItemGroup>
 </Project>

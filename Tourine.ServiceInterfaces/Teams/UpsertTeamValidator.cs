@@ -2,9 +2,9 @@
 
 namespace Tourine.ServiceInterfaces.Teams
 {
-    public class CreateTeamValidator : AbstractValidator<CreateTeam>
+    public class UpsertTeamValidator : AbstractValidator<UpsertTeam>
     {
-        public CreateTeamValidator()
+        public UpsertTeamValidator()
         {
             RuleFor(t => t.TourId).NotEmpty().NotNull();
             RuleFor(t => t.Buyer.PersonId).NotNull().NotEmpty();

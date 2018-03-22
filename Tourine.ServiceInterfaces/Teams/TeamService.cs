@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using ServiceStack;
 using ServiceStack.OrmLite;
@@ -12,14 +11,21 @@ namespace Tourine.ServiceInterfaces.Teams
 {
     public class TeamService : AppService
     {
+        public IAutoQueryDb AutoQuery { get; set; }
+
         [Authenticate]
-        public void Post(CreateTeam req)
+        public void Post(UpsertTeam req)
         {
             if (!Db.Exists<Person>(x => x.Id == req.Buyer.PersonId))
                 throw HttpError.NotFound("");
             if (!Db.Exists<Tour>(x => x.Id == req.TourId))
                 throw HttpError.NotFound("");
 
+            if (req.TeamId.HasValue)
+            {
+                Db.Delete<Team>(x => x.Id == req.TourId);
+                Db.Delete<PassengerList>(x => x.TeamId == req.TeamId);
+            }
             var tour = Db.SingleById<Tour>(req.TourId);
             if (tour.Capacity <= req.Passengers.Count)
                 throw HttpError.NotFound("freeSpace");
@@ -47,14 +53,10 @@ namespace Tourine.ServiceInterfaces.Teams
                             ReceivedMoney = personIncome.ReceivedMoney,
                             OptionType = personIncome.OptionType,
                             PassportDelivered = passenger.PassportDelivered,
-                            VisaDelivered = passenger.VisaDelivered
+                            VisaDelivered = passenger.VisaDelivered,
+                            TeamId = team.Id,
                         });
                     }
-                    Db.Insert(new TeamPerson
-                    {
-                        PersonId = passenger.PersonId,
-                        TeamId = team.Id
-                    });
                 }
                 dbTrans.Commit();
             }
@@ -63,11 +65,23 @@ namespace Tourine.ServiceInterfaces.Teams
         }
 
         [Authenticate]
-        public void Put(UpdateTeam team)
+        public object Get(GetTourTeams team)
         {
-            if (!Db.Exists<Team>(new { Id = team.Team.Id }))
+            if (!Db.Exists<Team>(x=> x.TourId == team.TourId))
                 throw HttpError.NotFound("");
-            Db.Update(team.Team);//@TODO: dont update submitDate
+            return AutoQuery.Execute(
+                team,
+                AutoQuery.CreateQuery(team, Request.GetRequestParams())
+            );
+        }
+
+        [Authenticate]
+        public void Delete(DeleteTeam team)
+        {
+            if (!Db.Exists<Team>(x => x.Id == team.TeamId))
+                throw HttpError.NotFound("");
+            Db.Delete<TeamPerson>(x => x.TeamId == team.TeamId);
+            Db.Delete<Team>(x => x.Id == team.TeamId);
         }
     }
 }

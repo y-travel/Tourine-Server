@@ -157,8 +157,10 @@
     <Compile Include="PriceDetail.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="TeamPersons\TeamPersonService.cs" />
-    <Compile Include="Teams\CreateTeam.cs" />
-    <Compile Include="Teams\CreateTeamValidator.cs" />
+    <Compile Include="Teams\UpsertTeam.cs" />
+    <Compile Include="Teams\UpsertTeamValidator.cs" />
+    <Compile Include="Teams\DeleteTeam.cs" />
+    <Compile Include="Teams\GetTourTeams.cs" />
     <Compile Include="Teams\TeamMember.cs" />
     <Compile Include="Teams\UpdateTeam.cs" />
     <Compile Include="Teams\UpdateTeamValidator.cs" />

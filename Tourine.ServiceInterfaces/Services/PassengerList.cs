@@ -1,6 +1,7 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
 using Tourine.ServiceInterfaces.Persons;
+using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Services
@@ -25,5 +26,10 @@ namespace Tourine.ServiceInterfaces.Services
         public IncomeStatus IncomeStatus { get; set; }
         public  bool VisaDelivered { get; set; }
         public bool PassportDelivered { get; set; }
+
+        [References(typeof(Team))]
+        public Guid TeamId { get; set; }
+        [Reference]
+        public Team Team { get; set; }
     }
 }

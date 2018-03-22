@@ -228,6 +228,7 @@
     <Compile Include="Migration\0006_20180312-ChangeBuyerToBuyerId.cs" />
     <Compile Include="Migration\0007_20180314-AddVisaPassDelivered.cs" />
     <Compile Include="Migration\0008_20180314-AllowNcToBeNull.cs" />
+    <Compile Include="Migration\0009_20180322-DeleteTeamPerson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -273,6 +274,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migration\008_20180314-AllowNcToBeNull.sql">
       <DependentUpon>0008_20180314-AllowNcToBeNull.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\009_20180322-DeleteTeamPerson.sql">
+      <DependentUpon>0009_20180322-DeleteTeamPerson.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

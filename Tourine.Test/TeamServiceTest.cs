@@ -15,7 +15,7 @@ namespace Tourine.Test
 {
     public class TeamServiceTest : ServiceTest<TeamService>
     {
-        private readonly Tour tour = new Tour{ Capacity = 2};
+        private readonly Tour tour = new Tour { Capacity = 2 };
         private readonly Person person_1 = new Person();
         private readonly Person person_2 = new Person();
         private readonly Person person_3 = new Person();
@@ -66,9 +66,9 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void CreateTeam_shoud_not_throw_exception()
+        public void UpsertTeam_shoud_not_throw_exception()
         {
-            new Action(() => MockService.Post(new CreateTeam
+            new Action(() => MockService.Post(new UpsertTeam
             {
                 TourId = tour.Id,
                 Buyer = _passengers[0],
@@ -78,9 +78,9 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void CreateTeam_should_throw_exception()//why: not free enugh space in this tour
+        public void UpsertTeam_should_throw_exception()//why: not free enugh space in this tour
         {
-            new Action(() => MockService.Post(new CreateTeam
+            new Action(() => MockService.Post(new UpsertTeam
             {
                 TourId = tour.Id,
                 Buyer = _passengers[0],
@@ -90,17 +90,22 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void UpdateTeam_should_throw_exception()
+        public void GetTourTeams_shoudl_return_result()
         {
-            Client.Invoking(t => t.Put(new UpdateTeam
-            {
-                Team = new Team
-                {
-                    Id = Guid.NewGuid(),
-                    TourId = Guid.NewGuid()
-                }
-            }))
-                .ShouldThrow<WebServiceException>();
+            Db.Insert(new Team { Buyer = person_1, BuyerId = person_1.Id, Tour = tour, TourId = tour.Id });
+
+            var res = (QueryResponse<Team>)MockService.Get(new GetTourTeams { TourId = tour.Id });
+            res.Results.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void DeleteTeam_shoudl_not_throw_exception()
+        {
+            var team = new Team { Buyer = person_1, BuyerId = person_1.Id, Tour = tour, TourId = tour.Id };
+            Db.Insert(team);
+
+            new Action(() => MockService.Delete(new DeleteTeam { TeamId = team.Id }))
+                .ShouldNotThrow<HttpError>();
         }
 
         public void CreateTeam()

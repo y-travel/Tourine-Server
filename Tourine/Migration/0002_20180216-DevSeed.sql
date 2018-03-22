@@ -113,13 +113,5 @@ GO
 INSERT dbo.Team VALUES ('7e33370f-6ee0-4297-acd0-237783d4e4f1', '443237f8-7eec-413f-9858-97bfd99ebc2b', 850000, 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa', 1, '2018-01-31 18:27:04.893')
 INSERT dbo.Team VALUES ('c3fde9b5-234a-4eb8-8c0c-ab48e807ffc7', 'c17496cf-7a71-451f-91da-1d10b165be13', 1800000, '5f05a5dc-3aee-4572-beba-a7d5a5fc3e64', 2, '2018-01-31 18:26:45.133')
 GO
--- 
--- Dumping data for table TeamPerson
---
-INSERT dbo.TeamPerson VALUES ('14cb4019-dc55-4058-b0d1-4b78feafcaad', '7e33370f-6ee0-4297-acd0-237783d4e4f1', 'cdaf2353-b68d-4f0f-8056-5e37e51d70aa')
-INSERT dbo.TeamPerson VALUES ('8020e8af-a032-4f4e-bd5c-9472a3c65a8e', 'c3fde9b5-234a-4eb8-8c0c-ab48e807ffc7', '5f05a5dc-3aee-4572-beba-a7d5a5fc3e64')
-INSERT dbo.TeamPerson VALUES ('2e57d02a-c2d4-45bf-922a-b6094e63b866', 'c3fde9b5-234a-4eb8-8c0c-ab48e807ffc7', '070d5d34-2723-4e48-bfe4-b07838e480f1')
-INSERT dbo.TeamPerson VALUES ('ec6602f8-c3a7-48ca-96d2-d8d1dc6933b5', 'c3fde9b5-234a-4eb8-8c0c-ab48e807ffc7', 'e2d864ca-19eb-40d6-adea-f5bfc7989846')
-GO
 SET NOEXEC OFF
 GO

@@ -3,10 +3,9 @@ using ServiceStack;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
-    [Route("/tours/{TourId}","DELETE")]
+    [Route("/tours/{Id}","DELETE")]
     public class DeleteTour : IReturn
     {
-        [QueryDbField(Field = "Id")]
-        public Guid TourId { get; set; }
+        public Guid Id { get; set; }
     }
 }

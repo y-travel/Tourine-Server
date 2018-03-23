@@ -47,94 +47,10 @@ namespace Tourine.ServiceInterfaces.Tours
 
         [Authenticate]
         [RequiredRole(nameof(Role.Admin))]
-        public object Post(CreateTour createReq)
+        public object Post(UpsertTour upsertTour)
         {
-            using (IDbTransaction dbTrans = Db.OpenTransaction())
-            {
-                var tour = new Tour
-                {
-                    AgencyId = Session.Agency.Id,
-                    BasePrice = createReq.BasePrice,
-                    InfantPrice = createReq.InfantPrice,
-                    Capacity = createReq.Capacity,
-                    TourDetail = createReq.TourDetail
-                };
-
-                Db.Insert(tour);
-                Db.SaveAllReferences(tour);
-                foreach (var option in createReq.Options)
-                {
-                    Db.Insert(new TourOption
-                    {
-                        OptionType = option.OptionType,
-                        Price = option.Price,
-                        TourId = tour.Id,
-                        OptionStatus = option.OptionType.GetDefaultStatus()
-                    });
-                }
-                dbTrans.Commit();
-                return Db.LoadSingleById<Tour>(tour.Id);
-            }
-        }
-
-        [Authenticate]
-        [RequiredRole(nameof(Role.Admin))]
-        public object Put(UpdateTour updateTour)
-        {
-            if (!Db.Exists<Tour>(new { Id = updateTour.TourId }))
-                throw HttpError.NotFound("");
-            using (IDbTransaction dbTrans = Db.OpenTransaction())
-            {
-                Db.UpdateOnly(new Tour
-                {
-                    Capacity = updateTour.Capacity,
-                    BasePrice = updateTour.BasePrice,
-                    InfantPrice = updateTour.InfantPrice
-                }
-                    , onlyFields: tour => new
-                    {
-                        tour.Capacity,
-                        tour.BasePrice,
-                        tour.InfantPrice
-                    }
-                    , @where: tour => tour.Id == updateTour.TourId);
-
-                var newTour = Db.SingleById<Tour>(updateTour.TourId);
-
-                Db.UpdateOnly(new TourDetail
-                {
-                    DestinationId = updateTour.TourDetail.DestinationId,
-                    Duration = updateTour.TourDetail.Duration,
-                    IsFlight = updateTour.TourDetail.IsFlight,
-                    LeaderId = updateTour.TourDetail.LeaderId,
-                    PlaceId = updateTour.TourDetail.PlaceId,
-                    StartDate = updateTour.TourDetail.StartDate
-                }
-                    , onlyFields: tour => new
-                    {
-                        tour.DestinationId,
-                        tour.Duration,
-                        tour.IsFlight,
-                        tour.LeaderId,
-                        tour.PlaceId,
-                        tour.StartDate
-                    }
-                    , @where: tourDetail => tourDetail.Id == newTour.TourDetailId);
-
-                foreach (var option in updateTour.Options)
-                {
-                    Db.UpdateOnly(new TourOption
-                    {
-                        Price = option.Price,
-                    }, onlyFields: opt => new
-                    {
-                        option.Price
-                    }
-                        , where: p => p.TourId == newTour.Id && p.OptionType == option.OptionType);
-                }
-                dbTrans.Commit();
-                return newTour;
-            }
+            var tour = upsertTour.ConvertTo<Tour>();
+            return tour.Id == Guid.Empty ? tour.Create(Db, Session) : tour.Update(Db);
         }
 
         [Authenticate]
@@ -297,10 +213,10 @@ namespace Tourine.ServiceInterfaces.Tours
         [Authenticate]
         public void Delete(DeleteTour req)
         {
-            if (!Db.Exists<Tour>(x => x.Id == req.TourId))
+            if (!Db.Exists<Tour>(x => x.Id == req.Id))
                 throw HttpError.NotFound("");
 
-            var tour = Db.SingleById<Tour>(req.TourId);
+            var tour = Db.SingleById<Tour>(req.Id);
             Db.Delete<Tour>(tour.Id);
             Db.Delete(Db.From<PassengerList>().Where(p => p.TourId == tour.Id));
             var teams = Db.Select(Db.From<Team>().Where(team => team.TourId == tour.Id));

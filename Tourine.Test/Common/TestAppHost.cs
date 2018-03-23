@@ -42,7 +42,7 @@ namespace Tourine.Test.Common
         public TestAppHost() : base("test", typeof(AppService).Assembly)
         {
             TestMode = true;
-            ConnectionFactory = new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider);
+            ConnectionFactory = new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider,true);
             Session = new AuthSession { Agency = CurrentAgency, User = CurrentUser };
         }
 

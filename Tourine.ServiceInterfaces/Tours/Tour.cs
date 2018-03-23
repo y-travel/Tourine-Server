@@ -38,7 +38,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
         [Ignore]
-        public List<TourOption> TourOptions { get; set; }
+        public List<TourOption> Options { get; set; }
 
     }
 

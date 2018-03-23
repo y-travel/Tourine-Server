@@ -2,11 +2,10 @@
 
 namespace Tourine.ServiceInterfaces.Tours
 {
-    public class UpdateTourValidator : AbstractValidator<UpdateTour>
+    public class UpsertTourValidator : AbstractValidator<UpsertTour>
     {
-        public UpdateTourValidator()
+        public UpsertTourValidator()
         {
-            RuleFor(t => t.TourId).NotEmpty();
             RuleFor(t => t.TourDetail.Duration).NotNull().NotEmpty().GreaterThanOrEqualTo(1);
             RuleFor(t => t.Capacity).NotEmpty().NotNull();
             RuleFor(t => t.BasePrice).NotEmpty().NotNull();

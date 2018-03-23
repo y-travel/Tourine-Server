@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ServiceStack;
-using ServiceStack.FluentValidation.Attributes;
 using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
-    [Route("/tours/", "POST")]
-    [Validator(typeof(CreateTourValidator))]
-    [Api("ww",2,IsRequired = true)]
-    public class CreateTour : IReturn<Tour>
+    [Route("/tours/{Id}", "POST")]
+    public class UpsertTour : IReturn<Guid>
     {
+        public Guid Id { get; set; }
         public int Capacity { get; set; }
         public int BasePrice { get; set; }
         public int InfantPrice { get; set; }

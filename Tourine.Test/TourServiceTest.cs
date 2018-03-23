@@ -1,15 +1,14 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Destinations;
 using Tourine.ServiceInterfaces.Places;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
-using Tourine.ServiceInterfaces.Users;
 using Tourine.Test.Common;
 
 namespace Tourine.Test
@@ -39,13 +38,13 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void GetTourOptions_shoudl_return_result()
+        public void GetTourOptions_should_return_result()
         {
             Db.Insert(new TourOption { TourId = _testTourId, Price = 1000, });
             Db.Insert(new TourOption { TourId = _testTourId, Price = 2000, });
             Db.Insert(new TourOption { TourId = new Guid(), Price = 2000, });
 
-            var res = (QueryResponse<TourOption>)MockService.Get(new GetTourOptions{TourId = _testTourId});
+            var res = (QueryResponse<TourOption>)MockService.Get(new GetTourOptions { TourId = _testTourId });
             res.Results.Count.Should().Be(2);
         }
 
@@ -71,7 +70,7 @@ namespace Tourine.Test
         [Test]
         public void CreateTour_should_not_return_exception()
         {
-            Client.Invoking(x => x.Post(new CreateTour
+            Client.Invoking(x => x.Post(new UpsertTour
             {
                 Capacity = 500,
                 BasePrice = 300000
@@ -86,25 +85,42 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void CreateTour_should_save_details()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void UpdateTour_should_save_tour(bool isUpdate)
         {
-            var tour = Client.Post(new CreateTour
+            var id = isUpdate ? Guid.NewGuid(): Guid.Empty;
+            Db.Insert(new Tour { Id = id });
+            Db.Insert(new TourDetail { Id = id });
+            var tourReq = new UpsertTour
             {
+                Id = id,
                 Capacity = 1,
                 BasePrice = 3000,
                 TourDetail = new TourDetail
                 {
+                    Id=id,
                     DestinationId = Guid.NewGuid(),
                     StartDate = DateTime.Now,
                     PlaceId = Guid.NewGuid()
-                }
-            });
-            tour.TourDetail.Should().NotBeNull();
+                },
+                Options = new[]
+                {
+                    new TourOption
+                    {
+                        OptionType = OptionType.Bus,
+                        Price = 1,
+                    }
+                }.ToList(),
+            };
+            var newTour = (Guid?)MockService.Post(tourReq);
+
+            newTour.Should().NotBeNull();
         }
         [Test]
         public void CreateTour_should_return_exception()
         {
-            Client.Invoking(x => x.Post(new CreateTour
+            Client.Invoking(x => x.Post(new UpsertTour
             {
                 BasePrice = 300000,
                 TourDetail = new TourDetail
@@ -117,7 +133,7 @@ namespace Tourine.Test
         //        [Test]
         //        public void UpdateTour_should_not_throw_exceprion()
         //        {
-        //            Client.Invoking(x => x.Put(new UpdateTour
+        //            Client.Invoking(x => x.Put(new UpsertTour
         //            {
         //                Tour = new Tour
         //                {
@@ -135,7 +151,7 @@ namespace Tourine.Test
         //        [Test]
         //        public void UpdateTour_should_throw_exceprion()
         //        {
-        //            Client.Invoking(x => x.Put(new UpdateTour
+        //            Client.Invoking(x => x.Put(new UpsertTour
         //            {
         //                Tour = new Tour
         //                {

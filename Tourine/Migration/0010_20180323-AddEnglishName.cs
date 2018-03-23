@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using FluentMigrator;
 
 namespace Tourine.Migration
 {
-    public class _0010_20180323_AddEnglishName
+    [Migration(001020180323)]
+    public class AddEnglishName : Common.MigrationBase
     {
     }
 }

@@ -95,7 +95,7 @@ namespace Tourine.Test.Common
             TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place),
                 typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Person),
                 typeof(Person), typeof(TourDetail), typeof(TeamPerson), typeof(Team),
-                typeof(Service), typeof(AgencyPerson),typeof(TourOption) };//should be fill with tables
+                typeof(Service), typeof(AgencyPerson),typeof(TourOption),typeof(PassengerList) };//should be fill with tables
 
             using (var db = ConnectionFactory.OpenDbConnection())
             {

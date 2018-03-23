@@ -137,7 +137,7 @@
     <Compile Include="TeamPersons\AddPersonsToTeamValidator.cs" />
     <Compile Include="TeamPersons\ChangePersonsTeam.cs" />
     <Compile Include="TeamPersons\ChangePersonsTeamValidator.cs" />
-    <Compile Include="TeamPersons\GetPersonsOfTeam.cs" />
+    <Compile Include="Teams\GetPersonsOfTeam.cs" />
     <Compile Include="TeamPersons\TeamPerson.cs" />
     <Compile Include="Persons\DeletePerson.cs" />
     <Compile Include="Destinations\GetDestinations.cs" />

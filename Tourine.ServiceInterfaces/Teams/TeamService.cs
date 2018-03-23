@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using ServiceStack;
 using ServiceStack.OrmLite;
@@ -14,7 +15,7 @@ namespace Tourine.ServiceInterfaces.Teams
         public IAutoQueryDb AutoQuery { get; set; }
 
         [Authenticate]
-        public void Post(UpsertTeam req)
+        public object Post(UpsertTeam req)
         {
             if (!Db.Exists<Person>(x => x.Id == req.Buyer.PersonId))
                 throw HttpError.NotFound("");
@@ -30,9 +31,10 @@ namespace Tourine.ServiceInterfaces.Teams
             if (tour.Capacity <= req.Passengers.Count)
                 throw HttpError.NotFound("freeSpace");
 
+            var team = new Team();
+
             using (IDbTransaction dbTrans = Db.OpenTransaction())
             {
-                var team = new Team();
                 team.TourId = req.TourId;
                 team.BuyerId = req.Buyer.PersonId;
                 team.Count = req.Passengers.Count + 1;
@@ -60,14 +62,13 @@ namespace Tourine.ServiceInterfaces.Teams
                 }
                 dbTrans.Commit();
             }
-
-
+            return Db.SingleById<Team>(team.Id);
         }
 
         [Authenticate]
         public object Get(GetTourTeams team)
         {
-            if (!Db.Exists<Team>(x=> x.TourId == team.TourId))
+            if (!Db.Exists<Team>(x => x.TourId == team.TourId))
                 throw HttpError.NotFound("");
             return AutoQuery.Execute(
                 team,
@@ -83,5 +84,65 @@ namespace Tourine.ServiceInterfaces.Teams
             Db.Delete<TeamPerson>(x => x.TeamId == team.TeamId);
             Db.Delete<Team>(x => x.Id == team.TeamId);
         }
+
+        [Authenticate]
+        public object Get(GetPersonsOfTeam team)
+        {
+            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId && pl.TeamId == team.TeamId)
+                .GroupBy<Person, PassengerList>((x, pl) => new
+                {
+                    x,
+                    pl.PassportDelivered,
+                    pl.VisaDelivered
+                })
+                .Select<Person, PassengerList>((x, pl) => new
+                {
+                    x,
+                    pl.PassportDelivered,
+                    pl.VisaDelivered,
+                    serviceSum = Sql.Sum(nameof(PassengerList) + "." + nameof(PassengerList.OptionType)),
+                });
+
+            var items = Db.Select<TempPerson>(q);
+            var teams = new List<TeamMember>();
+
+            foreach (var item in items)
+            {
+                var t = new TeamMember
+                {
+                    Person = item.ConvertTo<Person>(),
+                    PersonId = item.Id,
+                    PersonIncomes = item.SumOptionType.GetListOfTypes(),
+                    VisaDelivered = item.VisaDelivered,
+                    PassportDelivered = item.PassportDelivered
+                };
+                teams.Add(t);
+            }
+            return teams;
+        }
+    }
+
+    public class TempPerson
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Name { get; set; }
+        public string Family { get; set; }
+        public string EnglishName { get; set; }
+        public string EnglishFamily { get; set; }
+        public string MobileNumber { get; set; }
+        public string NationalCode { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public DateTime? PassportExpireDate { get; set; }
+        public DateTime? VisaExpireDate { get; set; }
+        public string PassportNo { get; set; }
+        public bool Gender { get; set; }
+        public PersonType Type { get; set; } = PersonType.Passenger;
+
+        public bool IsUnder5 { get; set; }
+        public bool IsInfant { get; set; }
+
+        public OptionType SumOptionType { get; set; }
+        public bool PassportDelivered { get; set; }
+        public bool VisaDelivered { get; set; }
     }
 }

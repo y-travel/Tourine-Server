@@ -7,7 +7,7 @@ namespace Tourine.ServiceInterfaces.Teams
 {
     [Route("/tours/{TourId}/teams/{TeamId}", "PUT")]
     [Route("/tours/{TourId}/teams", "POST")]
-    public class UpsertTeam : IReturn
+    public class UpsertTeam : IReturn<Team>
     {
         public Guid? TeamId { get; set; }
         public Guid TourId { get; set; }

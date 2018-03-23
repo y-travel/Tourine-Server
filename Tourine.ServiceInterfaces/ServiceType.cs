@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using ServiceStack;
+using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces
@@ -14,6 +16,20 @@ namespace Tourine.ServiceInterfaces
     }
     public static class OptionTypeExtension
     {
+        public static List<PersonIncome> GetListOfTypes(this OptionType optionType)
+        {
+            var list = new List<PersonIncome>();
+
+            if (optionType.Is(OptionType.Room))
+                list.Add(new PersonIncome{OptionType = OptionType.Room });
+            if (optionType.Is(OptionType.Bus))
+                list.Add(new PersonIncome { OptionType = OptionType.Bus });
+            if (optionType.Is(OptionType.Food))
+                list.Add(new PersonIncome { OptionType = OptionType.Food });
+
+            return list;
+        }
+
         public static OptionStatus GetDefaultStatus(this OptionType optionType)
         {
             switch (optionType)

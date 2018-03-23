@@ -282,6 +282,9 @@
     <EmbeddedResource Include="Migration\009_20180322-DeleteTeamPerson.sql">
       <DependentUpon>0009_20180322-DeleteTeamPerson.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migration\010_20180323-AddEnglishName.sql">
+      <DependentUpon>0010_20180323-AddEnglishName.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

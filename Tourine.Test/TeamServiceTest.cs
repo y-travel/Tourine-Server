@@ -6,6 +6,7 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Persons;
+using Tourine.ServiceInterfaces.Services;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.Tours;
 using Tourine.ServiceInterfaces.Users;
@@ -22,19 +23,19 @@ namespace Tourine.Test
 
         private readonly List<TeamMember> _passengers = new List<TeamMember>();
         List<PersonIncome> personIncomes = new List<PersonIncome>();
-        private readonly PersonIncome perosBusIncome = new PersonIncome
+        private readonly PersonIncome personBusIncome = new PersonIncome
         {
             OptionType = OptionType.Bus,
             IncomeStatus = IncomeStatus.Settled,
             ReceivedMoney = 12000
         };
-        private readonly PersonIncome perosFoodIncome = new PersonIncome
+        private readonly PersonIncome personFoodIncome = new PersonIncome
         {
             OptionType = OptionType.Food,
             IncomeStatus = IncomeStatus.Settled,
             ReceivedMoney = 15000
         };
-        private readonly PersonIncome perosRoomIncome = new PersonIncome
+        private readonly PersonIncome personRoomIncome = new PersonIncome
         {
             OptionType = OptionType.Room,
             IncomeStatus = IncomeStatus.Settled,
@@ -45,9 +46,9 @@ namespace Tourine.Test
         [SetUp]
         public new void Setup()
         {
-            personIncomes.Add(perosBusIncome);
-            personIncomes.Add(perosFoodIncome);
-            personIncomes.Add(perosRoomIncome);
+            personIncomes.Add(personBusIncome);
+            personIncomes.Add(personFoodIncome);
+            personIncomes.Add(personRoomIncome);
 
             var teamMember_1 = new TeamMember { PersonId = person_1.Id, PersonIncomes = personIncomes };
             var teamMember_2 = new TeamMember { PersonId = person_2.Id, PersonIncomes = personIncomes };
@@ -103,9 +104,22 @@ namespace Tourine.Test
         {
             var team = new Team { Buyer = person_1, BuyerId = person_1.Id, Tour = tour, TourId = tour.Id };
             Db.Insert(team);
-
             new Action(() => MockService.Delete(new DeleteTeam { TeamId = team.Id }))
                 .ShouldNotThrow<HttpError>();
+        }
+
+        [Test]
+        public void GetPersonOfTeam_shoudl_return_result()
+        {
+            var tm = (Team)MockService.Post(new UpsertTeam
+            {
+                TourId = tour.Id,
+                Buyer = _passengers[0],
+                Passengers = _passengers.GetRange(1, 1)
+            });
+
+            var res = (List<TeamMember>)MockService.Get(new GetPersonsOfTeam { TeamId = tm.Id });
+            res.Count.Should().Be(2);
         }
 
         public void CreateTeam()

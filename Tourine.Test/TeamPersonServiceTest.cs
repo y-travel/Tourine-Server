@@ -82,7 +82,7 @@ namespace Tourine.Test
         public void GetPassengerOfTeam_shuld_return_result()
         {
             var passengers = Client.Get(new GetPersonsOfTeam { TeamId = _testTeamGuid });
-            passengers.Results.Count.Should().Be(1);
+            passengers.Count.Should().Be(1);
         }
 
         public void CreateTeamPerson()

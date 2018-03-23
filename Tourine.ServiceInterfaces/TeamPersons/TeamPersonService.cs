@@ -31,11 +31,5 @@ namespace Tourine.ServiceInterfaces.TeamPassengers
             Db.Update(personsTeam.TeamPerson);
         }
 
-        [Authenticate]
-        public object Get(GetPersonsOfTeam team)
-        {
-            var passengers = AutoQuery.CreateQuery(team, Request.GetRequestParams());
-            return AutoQuery.Execute(team, passengers);
-        }
     }
 }

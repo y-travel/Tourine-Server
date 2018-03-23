@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.TourDetails;
@@ -12,34 +8,35 @@ namespace Tourine.ServiceInterfaces.Tours
 {
     public static class TourExtension
     {
-        public static Guid Create(this Tour newTour, IDbConnection db, AuthSession session)
+        public static Tour Create(this Tour newTour, IDbConnection db, AuthSession session)
         {
+            var tour = new Tour();
+
             using (var trans = db.OpenTransaction())
             {
-                var tour = new Tour();
-                tour.PopulateWith(newTour);
+                tour.PopulateFromPropertiesWithoutAttribute(newTour,typeof(NotPopulateAttribute));
 
                 db.Insert(tour);
                 db.SaveAllReferences(tour);
                 foreach (var option in newTour.Options)
                 {
                     var tmpOption = new TourOption();
-                    tmpOption.PopulateWith(option);
+                    tmpOption.PopulateFromPropertiesWithoutAttribute(option,typeof(NotPopulateAttribute));
                     tmpOption.TourId = tour.Id;
                     tmpOption.OptionStatus = option.OptionType.GetDefaultStatus();
                     db.Insert(tmpOption);
                 }
                 trans.Commit();
-                return tour.Id;
             }
+            return tour;
         }
 
-        public static Guid Update(this Tour upsertTour, IDbConnection db)
+        public static Tour Update(this Tour upsertTour, IDbConnection db)
         {
             var tour = db.SingleById<Tour>(upsertTour.Id);
             var tourDetail = db.SingleById<TourDetail>(upsertTour.TourDetail.Id);
             if (tour == null || tourDetail == null)
-                throw HttpError.NotFound("");
+                throw HttpError.NotFound($"tourId:{upsertTour.Id}tourDetailId:{upsertTour.TourDetail.Id}");
             using (var dbTrans = db.OpenTransaction())
             {
                 tour.PopulateWith(upsertTour);
@@ -50,8 +47,9 @@ namespace Tourine.ServiceInterfaces.Tours
                     db.Update(option, where: x => x.TourId == tour.Id && x.OptionType == option.OptionType);
                 }
                 dbTrans.Commit();
-                return tour.Id;
             }
+            return tour;
+
         }
     }
 }

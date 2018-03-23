@@ -8,6 +8,7 @@ namespace Tourine.ServiceInterfaces.TourDetails
 {
     public class TourDetail
     {
+        [NotPopulate]
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [References(typeof(Destination))]

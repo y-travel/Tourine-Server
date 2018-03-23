@@ -6,7 +6,7 @@ using Tourine.ServiceInterfaces.TourDetails;
 namespace Tourine.ServiceInterfaces.Tours
 {
     [Route("/tours/{Id}", "POST")]
-    public class UpsertTour : IReturn<Guid>
+    public class UpsertTour : IReturn<Tour>
     {
         public Guid Id { get; set; }
         public int Capacity { get; set; }

@@ -113,7 +113,7 @@ namespace Tourine.Test
                     }
                 }.ToList(),
             };
-            var newTour = (Guid?)MockService.Post(tourReq);
+            var newTour = MockService.Post(tourReq);
 
             newTour.Should().NotBeNull();
         }

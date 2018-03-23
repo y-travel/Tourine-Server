@@ -5,6 +5,7 @@ namespace Tourine.ServiceInterfaces.Tours
 {
     public class TourOption
     {
+        [NotPopulate]
         public Guid Id { get; set; } = Guid.NewGuid();
         public OptionType OptionType { get; set; }
         public long Price { get; set; }

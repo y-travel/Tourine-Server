@@ -12,6 +12,7 @@ namespace Tourine.ServiceInterfaces.Tours
 {
     public class Tour
     {
+        [NotPopulate]
         public Guid Id { get; set; } = Guid.NewGuid();
         public int Capacity { get; set; }
         public int BasePrice { get; set; }

@@ -116,6 +116,7 @@
     <Compile Include="Notifies\SendNotifyToTourBuyers.cs" />
     <Compile Include="Notifies\SendNotifyToTourLeader.cs" />
     <Compile Include="Notifies\SendNotifyToTourPassengers.cs" />
+    <Compile Include="NotPopulateAttribute.cs" />
     <Compile Include="PersonServiceReport.cs" />
     <Compile Include="Persons\GetCurrentPerson.cs" />
     <Compile Include="Persons\GetLeaders.cs" />

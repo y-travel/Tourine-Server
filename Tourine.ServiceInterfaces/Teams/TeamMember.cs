@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tourine.ServiceInterfaces.Persons;
 
 namespace Tourine.ServiceInterfaces.Teams
 {
     public class TeamMember
     {
         public Guid PersonId { get; set; }
+        public Person Person { get; set; }
         public List<PersonIncome> PersonIncomes { get; set; }
         public bool VisaDelivered { get; set; }
         public bool PassportDelivered { get; set; }

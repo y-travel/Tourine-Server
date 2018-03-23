@@ -7,6 +7,8 @@ namespace Tourine.ServiceInterfaces.Persons
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public string Family { get; set; }
+        public string EnglishName { get; set; }
+        public string EnglishFamily { get; set; }
         public string MobileNumber { get; set; }
         public string NationalCode { get; set; }
         public DateTime? BirthDate { get; set; }

@@ -100,7 +100,7 @@ namespace Tourine.ServiceInterfaces.Teams
                     x,
                     pl.PassportDelivered,
                     pl.VisaDelivered,
-                    serviceSum = Sql.Sum(nameof(PassengerList) + "." + nameof(PassengerList.OptionType)),
+                    SumOptionType = Sql.Sum(nameof(PassengerList) + "." + nameof(PassengerList.OptionType)),
                 });
 
             var items = Db.Select<TempPerson>(q);

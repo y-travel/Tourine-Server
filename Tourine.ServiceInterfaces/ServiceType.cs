@@ -20,11 +20,11 @@ namespace Tourine.ServiceInterfaces
         {
             var list = new List<PersonIncome>();
 
-            if (optionType.Is(OptionType.Room))
+            if (optionType.HasFlag(OptionType.Room))
                 list.Add(new PersonIncome{OptionType = OptionType.Room });
-            if (optionType.Is(OptionType.Bus))
+            if (optionType.HasFlag(OptionType.Bus))
                 list.Add(new PersonIncome { OptionType = OptionType.Bus });
-            if (optionType.Is(OptionType.Food))
+            if (optionType.HasFlag(OptionType.Food))
                 list.Add(new PersonIncome { OptionType = OptionType.Food });
 
             return list;

@@ -229,6 +229,7 @@
     <Compile Include="Migration\0007_20180314-AddVisaPassDelivered.cs" />
     <Compile Include="Migration\0008_20180314-AllowNcToBeNull.cs" />
     <Compile Include="Migration\0009_20180322-DeleteTeamPerson.cs" />
+    <Compile Include="Migration\0010_20180323-AddEnglishName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +255,9 @@
     <EmbeddedResource Include="Migration\007_20180314-AddVisaPassDelivered.sql">
       <DependentUpon>0007_20180314-AddVisaPassDelivered.cs</DependentUpon>
     </EmbeddedResource>
+    <Content Include="Migration\010_20180323-AddEnglishName.sql">
+      <DependentUpon>0010_20180323-AddEnglishName.cs</DependentUpon>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

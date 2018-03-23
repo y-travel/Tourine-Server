@@ -1,12 +1,12 @@
 ﻿-- <Migration ID="e0601d58-76da-46c7-8d79-6052efcbfc50" />
---GO
+GO
 
---PRINT N'Altering [dbo].[Person]'
---GO
---ALTER TABLE [dbo].[Person] ADD
---[EnglishName] [varchar] (50) NULL,
---[EnglishFamily] [varchar] (50) NULL
---GO
+PRINT N'Altering [dbo].[Person]'
+GO
+ALTER TABLE [dbo].[Person] ADD
+[EnglishName] [varchar] (50) NULL,
+[EnglishFamily] [varchar] (50) NULL
+GO
 
 IF DB_NAME() <> N'Tourine' SET NOEXEC ON
 -- 

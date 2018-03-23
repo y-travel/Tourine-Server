@@ -273,6 +273,6 @@ Table=[dbo].[VersionInfo];
     <None Include="Migrations\0.0.2\009_20180322-DeleteTeamPerson.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0.0.2\010_20180323-1237_PC1.sql" />
+    <None Include="Migrations\0.0.2\010_20180323-AddEnglishName.sql" />
   </ItemGroup>
 </Project>

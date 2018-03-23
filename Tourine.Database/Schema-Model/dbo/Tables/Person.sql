@@ -14,7 +14,9 @@ CREATE TABLE [dbo].[Person]
 [ChatId] [bigint] NULL,
 [IsUnder5] [bit] NULL,
 [IsInfant] [bit] NULL,
-[VisaExpireDate] [date] NULL
+[VisaExpireDate] [date] NULL,
+[EnglishName] [varchar] (50) NULL,
+[EnglishFamily] [varchar] (50) NULL
 )
 GO
 ALTER TABLE [dbo].[Person] ADD CONSTRAINT [PK_Person_Id] PRIMARY KEY CLUSTERED  ([Id])

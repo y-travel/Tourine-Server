@@ -8,8 +8,8 @@ CREATE TABLE [dbo].[PassengerList]
 [ReceivedMoney] [bigint] NOT NULL,
 [CurrencyFactor] [float] NOT NULL,
 [PassportDelivered] [bit] NULL,
-[VisaDelivered] [bit] NULL,
-[TeamId] [uniqueidentifier] NULL
+[TeamId] [uniqueidentifier] NULL,
+[HaveVisa] [bit] NULL
 )
 GO
 ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [PK_PassengerList_Id] PRIMARY KEY CLUSTERED  ([Id])

@@ -22,43 +22,62 @@ namespace Tourine.ServiceInterfaces.Teams
             if (!Db.Exists<Tour>(x => x.Id == req.TourId))
                 throw HttpError.NotFound("");
 
+            var team = new Team();
+
             if (req.TeamId.HasValue)
             {
-                Db.Delete<Team>(x => x.Id == req.TourId);
                 Db.Delete<PassengerList>(x => x.TeamId == req.TeamId);
+                Db.Delete<Team>(x => x.Id == req.TeamId);
+                team.Id = (Guid)req.TeamId;
             }
             var tour = Db.SingleById<Tour>(req.TourId);
             if (tour.Capacity <= req.Passengers.Count)
                 throw HttpError.NotFound("freeSpace");
 
-            var team = new Team();
 
             using (IDbTransaction dbTrans = Db.OpenTransaction())
             {
                 team.TourId = req.TourId;
                 team.BuyerId = req.Buyer.PersonId;
                 team.Count = req.Passengers.Count + 1;
+                team.BasePrice = req.BasePrice;
+                team.InfantPrice = req.InfantPrice;
+                team.TotalPrice = req.TotalPrice;
+
                 Db.Insert(team);
 
                 List<TeamMember> passengers = req.Passengers;
                 passengers.Insert(0, req.Buyer);
                 foreach (var passenger in passengers)
                 {
-                    foreach (var personIncome in passenger.PersonIncomes)
+                    if (passenger.Person.IsInfant)
                     {
                         Db.Insert(new PassengerList
                         {
                             PersonId = passenger.PersonId,
                             TourId = req.TourId,
-                            CurrencyFactor = personIncome.CurrencyFactor,
-                            IncomeStatus = personIncome.IncomeStatus,
-                            ReceivedMoney = personIncome.ReceivedMoney,
-                            OptionType = personIncome.OptionType,
+                            OptionType = OptionType.Empty,
                             PassportDelivered = passenger.PassportDelivered,
-                            VisaDelivered = passenger.VisaDelivered,
+                            HaveVisa = passenger.HaveVisa,
                             TeamId = team.Id,
                         });
                     }
+                    else
+                        foreach (var personIncome in passenger.PersonIncomes)
+                        {
+                            Db.Insert(new PassengerList
+                            {
+                                PersonId = passenger.PersonId,
+                                TourId = req.TourId,
+                                CurrencyFactor = personIncome.CurrencyFactor,
+                                IncomeStatus = personIncome.IncomeStatus,
+                                ReceivedMoney = personIncome.ReceivedMoney,
+                                OptionType = personIncome.OptionType,
+                                PassportDelivered = passenger.PassportDelivered,
+                                HaveVisa = passenger.HaveVisa,
+                                TeamId = team.Id,
+                            });
+                        }
                 }
                 dbTrans.Commit();
             }
@@ -93,17 +112,20 @@ namespace Tourine.ServiceInterfaces.Teams
                 {
                     x,
                     pl.PassportDelivered,
-                    pl.VisaDelivered
+                    VisaDelivered = pl.HaveVisa
                 })
                 .Select<Person, PassengerList>((x, pl) => new
                 {
                     x,
                     pl.PassportDelivered,
-                    pl.VisaDelivered,
+                    VisaDelivered = pl.HaveVisa,
                     SumOptionType = Sql.Sum(nameof(PassengerList) + "." + nameof(PassengerList.OptionType)),
                 });
 
             var items = Db.Select<TempPerson>(q);
+
+            var mainTeam = Db.Single<Team>(x => x.Id == team.TeamId);
+
             var teams = new List<TeamMember>();
 
             foreach (var item in items)
@@ -113,13 +135,25 @@ namespace Tourine.ServiceInterfaces.Teams
                     Person = item.ConvertTo<Person>(),
                     PersonId = item.Id,
                     PersonIncomes = item.SumOptionType.GetListOfTypes(),
-                    VisaDelivered = item.VisaDelivered,
+                    HaveVisa = item.VisaDelivered,
                     PassportDelivered = item.PassportDelivered
                 };
                 teams.Add(t);
             }
-            return teams;
+
+            var buyerIndex = teams.FindIndex(x => x.Person.Id == mainTeam.BuyerId);
+            var Buyer = teams[buyerIndex];
+            teams.RemoveAt(buyerIndex);
+
+            var teamMember = new TeamPassengers{Buyer = Buyer , Passengers = teams};
+            return teamMember;
         }
+    }
+
+    public class TeamPassengers
+    {
+        public TeamMember Buyer { get; set; }
+        public List<TeamMember> Passengers { get; set; }
     }
 
     public class TempPerson

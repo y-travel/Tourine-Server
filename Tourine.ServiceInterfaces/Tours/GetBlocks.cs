@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using ServiceStack;
 
 namespace Tourine.ServiceInterfaces.Tours

@@ -275,4 +275,7 @@ Table=[dbo].[VersionInfo];
   <ItemGroup>
     <None Include="Migrations\0.0.2\010_20180323-AddEnglishName.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\011_20180324-AddPriceToTeam.sql" />
+  </ItemGroup>
 </Project>

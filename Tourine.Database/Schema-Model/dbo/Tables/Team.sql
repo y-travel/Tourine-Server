@@ -4,7 +4,10 @@ CREATE TABLE [dbo].[Team]
 [TourId] [uniqueidentifier] NOT NULL,
 [BuyerId] [uniqueidentifier] NOT NULL,
 [Count] [int] NULL,
-[SubmitDate] [datetime] NOT NULL
+[SubmitDate] [datetime] NOT NULL,
+[InfantPrice] [bigint] NULL,
+[BasePrice] [bigint] NULL,
+[TotalPrice] [bigint] NULL
 )
 GO
 ALTER TABLE [dbo].[Team] ADD CONSTRAINT [PK_Team_Id] PRIMARY KEY CLUSTERED  ([Id])

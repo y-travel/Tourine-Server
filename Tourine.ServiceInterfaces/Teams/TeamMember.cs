@@ -9,7 +9,7 @@ namespace Tourine.ServiceInterfaces.Teams
         public Guid PersonId { get; set; }
         public Person Person { get; set; }
         public List<PersonIncome> PersonIncomes { get; set; }
-        public bool VisaDelivered { get; set; }
+        public bool HaveVisa { get; set; }
         public bool PassportDelivered { get; set; }
     }
 

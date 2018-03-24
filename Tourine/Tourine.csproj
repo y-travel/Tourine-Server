@@ -230,6 +230,7 @@
     <Compile Include="Migration\0008_20180314-AllowNcToBeNull.cs" />
     <Compile Include="Migration\0009_20180322-DeleteTeamPerson.cs" />
     <Compile Include="Migration\0010_20180323-AddEnglishName.cs" />
+    <Compile Include="Migration\0011_20180324-AddPriceToTeam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -282,8 +283,8 @@
     <EmbeddedResource Include="Migration\009_20180322-DeleteTeamPerson.sql">
       <DependentUpon>0009_20180322-DeleteTeamPerson.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\010_20180323-AddEnglishName.sql">
-      <DependentUpon>0010_20180323-AddEnglishName.cs</DependentUpon>
+    <EmbeddedResource Include="Migration\011_20180324-AddPriceToTeam.sql">
+      <DependentUpon>0011_20180324-AddPriceToTeam.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

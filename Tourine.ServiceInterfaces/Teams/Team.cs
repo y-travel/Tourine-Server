@@ -21,5 +21,9 @@ namespace Tourine.ServiceInterfaces.Teams
         public Guid BuyerId { get; set; }
         [Reference]
         public Person Buyer { get; set; }
+
+        public long InfantPrice { get; set; }
+        public long BasePrice { get; set; }
+        public long TotalPrice { get; set; }
     }
 }

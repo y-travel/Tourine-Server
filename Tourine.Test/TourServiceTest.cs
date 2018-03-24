@@ -85,21 +85,56 @@ namespace Tourine.Test
         }
 
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void UpdateTour_should_save_tour(bool isUpdate)
+        public void UpdateTour_should_save_tour()
         {
-            var id = isUpdate ? Guid.NewGuid(): Guid.Empty;
+            var id = Guid.NewGuid();
             Db.Insert(new Tour { Id = id });
             Db.Insert(new TourDetail { Id = id });
-            var tourReq = new UpsertTour
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
             {
                 Id = id,
                 Capacity = 1,
                 BasePrice = 3000,
                 TourDetail = new TourDetail
                 {
-                    Id=id,
+                    Id = id,
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid()
+                },
+                Options = new[]
+                {
+                    new TourOption
+                    {
+                        Id = id,
+                        OptionType = OptionType.Bus,
+                        Price = 1,
+                    }
+                }.ToList(),
+            };
+            //act
+            MockService.Post(request);
+            //assert
+            var newTourDetail = Db.SingleById<TourDetail>(id);
+            var newOptions = Db.Select<TourOption>(x => x.TourId == id);
+            newTourDetail.ShouldBeEquivalentTo(request.TourDetail);
+            newOptions[0].ShouldBeEquivalentTo(request.Options[0]);
+
+        }
+
+        [Test]
+        public void CreateTour_should_save_tour()
+        {
+            var id = Guid.Empty;
+            var request = new UpsertTour
+            {
+                Id = id,
+                Capacity = 1,
+                BasePrice = 3000,
+                TourDetail = new TourDetail
+                {
+                    Id = id,
                     DestinationId = Guid.NewGuid(),
                     StartDate = DateTime.Now,
                     PlaceId = Guid.NewGuid()
@@ -109,13 +144,19 @@ namespace Tourine.Test
                     new TourOption
                     {
                         OptionType = OptionType.Bus,
+                        OptionStatus = OptionStatus.Limited,
                         Price = 1,
                     }
                 }.ToList(),
             };
-            var newTour = MockService.Post(tourReq);
-
-            newTour.Should().NotBeNull();
+            //act
+            var returnedTour = (Tour)MockService.Post(request);
+            //assert
+            var savedTourDetail = Db.SingleById<TourDetail>(returnedTour.TourDetailId);
+            savedTourDetail.ShouldBeEquivalentTo(request.TourDetail);
+            var savedOptions = Db.Select<TourOption>(x => x.TourId == returnedTour.Id);
+            savedOptions.Count.Should().Be(1);
+            savedOptions[0].ShouldBeEquivalentTo(request.Options[0], x => x.Excluding(y => y.SelectedMemberPath.Matches("*Id")));
         }
         [Test]
         public void CreateTour_should_return_exception()

@@ -50,7 +50,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public object Post(UpsertTour upsertTour)
         {
             var tour = upsertTour.ConvertTo<Tour>();
-            return tour.Id == Guid.Empty ? tour.Create(Db, Session) : tour.Update(Db);
+            return tour.Id == Guid.Empty ? tour.Create(Db, Session) : tour.Update(Db,Session);
         }
 
         [Authenticate]

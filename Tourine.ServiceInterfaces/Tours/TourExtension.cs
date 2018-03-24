@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.TourDetails;
@@ -14,14 +13,14 @@ namespace Tourine.ServiceInterfaces.Tours
 
             using (var trans = db.OpenTransaction())
             {
-                tour.PopulateFromPropertiesWithoutAttribute(newTour,typeof(NotPopulateAttribute));
-
+                tour.SafePopulate(newTour);
+                tour.AgencyId = session.Agency.Id;
                 db.Insert(tour);
                 db.SaveAllReferences(tour);
                 foreach (var option in newTour.Options)
                 {
                     var tmpOption = new TourOption();
-                    tmpOption.PopulateFromPropertiesWithoutAttribute(option,typeof(NotPopulateAttribute));
+                    tmpOption.SafePopulate(option);
                     tmpOption.TourId = tour.Id;
                     tmpOption.OptionStatus = option.OptionType.GetDefaultStatus();
                     db.Insert(tmpOption);
@@ -31,7 +30,7 @@ namespace Tourine.ServiceInterfaces.Tours
             return tour;
         }
 
-        public static Tour Update(this Tour upsertTour, IDbConnection db)
+        public static Tour Update(this Tour upsertTour, IDbConnection db, AuthSession session)
         {
             var tour = db.SingleById<Tour>(upsertTour.Id);
             var tourDetail = db.SingleById<TourDetail>(upsertTour.TourDetail.Id);
@@ -39,17 +38,23 @@ namespace Tourine.ServiceInterfaces.Tours
                 throw HttpError.NotFound($"tourId:{upsertTour.Id}tourDetailId:{upsertTour.TourDetail.Id}");
             using (var dbTrans = db.OpenTransaction())
             {
-                tour.PopulateWith(upsertTour);
-                tourDetail.PopulateWith(upsertTour.TourDetail);
+                tour.SafePopulate(upsertTour);
+                tour.AgencyId = session.Agency.Id;
+                tour.TourDetailId = tourDetail.Id;
+                db.Update(tour);
+                tourDetail.SafePopulate(upsertTour.TourDetail);
+                db.Update(tourDetail);
                 foreach (var option in upsertTour.Options)
                 {
                     option.TourId = tour.Id;//to keep db integration
-                    db.Update(option, where: x => x.TourId == tour.Id && x.OptionType == option.OptionType);
+                    db.Update(option);
                 }
                 dbTrans.Commit();
             }
+            //update return value
+            tour.TourDetail = tourDetail;
+            tour.Options = upsertTour.Options;
             return tour;
-
         }
     }
 }

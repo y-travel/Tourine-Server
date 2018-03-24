@@ -24,7 +24,8 @@ namespace Tourine.ServiceInterfaces.TourDetails
         [Reference]
         public Place Place { get; set; }
 
-        public bool IsFlight { get; set; }
+        [NotPopulate]
+        public bool IsFlight { get; set; } = true;
 
         [References(typeof(Person))]
         public Guid? LeaderId { get; set; }

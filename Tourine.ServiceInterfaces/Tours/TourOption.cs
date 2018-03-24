@@ -8,8 +8,12 @@ namespace Tourine.ServiceInterfaces.Tours
         [NotPopulate]
         public Guid Id { get; set; } = Guid.NewGuid();
         public OptionType OptionType { get; set; }
+
         public long Price { get; set; }
+
         public OptionStatus OptionStatus { get; set; }
+
+        [NotPopulate]
         [References(typeof(Tour))]
         public Guid TourId { get; set; }
     }

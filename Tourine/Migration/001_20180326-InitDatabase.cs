@@ -2,7 +2,7 @@
 
 namespace Tourine.Migration
 {
-    [Migration(000120180216)]
+    [Migration(00120180326)]
     public class InitDatabase : Common.MigrationBase
     {
     }

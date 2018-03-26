@@ -2,7 +2,7 @@
 
 namespace Tourine.Migration
 {
-    [Migration(000220180216)]
+    [Migration(00220180326)]
     public class DevSeed : Common.MigrationBase
     {
     }

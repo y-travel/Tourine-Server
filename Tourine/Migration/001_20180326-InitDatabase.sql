@@ -1,4 +1,4 @@
-﻿-- <Migration ID="3277e4c1-a278-4efa-a8c3-87c842ff5b61" />
+﻿-- <Migration ID="3293fe93-ddfa-420a-9b9d-d9835326415c" />
 GO
 
 PRINT N'Creating [dbo].[Place]'
@@ -21,8 +21,8 @@ CREATE TABLE [dbo].[Person]
 [Name] [nvarchar] (50) NOT NULL,
 [Family] [nvarchar] (50) NOT NULL,
 [MobileNumber] [varchar] (11) NULL,
-[NationalCode] [varchar] (10) NOT NULL,
-[BirthDate] [date] NOT NULL,
+[NationalCode] [varchar] (10) NULL,
+[BirthDate] [date] NULL,
 [PassportExpireDate] [date] NULL,
 [PassportNo] [varchar] (50) NULL,
 [Gender] [bit] NOT NULL,
@@ -30,7 +30,10 @@ CREATE TABLE [dbo].[Person]
 [SocialNumber] [varchar] (15) NULL,
 [ChatId] [bigint] NULL,
 [IsUnder5] [bit] NULL,
-[IsInfant] [bit] NULL
+[IsInfant] [bit] NULL,
+[VisaExpireDate] [date] NULL,
+[EnglishName] [varchar] (50) NULL,
+[EnglishFamily] [varchar] (50) NULL
 )
 GO
 PRINT N'Creating primary key [PK_Person_Id] on [dbo].[Person]'
@@ -74,11 +77,6 @@ CREATE TABLE [dbo].[TourDetail]
 [StartDate] [datetime] NULL,
 [PlaceId] [uniqueidentifier] NOT NULL,
 [IsFlight] [bit] NULL,
-[InfantPrice] [bigint] NULL,
-[BusPrice] [bigint] NULL,
-[RoomPrice] [bigint] NULL,
-[FoodPrice] [bigint] NULL,
-[CreationDate] [datetime] NOT NULL,
 [LeaderId] [uniqueidentifier] NULL
 )
 GO
@@ -110,7 +108,9 @@ CREATE TABLE [dbo].[Tour]
 [Code] [nvarchar] (50) NULL,
 [Status] [tinyint] NOT NULL,
 [TourDetailId] [uniqueidentifier] NULL,
-[AgencyId] [uniqueidentifier] NULL
+[AgencyId] [uniqueidentifier] NULL,
+[InfantPrice] [bigint] NULL,
+[CreationDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Tour_Id] on [dbo].[Tour]'
@@ -123,45 +123,17 @@ CREATE TABLE [dbo].[Team]
 (
 [Id] [uniqueidentifier] NOT NULL CONSTRAINT [DF__Team__Id__440B1D61] DEFAULT (newid()),
 [TourId] [uniqueidentifier] NOT NULL,
-[MoneyReceived] [bigint] NULL,
-[Buyer] [uniqueidentifier] NOT NULL,
+[BuyerId] [uniqueidentifier] NOT NULL,
 [Count] [int] NULL,
-[SubmitDate] [datetime] NOT NULL
+[SubmitDate] [datetime] NOT NULL,
+[InfantPrice] [bigint] NULL,
+[BasePrice] [bigint] NULL,
+[TotalPrice] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Team_Id] on [dbo].[Team]'
 GO
 ALTER TABLE [dbo].[Team] ADD CONSTRAINT [PK_Team_Id] PRIMARY KEY CLUSTERED  ([Id])
-GO
-PRINT N'Creating [dbo].[TeamPerson]'
-GO
-CREATE TABLE [dbo].[TeamPerson]
-(
-[Id] [uniqueidentifier] NOT NULL CONSTRAINT [DF__TeamPassenge__Id__48CFD27E] DEFAULT (newid()),
-[TeamId] [uniqueidentifier] NOT NULL,
-[PersonId] [uniqueidentifier] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_TeamPerson_Id] on [dbo].[TeamPerson]'
-GO
-ALTER TABLE [dbo].[TeamPerson] ADD CONSTRAINT [PK_TeamPerson_Id] PRIMARY KEY CLUSTERED  ([Id])
-GO
-PRINT N'Creating [dbo].[Service]'
-GO
-CREATE TABLE [dbo].[Service]
-(
-[Id] [uniqueidentifier] NOT NULL CONSTRAINT [DF__Service__Id__4D94879B] DEFAULT (newid()),
-[PersonId] [uniqueidentifier] NOT NULL,
-[TourId] [uniqueidentifier] NOT NULL,
-[Type] [bigint] NOT NULL,
-[Status] [tinyint] NOT NULL,
-[Price] [bigint] NOT NULL,
-[CurrencyFactor] [float] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_Service_Id] on [dbo].[Service]'
-GO
-ALTER TABLE [dbo].[Service] ADD CONSTRAINT [PK_Service_Id] PRIMARY KEY CLUSTERED  ([Id])
 GO
 PRINT N'Creating [dbo].[PriceDetail]'
 GO
@@ -190,6 +162,41 @@ GO
 PRINT N'Creating primary key [PK_AgencyPerson] on [dbo].[AgencyPerson]'
 GO
 ALTER TABLE [dbo].[AgencyPerson] ADD CONSTRAINT [PK_AgencyPerson] PRIMARY KEY CLUSTERED  ([Id])
+GO
+PRINT N'Creating [dbo].[PassengerList]'
+GO
+CREATE TABLE [dbo].[PassengerList]
+(
+[Id] [uniqueidentifier] NOT NULL CONSTRAINT [DF__PassengerList__Id__4D94879B] DEFAULT (newid()),
+[PersonId] [uniqueidentifier] NOT NULL,
+[TourId] [uniqueidentifier] NOT NULL,
+[OptionType] [bigint] NOT NULL,
+[IncomeStatus] [tinyint] NOT NULL,
+[ReceivedMoney] [bigint] NOT NULL,
+[CurrencyFactor] [float] NOT NULL,
+[PassportDelivered] [bit] NULL,
+[TeamId] [uniqueidentifier] NULL,
+[HaveVisa] [bit] NULL
+)
+GO
+PRINT N'Creating primary key [PK_PassengerList_Id] on [dbo].[PassengerList]'
+GO
+ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [PK_PassengerList_Id] PRIMARY KEY CLUSTERED  ([Id])
+GO
+PRINT N'Creating [dbo].[TourOption]'
+GO
+CREATE TABLE [dbo].[TourOption]
+(
+[Id] [uniqueidentifier] NOT NULL ROWGUIDCOL CONSTRAINT [DF_Option_Id] DEFAULT (newid()),
+[OptionType] [tinyint] NULL,
+[Price] [bigint] NULL,
+[OptionStatus] [tinyint] NULL,
+[TourId] [uniqueidentifier] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Option_Id] on [dbo].[TourOption]'
+GO
+ALTER TABLE [dbo].[TourOption] ADD CONSTRAINT [PK_Option_Id] PRIMARY KEY CLUSTERED  ([Id])
 GO
 PRINT N'Creating [dbo].[Currency]'
 GO
@@ -232,25 +239,25 @@ ALTER TABLE [dbo].[TourDetail] ADD CONSTRAINT [FK_TourDetail_Person_Id] FOREIGN 
 GO
 ALTER TABLE [dbo].[TourDetail] ADD CONSTRAINT [FK_TourDetail_Place_Id] FOREIGN KEY ([PlaceId]) REFERENCES [dbo].[Place] ([Id])
 GO
-PRINT N'Adding foreign keys to [dbo].[Service]'
+PRINT N'Adding foreign keys to [dbo].[PassengerList]'
 GO
-ALTER TABLE [dbo].[Service] ADD CONSTRAINT [FK_Service_Person_Id] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id])
+ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [FK_PassengerList_Person_Id] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id])
 GO
-ALTER TABLE [dbo].[Service] ADD CONSTRAINT [FK_Service_Tour_Id] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
+ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [FK_PassengerList_Tour_Id] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
+GO
+ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [FK_PassengerList_Team_Id] FOREIGN KEY ([TeamId]) REFERENCES [dbo].[Team] ([Id])
 GO
 PRINT N'Adding foreign keys to [dbo].[Team]'
 GO
-ALTER TABLE [dbo].[Team] ADD CONSTRAINT [FK_Team_Person_Id] FOREIGN KEY ([Buyer]) REFERENCES [dbo].[Person] ([Id])
+ALTER TABLE [dbo].[Team] ADD CONSTRAINT [FK_Team_Person_Id] FOREIGN KEY ([BuyerId]) REFERENCES [dbo].[Person] ([Id])
 GO
 ALTER TABLE [dbo].[Team] ADD CONSTRAINT [FK_Team_Tour_Id] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
-GO
-PRINT N'Adding foreign keys to [dbo].[TeamPerson]'
-GO
-ALTER TABLE [dbo].[TeamPerson] ADD CONSTRAINT [FK_TeamPerson_Person_Id] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id])
-GO
-ALTER TABLE [dbo].[TeamPerson] ADD CONSTRAINT [FK_TeamPerson_Team_Id] FOREIGN KEY ([TeamId]) REFERENCES [dbo].[Team] ([Id])
 GO
 PRINT N'Adding foreign keys to [dbo].[User]'
 GO
 ALTER TABLE [dbo].[User] ADD CONSTRAINT [FK_User_Person_Id] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id])
+GO
+PRINT N'Adding foreign keys to [dbo].[TourOption]'
+GO
+ALTER TABLE [dbo].[TourOption] ADD CONSTRAINT [FK_Option_Tour] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
 GO

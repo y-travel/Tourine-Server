@@ -219,17 +219,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Job.cs" />
-    <Compile Include="Migration\0001_20180216-InitDatabase.cs" />
-    <Compile Include="Migration\0002_20180216-DevSeed.cs" />
-    <Compile Include="Migration\0003_20180309-AddTourServiceAlterTourDetailTour.cs" />
-    <Compile Include="Migration\0003_20180311-MoveCreationDateToTour.cs" />
-    <Compile Include="Migration\0004_20180312-ChangePassengerListFieldName.cs" />
-    <Compile Include="Migration\0005_20180312-RemovePriceFromTeam.cs" />
-    <Compile Include="Migration\0006_20180312-ChangeBuyerToBuyerId.cs" />
-    <Compile Include="Migration\0007_20180314-AddVisaPassDelivered.cs" />
-    <Compile Include="Migration\0008_20180314-AllowNcToBeNull.cs" />
-    <Compile Include="Migration\0009_20180322-DeleteTeamPerson.cs" />
-    <Compile Include="Migration\0010_20180323-AddEnglishName.cs" />
+    <Compile Include="Migration\001_20180326-InitDatabase.cs" />
+    <Compile Include="Migration\002_20180326-DevSeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -240,24 +231,9 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Migration\0001_20180216-InitDatabase.sql">
-      <DependentUpon>0001_20180216-InitDatabase.cs</DependentUpon>
+    <EmbeddedResource Include="Migration\002_20180326-DevSeed.sql">
+      <DependentUpon>002_20180326-DevSeed.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\0003_20180311-MoveCreationDateToTour.sql">
-      <DependentUpon>0003_20180311-MoveCreationDateToTour.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\005_20180312-RemovePriceFromTeam.sql">
-      <DependentUpon>0005_20180312-RemovePriceFromTeam.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\006_20180312-ChangeBuyerToBuyerId.sql">
-      <DependentUpon>0006_20180312-ChangeBuyerToBuyerId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\007_20180314-AddVisaPassDelivered.sql">
-      <DependentUpon>0007_20180314-AddVisaPassDelivered.cs</DependentUpon>
-    </EmbeddedResource>
-    <Content Include="Migration\010_20180323-AddEnglishName.sql">
-      <DependentUpon>0010_20180323-AddEnglishName.cs</DependentUpon>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -267,21 +243,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <EmbeddedResource Include="Migration\0002_20180216-DevSeed.sql">
-      <DependentUpon>0002_20180216-DevSeed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\0003_20180309-AddTourServiceAlterTourDetailTour.sql">
-      <DependentUpon>0003_20180309-AddTourServiceAlterTourDetailTour.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\004_20180312-ChangePassengerListFieldName.sql">
-      <DependentUpon>0004_20180312-ChangePassengerListFieldName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\008_20180314-AllowNcToBeNull.sql">
-      <DependentUpon>0008_20180314-AllowNcToBeNull.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\009_20180322-DeleteTeamPerson.sql">
-      <DependentUpon>0009_20180322-DeleteTeamPerson.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -298,6 +259,11 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migration\001_20180326-InitDatabase.sql">
+      <DependentUpon>001_20180326-InitDatabase.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

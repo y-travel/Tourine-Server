@@ -237,45 +237,15 @@ Table=[dbo].[VersionInfo];
     <None Include="Schema-Model\dbo\Tables\TeamPerson.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0.0.2\001_20180309-InitDatabase.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Schema-Model\dbo\Tables\PassengerList.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema-Model\dbo\Tables\TourService.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0.0.2\002_20180309-AddTourServiceAlterTourDetail,Tour.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Schema-Model\dbo\Tables\TourOption.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0.0.2\003_20180311-MoveCreationDateToTour.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0.0.2\004_20180312-ChangePassengerListFieldName.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0.0.2\005_20180312-RemovePriceFromTeam.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0.0.2\006_20180312-ChangeBuyerToBuyerId.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0.0.2\007_20180314-AddVisaPassDelivered.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0.0.2\008_20180314-AllowNcToBeNull.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0.0.2\009_20180322-DeleteTeamPerson.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0.0.2\010_20180323-AddEnglishName.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\0.0.2\011_20180324-AddPriceToTeam.sql" />
+    <None Include="Migrations\0.0.2\001_20180326-InitDatabase.sql" />
   </ItemGroup>
 </Project>

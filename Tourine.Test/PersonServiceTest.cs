@@ -4,16 +4,10 @@ using System.Data.SQLite;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
-using ServiceStack.OrmLite;
-using ServiceStack.Text;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyPersons;
 using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.TeamPassengers;
-using Tourine.ServiceInterfaces.Teams;
-using Tourine.ServiceInterfaces.Tours;
-using Tourine.ServiceInterfaces.Users;
 using Tourine.Test.Common;
 
 namespace Tourine.Test
@@ -26,7 +20,7 @@ namespace Tourine.Test
         private readonly Guid _testTourGuid = Guid.NewGuid();
         private readonly Guid _testAgencyGuid = Guid.NewGuid();
 
-        private readonly Person _person = new Person { NationalCode = "0123456789" , Family = "any"};
+        private readonly Person _person = new Person { NationalCode = "0123456789", Family = "any", Type = PersonType.Passenger | PersonType.Leader };
         private readonly Agency _agency = new Agency();
         [SetUp]
         public new void Setup()
@@ -114,28 +108,28 @@ namespace Tourine.Test
         [Test]
         public void FindPersonInAgency_should_return_result()
         {
-            var person = (QueryResponse<Person>)MockService.Get(new FindPersonInAgency {Str = "n", AgencyId = _agency.Id});
+            var person = (QueryResponse<Person>)MockService.Get(new FindPersonInAgency { Str = "n", AgencyId = _agency.Id });
             person.Results[0].ShouldBeEquivalentTo(_person);
         }
 
         [Test]
         public void FindPassengerInAgency_should_return_zero_result()
         {
-            var item = Client.Get(new FindPersonInAgency { Str = "p", AgencyId = _testAgencyGuid });
+            var item = (QueryResponse<Person>)MockService.Get(new FindPersonInAgency { Str = "p", AgencyId = _agency.Id });
             item.Results.Count.Should().Be(0);
         }
 
         [Test]
-        public void FindPassengerInAgency_should_throw_exception()
+        public void FindPassengerInAgency_should_throw_exception()//Why: the AgencyId is not exist in db
         {
-            Client.Invoking(p => p.Get(new FindPersonInAgency { Str = "r", AgencyId = Guid.NewGuid() }))
-                .ShouldThrow<WebServiceException>();
+            new Action(() => MockService.Get(new FindPersonInAgency { Str = "r", AgencyId = Guid.NewGuid() }))
+                .ShouldThrow<HttpError>();
         }
 
         [Test]
         public void GetLeaders_should_return_result()
         {
-            var item = Client.Get(new GetLeaders());
+            var item = (QueryResponse<Person>)MockService.Get(new GetLeaders());
             item.Results.Count.Should().Be(1);
         }
 
@@ -187,6 +181,24 @@ namespace Tourine.Test
             person.Id.Should().Be(_testPersonGuid);
             person.Name.Should().Be("testu");
         }
+
+        [Test]
+        public void DeleteLeader_should_throw_excetion()//Why: because this PersonId is not exist
+        {
+            new Action(() => MockService.Delete(new DeleteLeader { Id = Guid.NewGuid() }))
+                .ShouldThrow<HttpError>();
+        }
+
+        [Test]
+        public void DeleteLeader_should_not_throw_excetion()
+        {
+            new Action(() => MockService.Delete(new DeleteLeader { Id = _person.Id }))
+                .ShouldNotThrow<HttpError>();
+
+            var leader = (QueryResponse<Person>)MockService.Get(new GetPersons { Id = _person.Id });
+            leader.Results[0].Type.Should().Be(PersonType.Passenger);
+        }
+
         public void CreatePerson()
         {
             var _agencyPerson = new AgencyPerson { AgencyId = _agency.Id, PersonId = _person.Id };

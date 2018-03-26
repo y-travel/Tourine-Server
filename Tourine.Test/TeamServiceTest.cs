@@ -6,7 +6,6 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Services;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.Tours;
 using Tourine.ServiceInterfaces.Users;
@@ -50,9 +49,9 @@ namespace Tourine.Test
             personIncomes.Add(personFoodIncome);
             personIncomes.Add(personRoomIncome);
 
-            var teamMember_1 = new TeamMember { PersonId = person_1.Id, PersonIncomes = personIncomes };
-            var teamMember_2 = new TeamMember { PersonId = person_2.Id, PersonIncomes = personIncomes };
-            var teamMember_3 = new TeamMember { PersonId = person_3.Id, PersonIncomes = personIncomes };
+            var teamMember_1 = new TeamMember { PersonId = person_1.Id, PersonIncomes = personIncomes, Person = person_1 };
+            var teamMember_2 = new TeamMember { PersonId = person_2.Id, PersonIncomes = personIncomes, Person = person_2 };
+            var teamMember_3 = new TeamMember { PersonId = person_3.Id, PersonIncomes = personIncomes, Person = person_3 };
 
             _passengers.Add(teamMember_1);
             _passengers.Add(teamMember_2);
@@ -118,8 +117,8 @@ namespace Tourine.Test
                 Passengers = _passengers.GetRange(1, 1)
             });
 
-            var res = (List<TeamMember>)MockService.Get(new GetPersonsOfTeam { TeamId = tm.Id });
-            res.Count.Should().Be(2);
+            var res = (TeamPassengers)MockService.Get(new GetPersonsOfTeam { TeamId = tm.Id });
+            res.Passengers.Should().NotBeNull();
         }
 
         public void CreateTeam()

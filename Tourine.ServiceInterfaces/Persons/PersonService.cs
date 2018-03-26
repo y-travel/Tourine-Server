@@ -1,6 +1,5 @@
 ﻿using System;
 using ServiceStack;
-using ServiceStack.FluentValidation.Attributes;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.TeamPassengers;
@@ -111,5 +110,27 @@ namespace Tourine.ServiceInterfaces.Persons
         {
             return Db.SingleById<Person>(Session.User.PersonId);
         }
+
+        [Authenticate]
+        public object Post(UpsertLeader leader)
+        {
+            leader.Person.Type = leader.Person.Type | PersonType.Leader;
+            Db.Save(leader.Person);
+
+            return Db.SingleById<Person>(leader.Person.Id);
+        }
+
+        [Authenticate]
+        public void Delete(DeleteLeader req)
+        {
+            if (req.Id == null)
+                throw HttpError.NotFound("");
+            if (!Db.Exists<Person>(x=> x.Id == req.Id))
+                throw HttpError.NotFound("");
+           var leader = Db.SingleById<Person>(req.Id);
+            leader.Type = leader.Type & (~PersonType.Leader);
+            Db.Update(leader);
+        }
     }
+
 }

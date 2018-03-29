@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Tourine.ServiceInterfaces.Persons;
 
-namespace Tourine.ServiceInterfaces.Services
+namespace Tourine.ServiceInterfaces.Passengers
 {
     public class PassengerServiceInfo
     {

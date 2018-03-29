@@ -11,7 +11,6 @@ using Tourine.ServiceInterfaces.AgencyPersons;
 using Tourine.ServiceInterfaces.Destinations;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Places;
-using Tourine.ServiceInterfaces.TeamPassengers;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;

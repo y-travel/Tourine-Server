@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Data;
-using System.Net;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.Services;
-using Tourine.ServiceInterfaces.TeamPassengers;
-using Tourine.ServiceInterfaces.Teams;
-using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
@@ -213,20 +207,10 @@ namespace Tourine.ServiceInterfaces.Tours
         [Authenticate]
         public void Delete(DeleteTour req)
         {
-            if (!Db.Exists<Tour>(x => x.Id == req.Id))
-                throw HttpError.NotFound("");
-
             var tour = Db.SingleById<Tour>(req.Id);
-            Db.Delete<Tour>(tour.Id);
-            Db.Delete(Db.From<PassengerList>().Where(p => p.TourId == tour.Id));
-            var teams = Db.Select(Db.From<Team>().Where(team => team.TourId == tour.Id));
-            Db.Delete(Db.From<Team>().Where(team => team.TourId == tour.Id));
-            if (tour.ParentId == null)
-                Db.Delete(Db.From<TourDetail>().Where(t => t.Id == tour.TourDetailId));
-            foreach (var team in teams)
-            {
-                Db.Delete(Db.From<TeamPerson>().Where(tp => tp.TeamId == team.Id));
-            }
+            if (tour==null)
+                throw HttpError.NotFound("");
+            tour.Delete(Db);
         }
     }
 }

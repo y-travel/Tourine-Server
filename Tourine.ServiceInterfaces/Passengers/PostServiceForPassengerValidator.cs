@@ -1,12 +1,11 @@
 ﻿using ServiceStack.FluentValidation;
 
-namespace Tourine.ServiceInterfaces.Services
+namespace Tourine.ServiceInterfaces.Passengers
 {
-    public class PutServiceForPassengerValidator : AbstractValidator<PutServiceForPassenger>
+    public class PostServiceForPassengerValidator : AbstractValidator<PostServiceForPassenger>
     {
-        public PutServiceForPassengerValidator()
+        public PostServiceForPassengerValidator()
         {
-            RuleFor(s => s.PassengerList.Id).NotEmpty();
             RuleFor(s => s.PassengerList.PersonId).NotEmpty();
             RuleFor(s => s.PassengerList.TourId).NotEmpty();
             RuleFor(s => s.PassengerList.OptionType).NotEmpty();

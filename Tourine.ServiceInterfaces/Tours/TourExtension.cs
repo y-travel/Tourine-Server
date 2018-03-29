@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
@@ -55,6 +57,24 @@ namespace Tourine.ServiceInterfaces.Tours
             tour.TourDetail = tourDetail;
             tour.Options = upsertTour.Options;
             return tour;
+        }
+
+        public static bool Delete(this Tour req,IDbConnection Db)
+        {
+            using (var trans = Db.OpenTransaction())
+            {
+                var tour = Db.SingleById<Tour>(req.Id);
+                Db.Delete<Tour>(tour.Id);
+                Db.Delete(Db.From<PassengerList>().Where(p => p.TourId == tour.Id));
+                var teams = Db.Select(Db.From<Team>().Where(team => team.TourId == tour.Id));
+                Db.Delete(Db.From<Team>().Where(team => team.TourId == tour.Id));
+                if (tour.ParentId == null)
+                    Db.Delete(Db.From<TourDetail>().Where(t => t.Id == tour.TourDetailId));
+                foreach (var team in teams)
+                {
+                }
+                return true;
+            }
         }
     }
 }

@@ -12,10 +12,9 @@ using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyPersons;
 using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Places;
-using Tourine.ServiceInterfaces.Services;
-using Tourine.ServiceInterfaces.TeamPassengers;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
@@ -78,7 +77,6 @@ namespace Tourine.Test.Common
             container.RegisterAutoWired<PersonService>();
             container.RegisterAutoWired<PlaceService>();
             container.RegisterAutoWired<PassengerListService>();
-            container.RegisterAutoWired<TeamPersonService>();
             container.RegisterAutoWired<TeamService>();
             container.RegisterAutoWired<TourDetailService>();
             container.RegisterAutoWired<TourService>();
@@ -94,7 +92,7 @@ namespace Tourine.Test.Common
         {
             TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place),
                 typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Person),
-                typeof(Person), typeof(TourDetail), typeof(TeamPerson), typeof(Team),
+                typeof(Person), typeof(TourDetail), typeof(Team),
                 typeof(Service), typeof(AgencyPerson),typeof(TourOption),typeof(PassengerList) };//should be fill with tables
 
             using (var db = ConnectionFactory.OpenDbConnection())

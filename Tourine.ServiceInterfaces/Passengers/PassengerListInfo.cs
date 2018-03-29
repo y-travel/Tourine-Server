@@ -3,7 +3,7 @@ using ServiceStack.DataAnnotations;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Tours;
 
-namespace Tourine.ServiceInterfaces.Services
+namespace Tourine.ServiceInterfaces.Passengers
 {
     public class PassengerListInfo
     {

@@ -4,7 +4,7 @@ using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.Tours;
 
-namespace Tourine.ServiceInterfaces.Services
+namespace Tourine.ServiceInterfaces.Passengers
 {
     public class PassengerList
     {

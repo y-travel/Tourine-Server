@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Services;
-using Tourine.ServiceInterfaces.TeamPassengers;
 using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Teams
@@ -100,7 +99,6 @@ namespace Tourine.ServiceInterfaces.Teams
         {
             if (!Db.Exists<Team>(x => x.Id == team.TeamId))
                 throw HttpError.NotFound("");
-            Db.Delete<TeamPerson>(x => x.TeamId == team.TeamId);
             Db.Delete<Team>(x => x.Id == team.TeamId);
         }
 

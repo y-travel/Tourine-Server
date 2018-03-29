@@ -52,15 +52,15 @@ namespace Tourine.Test.Common
             AppHost.Dispose();
         }
 
-        public void InsertDb<T>(T model, bool saveSession = false)
+        public void InsertDb<TU>(TU model, bool saveSession = false)
         {
             Db.Insert(model);
             if (model.GetType() == typeof(User) && saveSession)
             {
                 var user = model as User;
                 AppHost.Session.User = user;
-                AppHost.Session.UserAuthId = user.Id.ToString();
-                AppHost.Session.Roles = user.Role.ParseRole<string>();
+                AppHost.Session.UserAuthId = user?.Id.ToString();
+                AppHost.Session.Roles = user?.Role.ParseRole<string>();
             }
             else if (model.GetType() == typeof(Agency) && saveSession)
             {

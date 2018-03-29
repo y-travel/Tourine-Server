@@ -5,7 +5,7 @@ using ServiceStack;
 using ServiceStack.DataAnnotations;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.Services;
+using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours

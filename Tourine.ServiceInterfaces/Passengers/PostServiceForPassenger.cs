@@ -1,6 +1,6 @@
 ﻿using ServiceStack;
 
-namespace Tourine.ServiceInterfaces.Services
+namespace Tourine.ServiceInterfaces.Passengers
 {
     [Route("/service", "POST")]
     public class PostServiceForPassenger : IReturn<PassengerList>

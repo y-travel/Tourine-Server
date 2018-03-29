@@ -1,5 +1,7 @@
-﻿using ServiceStack.OrmLite;
+﻿using System;
+using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.AgencyPersons;
+using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
@@ -24,7 +26,7 @@ namespace Tourine.ServiceInterfaces.Notifies
                 .Select<Person>(p => new { p.Id, p.ChatId, p.Name, p.Family });
             var persons = Db.Select<Person>(q);
             foreach (var person in persons)
-                bot.Send(agency.Msg, person.ChatId);
+                if (person.ChatId != null) bot.Send(agency.Msg, person.ChatId ?? 0);
         }
 
         public void Post(SendNotifyToTourBuyers tourBuyers)
@@ -34,17 +36,17 @@ namespace Tourine.ServiceInterfaces.Notifies
                 .Select<Person>(p => new { p.Id, p.ChatId, p.Name, p.Family });
             var buyers = Db.Select(q);
             foreach (var buyer in buyers)
-                bot.Send(tourBuyers.Msg, buyer.ChatId);
+                if (buyer.ChatId != null) bot.Send(tourBuyers.Msg, buyer.ChatId ?? 0);
         }
 
         public void Post(SendNotifyToTourPassengers tour)
         {
-            var q = Db.From<Person, Services.PassengerList>((p, s) => s.TourId == tour.TourId && p.Id == s.PersonId)
+            var q = Db.From<Person, PassengerList>((p, s) => s.TourId == tour.TourId && p.Id == s.PersonId)
                     .GroupBy(p => new { p.Id, p.ChatId, p.Name, p.Family })
                     .Select<Person>(p => new { p.Id, p.ChatId, p.Name, p.Family });
             var passengers = Db.Select(q);
             foreach (var passenger in passengers)
-                bot.Send(tour.Msg, passenger.ChatId);
+                if (passenger.ChatId != null) bot.Send(tour.Msg, passenger.ChatId ?? 0);
         }
 
         public void Post(SendNotifyToTourLeader tour)
@@ -55,7 +57,7 @@ namespace Tourine.ServiceInterfaces.Notifies
                 .Select<Person>(p => new { p.Id, p.ChatId, p.Name, p.Family });
             var leaders = Db.Select<Person>(q);
             foreach (var leader in leaders)
-                bot.Send(tour.Msg, leader.ChatId);
+                if (leader.ChatId != null) bot.Send(tour.Msg, leader.ChatId ?? 0);
         }
     }
 }

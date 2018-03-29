@@ -134,46 +134,6 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void RegisterPassenger_should_return_result()
-        {
-            List<Guid> psId = new List<Guid>();
-            Guid id1 = Guid.NewGuid();
-            Guid id2 = Guid.NewGuid();
-            psId.Add(id1);
-            psId.Add(id2);
-            var p1 = new Person { Id = id1, Name = "p1", NationalCode = "123456789", Type = 0, };
-            var p2 = new Person { Id = id1, Name = "p1", NationalCode = "123456789", Type = 0, };
-
-            var team = Client.Post(new RegisterPerson
-            {
-                TourId = _testTourGuid,
-                BuyerId = _testPersonGuid,
-                PassengersId = psId
-            });
-            team.BuyerId.Should().Be(_testPersonGuid);
-            team.Count.Should().Be(psId.Count + 1);
-        }
-
-        [Test]
-        public void RegisterPassenger_should_throw_exception()
-        {
-            List<Guid> psId = new List<Guid>();
-            Guid id1 = Guid.NewGuid();
-            Guid id2 = Guid.NewGuid();
-            psId.Add(id1);
-            psId.Add(id2);
-            var p1 = new Person { Id = id1, Name = "p1", NationalCode = "123456789", Type = 0, };
-            var p2 = new Person { Id = id1, Name = "p1", NationalCode = "123456789", Type = 0, };
-
-            Client.Invoking(x => x.Post(new RegisterPerson
-            {
-                TourId = Guid.NewGuid(),
-                BuyerId = _testPersonGuid,
-                PassengersId = psId
-            })).ShouldThrow<WebServiceException>();
-        }
-
-        [Test]
         public void GetCurrentPerson_should_return_result()
         {
             var person = (Person)MockService.Get(new GetCurrentPerson());

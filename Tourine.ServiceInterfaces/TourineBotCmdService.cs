@@ -7,9 +7,8 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Services;
-using Tourine.ServiceInterfaces.TeamPassengers;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
@@ -195,12 +194,11 @@ namespace Tourine.ServiceInterfaces
             }
         }
 
-        public List<PersonServiceReport> GetTeamPersonAndServices(Guid TourId, Guid teamId)
+        public List<PersonServiceReport> GetTeamPersonAndServices(Guid tourId, Guid teamId)
         {
             using (var db = ConnectionFactory.OpenDbConnection())
             {
-                var q = db.From<Person, PassengerList>((p, s) => p.Id == s.PersonId && s.TourId == TourId)
-                    .Join<TeamPerson>((p, tp) => p.Id == tp.PersonId && tp.TeamId == teamId)
+                var q = db.From<Person, PassengerList>((p, s) => p.Id == s.PersonId && s.TourId == tourId && s.TeamId==teamId)
                     .GroupBy<Person>(person => new { person.Id, person.Family, person.Name })
                     .OrderBy<Person>(person => new { person.Family, person.Name })
                     .Select(x => new { x.Family, x.Name, serviceSum = Sql.Sum("PassengerList.Type") });

@@ -18,7 +18,7 @@ namespace Tourine.ServiceInterfaces.Persons
         public bool Gender { get; set; }
         public PersonType Type { get; set; } = PersonType.Passenger;
         public string SocialNumber { get; set; }
-        public long ChatId { get; set; }
+        public long? ChatId { get; set; }
 
         public bool IsUnder5 { get; set; }
         public bool IsInfant { get; set; }

@@ -245,6 +245,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <EmbeddedResource Include="Migration\002_20180330-EnableCascadeDeleteOnTour.sql">
+      <DependentUpon>002_20180330-EnableCascadeDeleteOnTourDependecies.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

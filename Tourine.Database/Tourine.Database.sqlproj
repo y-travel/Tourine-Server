@@ -234,7 +234,6 @@ Table=[dbo].[VersionInfo];
   <ItemGroup>
     <None Include="Schema-Model\dbo\Tables\AgencyPerson.sql" />
     <None Include="Schema-Model\dbo\Tables\Person.sql" />
-    <None Include="Schema-Model\dbo\Tables\TeamPerson.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema-Model\dbo\Tables\PassengerList.sql" />
@@ -247,5 +246,8 @@ Table=[dbo].[VersionInfo];
   </ItemGroup>
   <ItemGroup>
     <None Include="Migrations\0.0.2\001_20180326-InitDatabase.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\002_20180330-EnableCascadeDeleteOnTour.sql" />
   </ItemGroup>
 </Project>

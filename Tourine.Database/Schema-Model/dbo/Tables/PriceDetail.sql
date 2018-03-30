@@ -11,5 +11,5 @@ ALTER TABLE [dbo].[PriceDetail] ADD CONSTRAINT [PK_PriceDetail_Id] PRIMARY KEY C
 GO
 ALTER TABLE [dbo].[PriceDetail] ADD CONSTRAINT [FK_PriceDetail_Currency_Id] FOREIGN KEY ([CurrencyId]) REFERENCES [dbo].[Currency] ([Id])
 GO
-ALTER TABLE [dbo].[PriceDetail] ADD CONSTRAINT [FK_PriceDetail_Tour_Id] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
+ALTER TABLE [dbo].[PriceDetail] ADD CONSTRAINT [FK_PriceDetail_Tour_Id] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id]) ON DELETE CASCADE
 GO

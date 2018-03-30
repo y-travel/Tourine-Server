@@ -221,6 +221,7 @@
     <Compile Include="Job.cs" />
     <Compile Include="Migration\001_20180326-InitDatabase.cs" />
     <Compile Include="Migration\002_20180326-DevSeed.cs" />
+    <Compile Include="Migration\002_20180330-EnableCascadeDeleteOnTourDependecies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +235,7 @@
     <EmbeddedResource Include="Migration\002_20180326-DevSeed.sql">
       <DependentUpon>002_20180326-DevSeed.cs</DependentUpon>
     </EmbeddedResource>
+    <Content Include="Migration\002_20180330-EnableCascadeDeleteOnTour.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

@@ -59,20 +59,18 @@ namespace Tourine.ServiceInterfaces.Tours
             return tour;
         }
 
-        public static bool Delete(this Tour req,IDbConnection Db)
+        public static bool Delete(this Tour req, IDbConnection db)
         {
-            using (var trans = Db.OpenTransaction())
+            using (var trans = db.OpenTransaction())
             {
-                var tour = Db.SingleById<Tour>(req.Id);
-                Db.Delete<Tour>(tour.Id);
-                Db.Delete(Db.From<PassengerList>().Where(p => p.TourId == tour.Id));
-                var teams = Db.Select(Db.From<Team>().Where(team => team.TourId == tour.Id));
-                Db.Delete(Db.From<Team>().Where(team => team.TourId == tour.Id));
-                if (tour.ParentId == null)
-                    Db.Delete(Db.From<TourDetail>().Where(t => t.Id == tour.TourDetailId));
-                foreach (var team in teams)
-                {
-                }
+                var tour = db.SingleById<Tour>(req.Id);
+                if (tour == null)
+                    throw HttpError.NotFound("TourId Not Found");
+                if (tour.IsBlock)
+                    db.Delete<Tour>(x => x.Id == tour.Id);
+                else//@TODO find a solution: if a block set another detailId will be remained
+                    db.Delete<TourDetail>(x => x.Id == req.TourDetailId);
+                trans.Commit();
                 return true;
             }
         }

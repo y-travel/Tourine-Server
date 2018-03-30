@@ -9,5 +9,5 @@ CREATE TABLE [dbo].[TourOption]
 GO
 ALTER TABLE [dbo].[TourOption] ADD CONSTRAINT [PK_Option_Id] PRIMARY KEY CLUSTERED  ([Id])
 GO
-ALTER TABLE [dbo].[TourOption] ADD CONSTRAINT [FK_Option_Tour] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id])
+ALTER TABLE [dbo].[TourOption] ADD CONSTRAINT [FK_Option_Tour] FOREIGN KEY ([TourId]) REFERENCES [dbo].[Tour] ([Id]) ON DELETE CASCADE
 GO

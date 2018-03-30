@@ -85,6 +85,31 @@ namespace Tourine.Test
         }
 
         [Test]
+        public void DeleteTour_when_block_is_true_should_remove_just_block()
+        {
+            var tourId = Guid.NewGuid();
+            var blockId = Guid.NewGuid();
+            Db.Insert(new Tour { Id = tourId });
+            Db.Insert(new Tour { Id = blockId, ParentId = tourId });
+            //
+            MockService.Delete(new DeleteTour { Id = blockId });
+            Db.SingleById<Tour>(tourId).Should().NotBeNull();
+        }
+
+        [Test]
+        public void DeleteTour_when_block_is_false_should_remove_tourDetail()
+        {
+            var tourId = Guid.NewGuid();
+            var blockId = Guid.NewGuid();
+            var tourDetailId = Guid.NewGuid();
+            Db.Insert(new TourDetail { Id = tourDetailId });
+            Db.Insert(new Tour { Id = tourId });
+            Db.Insert(new Tour { Id = blockId, ParentId = tourId });
+            //
+            MockService.Delete(new DeleteTour { Id = tourId });
+            Db.SingleById<TourDetail>(tourDetailId).Should().NotBeNull();
+        }
+        [Test]
         public void UpdateTour_should_save_tour()
         {
             var id = Guid.NewGuid();

@@ -50,6 +50,8 @@ namespace Tourine.ServiceInterfaces.Tours
         [Ignore]
         public List<TourOption> Options { get; set; }
 
+        [Ignore]
+        public bool IsBlock => ParentId != null && ParentId != Guid.Empty;
     }
 
     public static class TourExtensions

@@ -131,7 +131,6 @@
     <Compile Include="PlaceServiceTest.cs" />
     <Compile Include="RoleTest.cs" />
     <Compile Include="Common\ServiceTest.cs" />
-    <Compile Include="TeamPersonServiceTest.cs" />
     <Compile Include="TeamServiceTest.cs" />
     <Compile Include="TourDetailServiceTest.cs" />
     <Compile Include="TourineBotTest.cs" />

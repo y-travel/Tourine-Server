@@ -70,7 +70,7 @@ namespace Tourine.ServiceInterfaces.Persons
             return AutoQuery.Execute(persons, item);
         }
 
-        //[Authenticate]
+        [Authenticate]
         public object Get(GetLeaders leaders)
         {
             var query = AutoQuery.CreateQuery(leaders, Request.GetRequestParams())

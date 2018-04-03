@@ -176,6 +176,7 @@
     <Compile Include="TourStatus.cs" />
     <Compile Include="Tours\DeleteTour.cs" />
     <Compile Include="Tours\GetBlocks.cs" />
+    <Compile Include="Tours\GetPersonsOfTour.cs" />
     <Compile Include="Tours\GetRootTours.cs" />
     <Compile Include="Tours\GetTour.cs" />
     <Compile Include="Tours\GetTourFreespace.cs" />

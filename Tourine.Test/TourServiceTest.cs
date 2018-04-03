@@ -6,6 +6,7 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Places;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
@@ -17,6 +18,7 @@ namespace Tourine.Test
     {
         private readonly Guid _testTourId = Guid.NewGuid();
         private readonly Guid _testTourDetaiGuid = Guid.NewGuid();
+        private readonly Person _leader = new Person { Name = "any" };
         [SetUp]
         public new void Setup()
         {
@@ -231,17 +233,27 @@ namespace Tourine.Test
         //                }
         //            })).ShouldThrow<WebServiceException>();
         //        }
+
+        [Test]
+        public void GetPersonOfTour_should_return_result()
+        {
+            var res = (TourPassengers)MockService.Get(new GetPersonsOfTour { TourId = _testTourId });
+            res.Leader.Id.Should().Be(_leader.Id);
+        }
+
         public void CreateTours()
         {
             var testDId = Guid.NewGuid();
             var testPId = Guid.NewGuid();
             Db.Insert(new Place { Id = testPId, Name = "Bed" });
             Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
+            Db.Insert(_leader);
             Db.Insert(new TourDetail
             {
                 Id = _testTourDetaiGuid,
                 DestinationId = testDId,
                 PlaceId = testPId,
+                LeaderId = _leader.Id,
             });
 
             Db.Insert(new Tour

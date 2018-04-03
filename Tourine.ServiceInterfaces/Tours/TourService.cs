@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
+using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Persons;
+using Tourine.ServiceInterfaces.Teams;
+using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
 {
@@ -212,6 +217,57 @@ namespace Tourine.ServiceInterfaces.Tours
                 throw HttpError.NotFound("");
             tour.Delete(Db);
         }
+
+        [Authenticate]
+        public object Get(GetPersonsOfTour tour)
+        {
+            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId && pl.TourId == tour.TourId )
+                .GroupBy<Person, PassengerList>((x, pl) => new
+                {
+                    x,
+                    pl.PassportDelivered,
+                    VisaDelivered = pl.HaveVisa,
+                    pl.TeamId,
+                })
+                .OrderBy(p => p.Id)
+                .Select<Person, PassengerList>((x, pl) => new
+                {
+                    x,
+                    pl.PassportDelivered,
+                    VisaDelivered = pl.HaveVisa,
+                    pl.TeamId,
+                    SumOptionType = Sql.Sum(nameof(PassengerList) + "." + nameof(PassengerList.OptionType)),
+                });
+
+            var items = Db.Select<TempPerson>(q);
+
+            var mainTour = Db.Single<Tour>(x => x.Id == tour.TourId);
+
+            var teams = new List<TeamMember>();
+
+            foreach (var item in items)
+            {
+                var t = new TeamMember
+                {
+                    Person = item.ConvertTo<Person>(),
+                    PersonId = item.Id,
+                    PersonIncomes = item.SumOptionType.GetListOfTypes(),
+                    HaveVisa = item.VisaDelivered,
+                    PassportDelivered = item.PassportDelivered
+                };
+                teams.Add(t);
+            }
+            var leader = Db.Single(Db.From<Person,TourDetail>((p, td) => td.Id == mainTour.TourDetailId && p.Id == td.LeaderId));
+
+            var tourPassengers = new TourPassengers { Leader = leader , Passengers = teams };
+            return tourPassengers;
+        }
+    }
+
+    public class TourPassengers
+    {
+        public Person Leader { get; set; }
+        public List<TeamMember> Passengers { get; set; }
     }
 }
 

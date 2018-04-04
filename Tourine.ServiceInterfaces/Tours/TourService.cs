@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
@@ -49,7 +50,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public object Post(UpsertTour upsertTour)
         {
             var tour = upsertTour.ConvertTo<Tour>();
-            return tour.Id == Guid.Empty ? tour.Create(Db, Session) : tour.Update(Db,Session);
+            return tour.Id == Guid.Empty ? tour.Create(Db, Session) : tour.Update(Db, Session);
         }
 
         [Authenticate]
@@ -213,7 +214,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public void Delete(DeleteTour req)
         {
             var tour = Db.SingleById<Tour>(req.Id);
-            if (tour==null)
+            if (tour == null)
                 throw HttpError.NotFound("");
             tour.Delete(Db);
         }
@@ -221,7 +222,8 @@ namespace Tourine.ServiceInterfaces.Tours
         [Authenticate]
         public object Get(GetPersonsOfTour tour)
         {
-            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId && pl.TourId == tour.TourId )
+            var tours =  Db.From<Tour>().Where(t => t.Id == tour.TourId || t.ParentId == tour.TourId);
+            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId).Where<PassengerList>(pl => Sql.In(pl.TourId,Db.Select(tours).Select(t => t.Id)))
                 .GroupBy<Person, PassengerList>((x, pl) => new
                 {
                     x,
@@ -257,9 +259,9 @@ namespace Tourine.ServiceInterfaces.Tours
                 };
                 teams.Add(t);
             }
-            var leader = Db.Single(Db.From<Person,TourDetail>((p, td) => td.Id == mainTour.TourDetailId && p.Id == td.LeaderId));
+            var leader = Db.Single(Db.From<Person, TourDetail>((p, td) => td.Id == mainTour.TourDetailId && p.Id == td.LeaderId));
 
-            var tourPassengers = new TourPassengers { Leader = leader , Passengers = teams };
+            var tourPassengers = new TourPassengers { Leader = leader, Passengers = teams };
             return tourPassengers;
         }
     }

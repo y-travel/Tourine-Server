@@ -25,5 +25,6 @@ namespace Tourine.ServiceInterfaces.Teams
         public long InfantPrice { get; set; }
         public long BasePrice { get; set; }
         public long TotalPrice { get; set; }
+        public bool BuyerIsPassenger { get; set; } = true;
     }
 }

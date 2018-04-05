@@ -250,4 +250,7 @@ Table=[dbo].[VersionInfo];
   <ItemGroup>
     <None Include="Migrations\0.0.2\002_20180330-EnableCascadeDeleteOnTour.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\003_20180405-AddBuyerIsPassenger.sql" />
+  </ItemGroup>
 </Project>

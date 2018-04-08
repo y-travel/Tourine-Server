@@ -42,6 +42,7 @@ namespace Tourine.ServiceInterfaces.Agencies
         public object Get(GetAgencies agencies)
         {
             var query = AutoQuery.CreateQuery(agencies, Request.GetRequestParams())
+                .Where(x => x.Id != Session.Agency.Id)
                 .OrderBy(agency => agency.Name);
             return AutoQuery.Execute(agencies, query);
         }

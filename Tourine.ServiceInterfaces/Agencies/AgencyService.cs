@@ -26,7 +26,7 @@ namespace Tourine.ServiceInterfaces.Agencies
             Db.Insert(agency.Agency);
             agency.Person.Type = PersonType.Customer;
             Db.Insert(agency.Person);
-            Db.Insert(new AgencyPerson {AgencyId = agency.Agency.Id, PersonId = agency.Person.Id});
+            Db.Insert(new AgencyPerson { AgencyId = agency.Agency.Id, PersonId = agency.Person.Id });
             return Db.SingleById<Agency>(agency.Agency.Id);
         }
 
@@ -41,10 +41,14 @@ namespace Tourine.ServiceInterfaces.Agencies
         [Authenticate]
         public object Get(GetAgencies agencies)
         {
-            var query = AutoQuery.CreateQuery(agencies, Request.GetRequestParams())
+            if (agencies.IsAll)
+                return AutoQuery.Execute(agencies,
+                    AutoQuery.CreateQuery(agencies, Request.GetRequestParams())
+                        .OrderBy(agency => agency.Name));
+            return AutoQuery.Execute(agencies,
+                AutoQuery.CreateQuery(agencies, Request.GetRequestParams())
                 .Where(x => x.Id != Session.Agency.Id)
-                .OrderBy(agency => agency.Name);
-            return AutoQuery.Execute(agencies, query);
+                .OrderBy(agency => agency.Name));
         }
 
         [Authenticate]

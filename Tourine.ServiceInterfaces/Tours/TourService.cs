@@ -222,19 +222,22 @@ namespace Tourine.ServiceInterfaces.Tours
         [Authenticate]
         public object Get(GetPersonsOfTour tour)
         {
-            var tours =  Db.From<Tour>().Where(t => t.Id == tour.TourId || t.ParentId == tour.TourId);
-            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId).Where<PassengerList>(pl => Sql.In(pl.TourId,Db.Select(tours).Select(t => t.Id)))
+            var tours = Db.From<Tour>().Where(t => t.Id == tour.TourId || t.ParentId == tour.TourId);
+            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId).Where<PassengerList>(pl => Sql.In(pl.TourId, Db.Select(tours).Select(t => t.Id)))
                 .GroupBy<Person, PassengerList>((x, pl) => new
                 {
                     x,
+                    pl.TourId,
                     pl.PassportDelivered,
                     VisaDelivered = pl.HaveVisa,
                     pl.TeamId,
                 })
-                .OrderBy(p => p.Id)
+                .OrderBy<PassengerList>(pl => pl.TourId)
+                .OrderBy(p => new { p.Family, p.Name })
                 .Select<Person, PassengerList>((x, pl) => new
                 {
                     x,
+                    pl.TourId,
                     pl.PassportDelivered,
                     VisaDelivered = pl.HaveVisa,
                     pl.TeamId,
@@ -255,7 +258,8 @@ namespace Tourine.ServiceInterfaces.Tours
                     PersonId = item.Id,
                     PersonIncomes = item.SumOptionType.GetListOfTypes(),
                     HaveVisa = item.VisaDelivered,
-                    PassportDelivered = item.PassportDelivered
+                    PassportDelivered = item.PassportDelivered,
+                    TourId = item.TourId,
                 };
                 teams.Add(t);
             }
@@ -263,6 +267,17 @@ namespace Tourine.ServiceInterfaces.Tours
 
             var tourPassengers = new TourPassengers { Leader = leader, Passengers = teams };
             return tourPassengers;
+        }
+
+        [Authenticate]
+        public object Get(GetTourAgency tour)
+        {
+            return tour.LoadChild ? Db.LoadSelect(Db.From<Tour>()
+                 .Where(t => t.Id == tour.TourId || t.ParentId == tour.TourId)
+                 .Select(t => new { t.Id, t.AgencyId })) :
+              Db.LoadSelect(Db.From<Tour>()
+                 .Where(t => t.Id == tour.TourId)
+                 .Select(t => new { t.Id, t.AgencyId }));
         }
     }
 

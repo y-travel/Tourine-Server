@@ -176,5 +176,6 @@ namespace Tourine.ServiceInterfaces.Teams
         public OptionType SumOptionType { get; set; }
         public bool PassportDelivered { get; set; }
         public bool VisaDelivered { get; set; }
+        public Guid TourId { get; set; }
     }
 }

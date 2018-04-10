@@ -253,4 +253,7 @@ Table=[dbo].[VersionInfo];
   <ItemGroup>
     <None Include="Migrations\0.0.2\003_20180405-AddBuyerIsPassenger.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\0.0.2\004_20180410-AddTeamCountTrigger.sql" />
+  </ItemGroup>
 </Project>

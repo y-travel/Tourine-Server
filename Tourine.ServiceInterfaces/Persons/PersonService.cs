@@ -89,7 +89,7 @@ namespace Tourine.ServiceInterfaces.Persons
         {
             leader.Person.Type = leader.Person.Type | PersonType.Leader;
             Db.Save(leader.Person);
-
+            
             return Db.SingleById<Person>(leader.Person.Id);
         }
 

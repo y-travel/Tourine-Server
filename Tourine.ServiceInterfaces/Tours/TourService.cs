@@ -232,7 +232,7 @@ namespace Tourine.ServiceInterfaces.Tours
                     VisaDelivered = pl.HaveVisa,
                     pl.TeamId,
                 })
-                .OrderBy<PassengerList>(pl => pl.TourId)
+                .OrderBy<PassengerList>(pl => pl.TeamId)
                 .OrderBy(p => new { p.Family, p.Name })
                 .Select<Person, PassengerList>((x, pl) => new
                 {
@@ -260,6 +260,7 @@ namespace Tourine.ServiceInterfaces.Tours
                     HaveVisa = item.VisaDelivered,
                     PassportDelivered = item.PassportDelivered,
                     TourId = item.TourId,
+                    TeamId = item.TeamId,
                 };
                 teams.Add(t);
             }

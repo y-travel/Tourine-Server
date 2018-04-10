@@ -139,18 +139,22 @@ namespace Tourine.ServiceInterfaces.Teams
                 teams.Add(t);
             }
 
-            var buyerIndex = teams.FindIndex(x => x.Person.Id == mainTeam.BuyerId);
-            var Buyer = teams[buyerIndex];
-            teams.RemoveAt(buyerIndex);
+            var buyer = Db.SingleById<Person>(mainTeam.BuyerId);
+            if (teams.Exists(x => x.Person.Id == buyer.Id))
+            {
+                var buyerIndex = teams.FindIndex(x => x.Person.Id == buyer.Id);
+                teams.Insert(0,teams[buyerIndex]);
+                teams.RemoveAt(buyerIndex+1);
+            }
 
-            var teamMember = new TeamPassengers{Buyer = Buyer , Passengers = teams};
+            var teamMember = new TeamPassengers{Buyer = buyer , Passengers = teams};
             return teamMember;
         }
     }
 
     public class TeamPassengers
     {
-        public TeamMember Buyer { get; set; }
+        public Person Buyer { get; set; }
         public List<TeamMember> Passengers { get; set; }
     }
 
@@ -177,5 +181,6 @@ namespace Tourine.ServiceInterfaces.Teams
         public bool PassportDelivered { get; set; }
         public bool VisaDelivered { get; set; }
         public Guid TourId { get; set; }
+        public Guid TeamId { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public string Code { get; set; }
 
         [NotPopulate]
-        public TourStatus Status { get; set; } = TourStatus.Created;
+        public TourStatus Status { get; set; } = TourStatus.Created;//@TODO set to creating
 
         [References(typeof(TourDetail))]
         public Guid? TourDetailId { get; set; }

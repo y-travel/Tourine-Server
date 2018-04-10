@@ -156,6 +156,7 @@
     <Compile Include="Places\PutPlaceValidator.cs" />
     <Compile Include="PriceDetail.cs" />
     <Compile Include="Role.cs" />
+    <Compile Include="Teams\TeamLogics.cs" />
     <Compile Include="Teams\UpsertTeam.cs" />
     <Compile Include="Teams\UpsertTeamValidator.cs" />
     <Compile Include="Teams\DeleteTeam.cs" />

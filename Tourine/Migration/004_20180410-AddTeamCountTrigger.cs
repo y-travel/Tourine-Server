@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using FluentMigrator;
 
 namespace Tourine.Migration
 {
-    public class _004_20180410_AddTeamCountTrigger
+    [Migration(00420180410)]
+    public class AddTeamCountTrigger : Common.MigrationBase
     {
     }
 }

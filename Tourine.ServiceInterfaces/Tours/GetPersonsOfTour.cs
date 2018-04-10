@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using ServiceStack;
-using Tourine.ServiceInterfaces.Teams;
 
 namespace Tourine.ServiceInterfaces.Tours
 {

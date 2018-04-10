@@ -12,6 +12,7 @@ namespace Tourine.ServiceInterfaces.Teams
         public bool HaveVisa { get; set; }
         public bool PassportDelivered { get; set; }
         public Guid TourId { get; set; }
+        public Guid TeamId { get; set; }
     }
 
     public class PersonIncome

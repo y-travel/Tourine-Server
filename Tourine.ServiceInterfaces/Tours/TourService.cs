@@ -50,7 +50,10 @@ namespace Tourine.ServiceInterfaces.Tours
         public object Post(UpsertTour upsertTour)
         {
             var tour = upsertTour.ConvertTo<Tour>();
-            return tour.Id == Guid.Empty ? tour.Create(Db, Session) : tour.Update(Db, Session);
+
+            return tour.Id == Guid.Empty
+                ? tour.IsBlock ? tour.CreateBlock(Db) : tour.Create(Db, Session)
+                : tour.IsBlock ? tour.UpdateBlock(Db) : tour.Update(Db, Session);
         }
 
         [Authenticate]
@@ -72,142 +75,18 @@ namespace Tourine.ServiceInterfaces.Tours
             results.Total = results.Results.Count;
             return results;
         }
-
+        //@TODO omit after freespace added
         [Authenticate]
         public object Get(GetTourFreeSpace getTourFreeSpace)
         {
             if (Db.Exists<Tour>(x => x.Id == getTourFreeSpace.TourId))
             {
                 var tour = Db.SingleById<Tour>(getTourFreeSpace.TourId);
-                var passengerCount = tour.getCurrentPassengerCount(Db);
-                var tourBlocksCapacity = tour.getBlocksCapacity(Db);
+                var passengerCount = tour.GetCurrentPassengerCount(Db);
+                var tourBlocksCapacity = tour.GetBlocksCapacity(Db);
                 return (tour.Capacity - tourBlocksCapacity - passengerCount).ToString();
             }
             throw HttpError.NotFound("");
-        }
-
-        [Authenticate]
-        public object Post(ReserveBlock block)
-        {
-            if (!Db.Exists<Tour>(x => x.Id == block.ParentId))
-                throw HttpError.NotFound("");
-            if (!Db.Exists<Agency>(x => x.Id == block.AgencyId))
-                throw HttpError.NotFound("");
-
-            var tour = Db.SingleById<Tour>(block.ParentId);
-
-            var tourReserved = tour.getBlocksCapacity(Db);
-            var tourPassengers = tour.getCurrentPassengerCount(Db);
-
-            if (tour.Capacity < block.Capacity + tourReserved + tourPassengers)
-                throw HttpError.NotFound("freeSpace");
-
-            var newBlock = new Tour
-            {
-                AgencyId = block.AgencyId,
-                BasePrice = block.BasePrice,
-                Capacity = block.Capacity,
-                InfantPrice = block.InfantPrice,
-                ParentId = block.ParentId,
-                TourDetailId = tour.TourDetailId,
-                Status = TourStatus.Created,
-            };
-
-            //@TODO limited and unlimited inserted manually, should be read from parent tour
-            var roomOption = new TourOption
-            {
-                TourId = newBlock.Id,
-                OptionType = OptionType.Room,
-                Price = block.RoomPrice,
-                OptionStatus = OptionType.Room.GetDefaultStatus()
-            };
-            var busOoption = new TourOption
-            {
-                TourId = newBlock.Id,
-                OptionType = OptionType.Bus,
-                Price = block.BusPrice,
-                OptionStatus = OptionType.Bus.GetDefaultStatus()
-            };
-            var foodOption = new TourOption
-            {
-                TourId = newBlock.Id,
-                OptionType = OptionType.Food,
-                Price = block.FoodPrice,
-                OptionStatus = OptionType.Food.GetDefaultStatus()
-            };
-            using (var transDb = Db.OpenTransaction())
-            {
-                Db.Insert(newBlock);
-                Db.Insert(roomOption);
-                Db.Insert(busOoption);
-                Db.Insert(foodOption);
-                transDb.Commit();
-            }
-
-            return Db.SingleById<Tour>(newBlock.Id);
-        }
-
-        [Authenticate]
-        public object Put(UpdateBlock block)
-        {
-            if (!Db.Exists<Tour>(x => x.Id == block.ParentId))
-                throw HttpError.NotFound("");
-            if (!Db.Exists<Agency>(x => x.Id == block.AgencyId))
-                throw HttpError.NotFound("");
-
-            var parentTour = Db.SingleById<Tour>(block.ParentId);
-            var oldBlock = Db.SingleById<Tour>(block.Id);
-            var tourReserved = parentTour.getBlocksCapacity(Db);
-            var tourPassengers = oldBlock.getCurrentPassengerCount(Db);
-
-            if (parentTour.Capacity - tourReserved - tourPassengers + oldBlock.Capacity < block.Capacity)
-                throw HttpError.NotFound("freeSpace");
-
-            Db.UpdateOnly(new Tour
-            {
-                Id = block.Id,
-                AgencyId = block.AgencyId,
-                BasePrice = block.BasePrice,
-                Capacity = block.Capacity,
-                InfantPrice = block.InfantPrice,
-            }
-                , onlyFields: tour => new
-                {
-                    tour.Capacity,
-                    tour.BasePrice,
-                    tour.InfantPrice,
-                    tour.AgencyId
-                }
-                , @where: tour => tour.Id == block.Id);
-
-            Db.UpdateOnly(new TourOption
-            {
-                Price = block.BusPrice,
-            }, onlyFields: option => new
-            {
-                option.Price
-            }
-            , where: p => p.TourId == block.Id && p.OptionType == OptionType.Bus);
-
-            Db.UpdateOnly(new TourOption
-            {
-                Price = block.RoomPrice,
-            }, onlyFields: option => new
-            {
-                option.Price
-            }
-                , where: p => p.TourId == block.Id && p.OptionType == OptionType.Room);
-
-            Db.UpdateOnly(new TourOption
-            {
-                Price = block.FoodPrice,
-            }, onlyFields: option => new
-            {
-                option.Price
-            }
-                , where: p => p.TourId == block.Id && p.OptionType == OptionType.Food);
-
-            return Db.SingleById<Tour>(block.Id);
         }
 
         [Authenticate]

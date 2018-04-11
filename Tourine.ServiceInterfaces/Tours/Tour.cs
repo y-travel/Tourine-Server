@@ -31,6 +31,7 @@ namespace Tourine.ServiceInterfaces.Tours
         [NotPopulate]
         public TourStatus Status { get; set; } = TourStatus.Created;//@TODO set to creating
 
+        [NotPopulate]
         [References(typeof(TourDetail))]
         public Guid? TourDetailId { get; set; }
 
@@ -52,23 +53,6 @@ namespace Tourine.ServiceInterfaces.Tours
 
         [Ignore]
         public bool IsBlock => ParentId != null && ParentId != Guid.Empty;
-    }
-
-    public static class TourExtensions
-    {
-        public static int getBlocksCapacity(this Tour tour, IDbConnection Db)
-        {
-            var tourReserved = Db.Scalar<Tour, int>(
-                t => Sql.Sum(t.Capacity),
-                t => t.ParentId == tour.Id
-            );
-            return tourReserved;
-        }
-        public static int getCurrentPassengerCount(this Tour tour, IDbConnection Db)
-        {
-            var count = Db.Scalar<PassengerList, int>(x => Sql.CountDistinct(x.PersonId), x => x.TourId == tour.Id);
-            return count;
-        }
 
     }
 }

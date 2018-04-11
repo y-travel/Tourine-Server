@@ -6,14 +6,28 @@ using ServiceStack;
 
 namespace Tourine.ServiceInterfaces
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class NotPopulateAttribute : AttributeBase
+
+    public abstract class PopulateAttributeBase : AttributeBase
     {
+        public List<string> Names { get; set; } = new List<string>();
+        protected PopulateAttributeBase(params string[] names)
+        {
+            if (names != null)
+                Names.AddRange(names);
+        }
+
+        public bool IsExist(string name) => Names.Count == 0 || Names.Exists(x => x == name);
+    }
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    public class NotPopulateAttribute : PopulateAttributeBase
+    {
+        public NotPopulateAttribute(params string[] names) : base(names) { }
     }
 
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class PopulateAttribute : AttributeBase
+    public class PopulateAttribute : PopulateAttributeBase
     {
+        public PopulateAttribute(params string[] names) : base(names) { }
     }
 
     public static class PopulateExtension

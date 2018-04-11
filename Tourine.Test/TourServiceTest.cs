@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Destinations;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Places;
@@ -198,47 +200,74 @@ namespace Tourine.Test
             })).ShouldThrow<WebServiceException>();
         }
 
-        //        [Test]
-        //        public void UpdateTour_should_not_throw_exceprion()
-        //        {
-        //            Client.Invoking(x => x.Put(new UpsertTour
-        //            {
-        //                Tour = new Tour
-        //                {
-        //                    Id = _testTourId,
-        //                    Code = "aio",
-        //                    Status = TourStatus.Created,
-        //                    Capacity = 500,
-        //                    BasePrice = 300000,
-        //                    TourDetailId = Guid.NewGuid(),
-        //                    AgencyId = Guid.NewGuid()
-        //                }
-        //            })).ShouldNotThrow<WebServiceException>();
-        //        }
-
-        //        [Test]
-        //        public void UpdateTour_should_throw_exceprion()
-        //        {
-        //            Client.Invoking(x => x.Put(new UpsertTour
-        //            {
-        //                Tour = new Tour
-        //                {
-        //                    Id = Guid.NewGuid(),
-        //                    Code = "123456",
-        //                    Status = TourStatus.Created,
-        //                    Capacity = 50,
-        //                    BasePrice = 1200000,
-        //                    TourDetailId = Guid.NewGuid(),
-        //                    AgencyId = Guid.NewGuid()
-        //                }
-        //            })).ShouldThrow<WebServiceException>();
-        //        }
-
         [Test]
         public void GetPersonOfTour_should_return_result()
         {
             var res = (TourPassengers)MockService.Get(new GetPersonsOfTour { TourId = _testTourId });
             res.Leader.Id.Should().Be(_leader.Id);
+        }
+
+        [Test]
+        public void UpdateBlock_should_store_dependecies()
+        {
+            var id = Guid.NewGuid();
+            Db.Insert(new Tour { Id = id, Capacity = 1, ParentId = id });
+            Db.Insert(new Agency { Id = id });
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                Id = id,
+                AgencyId = id,
+                ParentId = id,
+                InfantPrice = 1,
+                BasePrice = 1,
+                Capacity = 1,
+                Options = new List<TourOption>
+                {
+                    new TourOption
+                    {
+                        Id=id,
+                        OptionType = OptionType.Bus,
+                        OptionStatus = OptionStatus.Limited,
+                        Price = 1,
+                    }
+                }
+            };
+            var newBlock = (Tour)MockService.Post(request);
+            var savedOptions = Db.Select<TourOption>(x => x.TourId == newBlock.Id);
+            savedOptions.Count.Should().Be(1);
+            savedOptions[0].ShouldBeEquivalentTo(request.Options[0], x => x.Excluding(y => y.SelectedMemberPath.Matches("*Id")));
+        }
+
+        [Test]
+        public void CreateBlock_should_store_dependecies()
+        {
+            var id = Guid.NewGuid();
+            Db.Insert(new Tour { Id = id, Capacity = 1 });
+            Db.Insert(new Agency { Id = id });
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                AgencyId = id,
+                ParentId = id,
+                InfantPrice = 1,
+                BasePrice = 1,
+                Capacity = 1,
+                Options = new List<TourOption>
+                {
+                    new TourOption
+                    {
+                        
+                        OptionType = OptionType.Bus,
+                        OptionStatus = OptionStatus.Limited,
+                        Price = 1,
+                    }
+                }
+            };
+            var newBlock = (Tour)MockService.Post(request);
+            var savedOptions = Db.Select<TourOption>(x => x.TourId == newBlock.Id);
+            savedOptions.Count.Should().Be(1);
+            savedOptions[0].ShouldBeEquivalentTo(request.Options[0], x => x.Excluding(y => y.SelectedMemberPath.Matches("*Id")));
         }
 
         public void CreateTours()

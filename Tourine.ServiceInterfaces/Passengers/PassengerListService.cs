@@ -46,7 +46,7 @@ namespace Tourine.ServiceInterfaces.Passengers
                 throw HttpError.NotFound("");
 
             //calculate destination tour free space
-            var passengerCount = desTour.getCurrentPassengerCount(Db) + desTour.getBlocksCapacity(Db);
+            var passengerCount = desTour.GetCurrentPassengerCount(Db) + desTour.GetBlocksCapacity(Db);
             if (passengerCount + req.Passengers.Count > desTour.Capacity)
                 throw HttpError.NotFound("freeSpace");
 

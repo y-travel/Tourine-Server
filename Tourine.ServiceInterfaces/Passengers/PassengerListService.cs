@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.Tours;
@@ -46,6 +47,7 @@ namespace Tourine.ServiceInterfaces.Passengers
                 throw HttpError.NotFound("");
 
             //calculate destination tour free space
+            //@TODO: should be calculate with trigger in db
             var passengerCount = desTour.GetCurrentPassengerCount(Db) + desTour.GetBlocksCapacity(Db);
             if (passengerCount + req.Passengers.Count > desTour.Capacity)
                 throw HttpError.NotFound("freeSpace");
@@ -65,10 +67,12 @@ namespace Tourine.ServiceInterfaces.Passengers
                 newBlock.ParentId = desTour.Id;
                 newBlock.Capacity = req.Passengers.Count;
                 newBlock.AgencyId = req.AgencyId;
+
                 if (req.AgencyId == Session.Agency.Id)
                     newBlock.Id = desTour.Id;
                 else
                     Db.Insert(newBlock);
+
                 foreach (OptionType option in Enum.GetValues(typeof(OptionType)))
                 {
                     if (option == OptionType.Empty) continue;
@@ -86,7 +90,7 @@ namespace Tourine.ServiceInterfaces.Passengers
                 //insert team
                 var teamLogic = new TeamLogics();
                 var teamIds = req.Passengers.Map(x => x.TeamId).Distinct().ToList();
-                var teams = Db.Select(Db.From<Team>().Where(t => Sql.In(t.Id, teamIds)));
+                var teams = Db.LoadSelect(Db.From<Team>().Where(t => Sql.In(t.Id, teamIds)));
                 foreach (var team in teams)
                 {
                     var newTeam = new Team();
@@ -109,6 +113,7 @@ namespace Tourine.ServiceInterfaces.Passengers
                     newTeam.Count = sameTeamPassengers.Count;
                     newTeam.InfantPrice = newBlock.InfantPrice;
                     newTeam.TotalPrice = teamLogic.CalculateTotalPrice(sameTeamPassengers, tourOptions, newBlock.InfantPrice, newBlock.BasePrice);
+                    newTeam.Buyer = team.Buyer;
                     Db.Insert(newTeam);
                     newTeamList.Add(newTeam);
                     foreach (var passenger in sameTeamPassengers)
@@ -156,9 +161,11 @@ namespace Tourine.ServiceInterfaces.Passengers
             }
             var result = new TourTeammember
             {
-                TourId = newBlock.Id,
+                isTeam = req.AgencyId == Session.Agency.Id,
+                Id = newBlock.Id,
                 BasePrice = newBlock.BasePrice,
                 InfantPrice = newBlock.InfantPrice,
+                Agency = Db.SingleById<Agency>(req.AgencyId),
                 FoodPrice = options.Find(x => x.OptionType == OptionType.Food).Price,
                 RoomPrice = options.Find(x => x.OptionType == OptionType.Room).Price,
                 BusPrice = options.Find(x => x.OptionType == OptionType.Bus).Price,
@@ -171,12 +178,14 @@ namespace Tourine.ServiceInterfaces.Passengers
 
     public class TourTeammember
     {
-        public Guid TourId { get; set; }
+        public bool isTeam { get; set; }
+        public Guid Id { get; set; }
         public long BasePrice { get; set; }
         public long InfantPrice { get; set; }
         public long FoodPrice { get; set; }
         public long BusPrice { get; set; }
         public long RoomPrice { get; set; }
+        public Agency Agency { get; set; }
         public List<Team> Teams { get; set; }
 
     }

@@ -157,6 +157,8 @@
     <Compile Include="PriceDetail.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="Teams\TeamLogics.cs" />
+    <Compile Include="Teams\UpdateTeamList.cs" />
+    <Compile Include="Teams\UpdateTeamListValidator.cs" />
     <Compile Include="Teams\UpsertTeam.cs" />
     <Compile Include="Teams\UpsertTeamValidator.cs" />
     <Compile Include="Teams\DeleteTeam.cs" />
@@ -188,6 +190,8 @@
     <Compile Include="Tours\GetTours.cs" />
     <Compile Include="Tours\TourExtensions.cs" />
     <Compile Include="Tours\TourOption.cs" />
+    <Compile Include="Tours\UpdateTourPrice.cs" />
+    <Compile Include="Tours\UpdateTourPriceValidator.cs" />
     <Compile Include="Tours\UpsertTour.cs" />
     <Compile Include="Tours\UpsertTourValidator.cs" />
     <Compile Include="Tours\Tour.cs" />

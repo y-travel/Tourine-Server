@@ -159,6 +159,35 @@ namespace Tourine.ServiceInterfaces.Tours
                  .Where(t => t.Id == tour.TourId)
                  .Select(t => new { t.Id, t.AgencyId }));
         }
+
+        [Authenticate]
+        public void Put(UpdateTourPrice tour)
+        {
+            if (!Db.Exists<Tour>(x => x.Id == tour.TourId))
+                throw HttpError.NotFound("");
+            Db.UpdateOnly(new Tour
+            {
+                InfantPrice = tour.InfantPrice,
+                BasePrice = tour.BasePrice,
+            }, onlyFields: t => new
+            {
+                t.InfantPrice,
+                t.BasePrice,
+            }
+            , where: p => p.Id == tour.TourId);
+
+            Db.UpdateOnly(new TourOption { Price = tour.BusPrice },
+                onlyFields: t => new { t.Price },
+                where: p => p.Id == tour.TourId && p.OptionType == OptionType.Bus);
+
+            Db.UpdateOnly(new TourOption { Price = tour.RoomPrice },
+                onlyFields: t => new { t.Price },
+                where: p => p.Id == tour.TourId && p.OptionType == OptionType.Room);
+
+            Db.UpdateOnly(new TourOption { Price = tour.FoodPrice },
+                onlyFields: t => new { t.Price },
+                where: p => p.Id == tour.TourId && p.OptionType == OptionType.Food);
+        }
     }
 
     public class TourPassengers

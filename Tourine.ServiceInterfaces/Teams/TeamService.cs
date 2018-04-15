@@ -143,12 +143,31 @@ namespace Tourine.ServiceInterfaces.Teams
             if (teams.Exists(x => x.Person.Id == buyer.Id))
             {
                 var buyerIndex = teams.FindIndex(x => x.Person.Id == buyer.Id);
-                teams.Insert(0,teams[buyerIndex]);
-                teams.RemoveAt(buyerIndex+1);
+                teams.Insert(0, teams[buyerIndex]);
+                teams.RemoveAt(buyerIndex + 1);
             }
 
-            var teamMember = new TeamPassengers{Buyer = buyer , Passengers = teams};
+            var teamMember = new TeamPassengers { Buyer = buyer, Passengers = teams };
             return teamMember;
+        }
+
+        [Authenticate]
+        public void Put(UpdateTeamList teamList)
+        {
+            foreach (var team in teamList.Teams)
+            {
+                Db.UpdateOnly(new Team
+                {
+                    InfantPrice = team.InfantPrice,
+                    BasePrice = team.BasePrice,
+                }, onlyFields: t => new
+                {
+                    t.InfantPrice,
+                    t.BasePrice,
+                }
+                    , where: p => p.Id == team.Id);
+
+            }
         }
     }
 

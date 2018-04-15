@@ -17,7 +17,7 @@ namespace Tourine.ServiceInterfaces.Tours
 
         public int Capacity { get; set; }
 
-        public int BasePrice { get; set; }
+        public long BasePrice { get; set; }
 
         [References(typeof(Tour))]
         public Guid? ParentId { get; set; }

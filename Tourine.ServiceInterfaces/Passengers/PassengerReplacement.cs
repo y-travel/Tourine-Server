@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using ServiceStack;
 using Tourine.ServiceInterfaces.Teams;
-using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Passengers
 {

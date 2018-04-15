@@ -206,7 +206,8 @@ Table=[dbo].[VersionInfo];
     <Folder Include="Schema-Model\" />
     <Folder Include="Schema-Model\dbo\" />
     <Folder Include="Schema-Model\dbo\Tables\" />
-    <Folder Include="Migrations\0.0.2" />
+    <Folder Include="Migrations\1.0.0" />
+    <Folder Include="Migrations\1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pre-Deployment\01_Create_Database.sql" />
@@ -245,15 +246,18 @@ Table=[dbo].[VersionInfo];
     <None Include="Schema-Model\dbo\Tables\TourOption.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0.0.2\001_20180326-InitDatabase.sql" />
+    <None Include="Migrations\1.0.0\001_20180326-InitDatabase.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0.0.2\002_20180330-EnableCascadeDeleteOnTour.sql" />
+    <None Include="Migrations\1.0.0\002_20180330-EnableCascadeDeleteOnTour.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0.0.2\003_20180405-AddBuyerIsPassenger.sql" />
+    <None Include="Migrations\1.0.0\003_20180405-AddBuyerIsPassenger.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\0.0.2\004_20180410-AddTeamCountTrigger.sql" />
+    <None Include="Migrations\1.0.0\004_20180410-AddTeamCountTrigger.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.1\001_20180415-AlterPassengerList,TeamAddUniqueness.sql" />
   </ItemGroup>
 </Project>

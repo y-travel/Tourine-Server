@@ -224,6 +224,7 @@
     <Compile Include="Migration\002_20180330-EnableCascadeDeleteOnTourDependecies.cs" />
     <Compile Include="Migration\003_20180405-AddBuyerIsPassenger.cs" />
     <Compile Include="Migration\004_20180410-AddTeamCountTrigger.cs" />
+    <Compile Include="Migration\005_20180417-AddTourFreeSpaceTrigger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migration\004_20180410-AddTeamCountTrigger.sql">
       <DependentUpon>004_20180410-AddTeamCountTrigger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\005_20180417-AddTourFreeSpaceTrigger.sql">
+      <DependentUpon>005_20180417-AddTourFreeSpaceTrigger.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

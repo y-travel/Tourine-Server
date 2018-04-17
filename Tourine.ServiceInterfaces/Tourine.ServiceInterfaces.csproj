@@ -112,6 +112,7 @@
     <Compile Include="Destinations\CreateDestinationValidator.cs" />
     <Compile Include="Destinations\UpdateDestination.cs" />
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
+    <Compile Include="OptionType.cs" />
     <Compile Include="Passengers\PassengerReplacement.cs" />
     <Compile Include="Persons\DeleteLeader.cs" />
     <Compile Include="Persons\UpsertLeader.cs" />
@@ -135,7 +136,6 @@
     <Compile Include="Passengers\PutServiceForPassengerValidator.cs" />
     <Compile Include="Passengers\PassengerList.cs" />
     <Compile Include="Passengers\PassengerListService.cs" />
-    <Compile Include="OptionType.cs" />
     <Compile Include="Teams\GetPersonsOfTeam.cs" />
     <Compile Include="Persons\DeletePerson.cs" />
     <Compile Include="Destinations\GetDestinations.cs" />

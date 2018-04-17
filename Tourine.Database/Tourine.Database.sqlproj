@@ -42,6 +42,7 @@
     <ExcludeObjectsFromSync>
 Table=[dbo].[VersionInfo];
 </ExcludeObjectsFromSync>
+    <BuildOptionSkipThreePartNameCheck>True</BuildOptionSkipThreePartNameCheck>
   </PropertyGroup>
   <!-- READYROLL OFFLINE SCHEMA MODEL OPTIONS -->
   <PropertyGroup>
@@ -259,5 +260,8 @@ Table=[dbo].[VersionInfo];
   </ItemGroup>
   <ItemGroup>
     <None Include="Migrations\1.0.1\001_20180415-AlterPassengerList,TeamAddUniqueness.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.1\002_20180417-AddTourFreeSpaceTrigger.sql" />
   </ItemGroup>
 </Project>

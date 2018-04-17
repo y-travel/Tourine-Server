@@ -129,15 +129,13 @@
     <Compile Include="Notifies\SendNotifyToTourAgencies.cs" />
     <Compile Include="IncomeStatus.cs" />
     <Compile Include="Passengers\GetServiceOfTour.cs" />
-    <Compile Include="Passengers\PassengerServiceInfo.cs" />
     <Compile Include="Passengers\PostServiceForPassenger.cs" />
     <Compile Include="Passengers\PostServiceForPassengerValidator.cs" />
     <Compile Include="Passengers\PutServiceForPassenger.cs" />
     <Compile Include="Passengers\PutServiceForPassengerValidator.cs" />
     <Compile Include="Passengers\PassengerList.cs" />
-    <Compile Include="Passengers\PassengerListInfo.cs" />
     <Compile Include="Passengers\PassengerListService.cs" />
-    <Compile Include="ServiceType.cs" />
+    <Compile Include="OptionType.cs" />
     <Compile Include="Teams\GetPersonsOfTeam.cs" />
     <Compile Include="Persons\DeletePerson.cs" />
     <Compile Include="Destinations\GetDestinations.cs" />
@@ -156,7 +154,7 @@
     <Compile Include="Places\PutPlaceValidator.cs" />
     <Compile Include="PriceDetail.cs" />
     <Compile Include="Role.cs" />
-    <Compile Include="Teams\TeamLogics.cs" />
+    <Compile Include="Teams\TeamLogic.cs" />
     <Compile Include="Teams\UpdateTeamList.cs" />
     <Compile Include="Teams\UpdateTeamListValidator.cs" />
     <Compile Include="Teams\UpsertTeam.cs" />

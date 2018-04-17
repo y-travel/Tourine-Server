@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ServiceStack.DataAnnotations;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Tours;
@@ -26,5 +27,8 @@ namespace Tourine.ServiceInterfaces.Teams
         public long BasePrice { get; set; }
         public long TotalPrice { get; set; }
         public bool BuyerIsPassenger { get; set; } = true;
+
+        [Ignore]
+        public List<TeamMember> Type { get; set; }
     }
 }

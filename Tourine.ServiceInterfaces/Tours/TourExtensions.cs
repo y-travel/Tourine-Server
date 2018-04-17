@@ -35,9 +35,9 @@ namespace Tourine.ServiceInterfaces.Tours
         }
         public static Tour CreateBlock(this Tour block, IDbConnection db)
         {
-            var newBlock=new Tour();
+            var newBlock = new Tour();
             newBlock.SafePopulate(block);
-            using (var trans=db.OpenTransaction())
+            using (var trans = db.OpenTransaction())
             {
                 block.CheckFreeSpace(db, block.Capacity);
                 db.Insert(newBlock);
@@ -147,5 +147,41 @@ namespace Tourine.ServiceInterfaces.Tours
                 x => Sql.CountDistinct(x.PersonId),
                 x => x.TourId == tour.Id
             );
+
+        public static bool IsPassengerExist(this Tour tour, Guid forPersonId, IDbConnection db) =>
+            db.Exists<PassengerList>(x =>  x.TourId == tour.Id && x.PersonId == forPersonId );
+
+        public static Tour ReservePendingBlock(this Tour block,int capacity , Guid toAgency, IDbConnection db)
+        {
+            var newBlock = new Tour();
+            var options = db.Select(db.From<TourOption>().Where(to => to.TourId == block.Id));
+
+            newBlock.SafePopulate(block);
+            newBlock.Status = TourStatus.Creating;
+            newBlock.ParentId = block.Id;
+            newBlock.Capacity = capacity;
+            newBlock.AgencyId = toAgency;
+
+            var createNewBlock = block.AgencyId != toAgency;
+            if (createNewBlock)
+            {
+                db.Insert(newBlock);
+                foreach (OptionType option in Enum.GetValues(typeof(OptionType)))
+                {
+                    if (option == OptionType.Empty) continue;
+                    var newOption = new TourOption
+                    {
+                        TourId = newBlock.Id,
+                        OptionType = option,
+                        Price = options.Find(x => x.OptionType == option).Price,
+                        OptionStatus = option.GetDefaultStatus()
+                    };
+                    db.Insert(newOption);
+                }
+            }
+            else
+                newBlock.Id = block.Id;
+            return newBlock;
+        }
     }
 }

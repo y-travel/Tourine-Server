@@ -160,10 +160,12 @@ namespace Tourine.ServiceInterfaces.Teams
                 {
                     InfantPrice = team.InfantPrice,
                     BasePrice = team.BasePrice,
+                    IsPending = false,
                 }, onlyFields: t => new
                 {
                     t.InfantPrice,
                     t.BasePrice,
+                    IsPanding = t.IsPending,
                 }
                     , where: p => p.Id == team.Id);
 

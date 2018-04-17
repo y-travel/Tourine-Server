@@ -169,10 +169,12 @@ namespace Tourine.ServiceInterfaces.Tours
             {
                 InfantPrice = tour.InfantPrice,
                 BasePrice = tour.BasePrice,
+                Status = TourStatus.Created,
             }, onlyFields: t => new
             {
                 t.InfantPrice,
                 t.BasePrice,
+                t.Status,
             }
             , where: p => p.Id == tour.TourId);
 

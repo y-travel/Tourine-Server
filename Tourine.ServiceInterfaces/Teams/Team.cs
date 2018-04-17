@@ -30,5 +30,7 @@ namespace Tourine.ServiceInterfaces.Teams
 
         [Ignore]
         public List<TeamMember> Type { get; set; }
+
+        public bool IsPending { get; set; }
     }
 }

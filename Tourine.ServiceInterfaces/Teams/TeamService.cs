@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Passengers;
@@ -90,7 +91,7 @@ namespace Tourine.ServiceInterfaces.Teams
                 throw HttpError.NotFound("");
             return AutoQuery.Execute(
                 team,
-                AutoQuery.CreateQuery(team, Request.GetRequestParams())
+                AutoQuery.CreateQuery(team, Request.GetRequestParams()).Where(t => t.IsPending == false)
             );
         }
 
@@ -152,23 +153,28 @@ namespace Tourine.ServiceInterfaces.Teams
         }
 
         [Authenticate]
-        public void Put(UpdateTeamList teamList)
+        public void Put(PassengerReplacementTeamAccomplish teamList)
         {
-            foreach (var team in teamList.Teams)
+            using (IDbTransaction dbTrans = Db.OpenTransaction())
             {
-                Db.UpdateOnly(new Team
+                foreach (var team in teamList.Teams)
                 {
-                    InfantPrice = team.InfantPrice,
-                    BasePrice = team.BasePrice,
-                    IsPending = false,
-                }, onlyFields: t => new
-                {
-                    t.InfantPrice,
-                    t.BasePrice,
-                    IsPanding = t.IsPending,
+                    Db.UpdateOnly(new Team
+                    {
+                        InfantPrice = team.InfantPrice,
+                        BasePrice = team.BasePrice,
+                        IsPending = false,
+                    }, onlyFields: t => new
+                    {
+                        t.InfantPrice,
+                        t.BasePrice,
+                        IsPanding = t.IsPending,
+                    }
+                        , where: p => p.Id == team.Id);
                 }
-                    , where: p => p.Id == team.Id);
-
+                var replacedPerson = Db.Select(Db.From<PassengerList>().Where(x => Sql.In(x.TeamId, teamList.Teams.Map(t => t.Id))).Select(p => new { p.PersonId }));
+                Db.Delete<PassengerList>(x => Sql.In(x.PersonId, replacedPerson.Map(p => p.PersonId)) && x.TourId == teamList.OldTourId);
+                dbTrans.Commit();
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using ServiceStack;
 using ServiceStack.OrmLite;
@@ -68,7 +69,7 @@ namespace Tourine.ServiceInterfaces.Tours
         public object Get(GetBlocks blocks)
         {
             var query = AutoQuery.CreateQuery(blocks, Request.GetRequestParams())
-                .Where(tour => tour.ParentId == blocks.TourId);
+                .Where(tour => tour.ParentId == blocks.TourId && tour.Status != TourStatus.Creating);
             var results = AutoQuery.Execute(blocks, query);
             var mainTour = Db.SingleById<Tour>(blocks.TourId);
             results.Results.Insert(0, mainTour);
@@ -102,7 +103,8 @@ namespace Tourine.ServiceInterfaces.Tours
         public object Get(GetPersonsOfTour tour)
         {
             var tours = Db.From<Tour>().Where(t => t.Id == tour.TourId || t.ParentId == tour.TourId);
-            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId).Where<PassengerList>(pl => Sql.In(pl.TourId, Db.Select(tours).Select(t => t.Id)))
+            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId)
+                .Where<PassengerList>(pl => Sql.In(pl.TourId, Db.Select(tours).Select(t => t.Id)))
                 .GroupBy<Person, PassengerList>((x, pl) => new
                 {
                     x,
@@ -161,34 +163,41 @@ namespace Tourine.ServiceInterfaces.Tours
         }
 
         [Authenticate]
-        public void Put(UpdateTourPrice tour)
+        public void Put(PassengerReplacementTourAccomplish tour)
         {
-            if (!Db.Exists<Tour>(x => x.Id == tour.TourId))
-                throw HttpError.NotFound("");
-            Db.UpdateOnly(new Tour
+            using (var dbTrans = Db.OpenTransaction())
             {
-                InfantPrice = tour.InfantPrice,
-                BasePrice = tour.BasePrice,
-                Status = TourStatus.Created,
-            }, onlyFields: t => new
-            {
-                t.InfantPrice,
-                t.BasePrice,
-                t.Status,
+                if (!Db.Exists<Tour>(x => x.Id == tour.TourId))
+                    throw HttpError.NotFound("");
+                Db.UpdateOnly(new Tour
+                {
+                    InfantPrice = tour.InfantPrice,
+                    BasePrice = tour.BasePrice,
+                    Status = TourStatus.Created,
+                }, onlyFields: t => new { t.InfantPrice, t.BasePrice, t.Status, }
+                    , where: p => p.Id == tour.TourId);
+
+                Db.UpdateOnly(new TourOption { Price = tour.BusPrice },
+                    onlyFields: t => new { t.Price },
+                    where: p => p.Id == tour.TourId && p.OptionType == OptionType.Bus);
+
+                Db.UpdateOnly(new TourOption { Price = tour.RoomPrice },
+                    onlyFields: t => new { t.Price },
+                    where: p => p.Id == tour.TourId && p.OptionType == OptionType.Room);
+
+                Db.UpdateOnly(new TourOption { Price = tour.FoodPrice },
+                    onlyFields: t => new { t.Price },
+                    where: p => p.Id == tour.TourId && p.OptionType == OptionType.Food);
+
+                var replacedPerson = Db.Select(Db.From<PassengerList>().Where(x => x.TourId == tour.TourId));
+
+                Db.UpdateOnly(new Team { IsPending = false},
+                    onlyFields: t => new { t.IsPending },
+                    where: p => Sql.In(p.Id,replacedPerson.Map(t=> t.TeamId)));
+
+                Db.Delete<PassengerList>(x => Sql.In(x.PersonId, replacedPerson.Map(pl=> pl.PersonId)) && x.TourId == tour.OldTourId);
+                dbTrans.Commit();
             }
-            , where: p => p.Id == tour.TourId);
-
-            Db.UpdateOnly(new TourOption { Price = tour.BusPrice },
-                onlyFields: t => new { t.Price },
-                where: p => p.Id == tour.TourId && p.OptionType == OptionType.Bus);
-
-            Db.UpdateOnly(new TourOption { Price = tour.RoomPrice },
-                onlyFields: t => new { t.Price },
-                where: p => p.Id == tour.TourId && p.OptionType == OptionType.Room);
-
-            Db.UpdateOnly(new TourOption { Price = tour.FoodPrice },
-                onlyFields: t => new { t.Price },
-                where: p => p.Id == tour.TourId && p.OptionType == OptionType.Food);
         }
     }
 

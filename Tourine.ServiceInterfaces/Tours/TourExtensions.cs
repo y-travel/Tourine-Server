@@ -4,6 +4,7 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 
 namespace Tourine.ServiceInterfaces.Tours
@@ -149,9 +150,9 @@ namespace Tourine.ServiceInterfaces.Tours
             );
 
         public static bool IsPassengerExist(this Tour tour, Guid forPersonId, IDbConnection db) =>
-            db.Exists<PassengerList>(x =>  x.TourId == tour.Id && x.PersonId == forPersonId );
+            db.Exists<PassengerList>(x => x.TourId == tour.Id && x.PersonId == forPersonId);
 
-        public static Tour ReservePendingBlock(this Tour block,int capacity , Guid toAgency, IDbConnection db)
+        public static Tour ReservePendingBlock(this Tour block, int capacity, Guid toAgency, IDbConnection db)
         {
             var newBlock = new Tour();
             var options = db.Select(db.From<TourOption>().Where(to => to.TourId == block.Id));
@@ -161,6 +162,7 @@ namespace Tourine.ServiceInterfaces.Tours
             newBlock.ParentId = block.Id;
             newBlock.Capacity = capacity;
             newBlock.AgencyId = toAgency;
+            newBlock.TourDetailId = block.TourDetailId;
 
             var createNewBlock = block.AgencyId != toAgency;
             if (createNewBlock)
@@ -182,6 +184,12 @@ namespace Tourine.ServiceInterfaces.Tours
             else
                 newBlock.Id = block.Id;
             return newBlock;
+        }
+
+        public static void ClearPending(this Tour tour, IDbConnection db)
+        {
+            db.Delete<Team>(x => x.TourId == tour.Id && x.IsPending);
+            //passengerList table updated because of cascade delete
         }
     }
 }

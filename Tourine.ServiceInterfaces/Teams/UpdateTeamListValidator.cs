@@ -7,7 +7,7 @@ using ServiceStack.FluentValidation;
 
 namespace Tourine.ServiceInterfaces.Teams
 {
-    class UpdateTeamListValidator : AbstractValidator<UpdateTeamList>
+    class UpdateTeamListValidator : AbstractValidator<PassengerReplacementTeamAccomplish>
     {
         public UpdateTeamListValidator()
         {

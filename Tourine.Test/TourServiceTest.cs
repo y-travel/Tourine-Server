@@ -273,7 +273,7 @@ namespace Tourine.Test
         [Test]
         public void UpdateTourPrice_should_not_throw_exception()
         {
-            new Action(() => MockService.Put(new UpdateTourPrice { TourId = _testTourId , BasePrice = 1 , InfantPrice = 1,BusPrice = 1,FoodPrice = 1,RoomPrice = 1}))
+            new Action(() => MockService.Put(new PassengerReplacementTourAccomplish { TourId = _testTourId , BasePrice = 1 , InfantPrice = 1,BusPrice = 1,FoodPrice = 1,RoomPrice = 1}))
                 .ShouldNotThrow<HttpError>();
         }
 

@@ -57,7 +57,13 @@ namespace Tourine.ServiceInterfaces.Passengers
                 var teamLogic = new TeamLogic(Db);
                 var teamIds = req.Passengers.Map(x => x.TeamId).Distinct().ToList();
                 var teams = Db.LoadSelect(Db.From<Team>().Where(t => Sql.In(t.Id, teamIds)));
-                newTeamList.AddRange(from team in teams let sameTeamPassengers = req.Passengers.FindAll(t => t.TeamId == team.Id) select teamLogic.CopyPassengers(team, newBlock, sameTeamPassengers));
+                foreach (var team in teams)
+                {
+                    var sameTeamPassengers = req.Passengers.FindAll(t => t.TeamId == team.Id);
+                    desTour.ClearPending(Db);
+                    newTeamList.Add(teamLogic.CopyPassengers(team, newBlock, sameTeamPassengers));
+                }
+                
                 transDb.Commit();
             }
 

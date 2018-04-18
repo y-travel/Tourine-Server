@@ -2,10 +2,11 @@
 
 namespace Tourine.ServiceInterfaces.Tours
 {
-    public class UpdateTourPriceValidator : AbstractValidator<UpdateTourPrice>
+    public class PassengerReplacementTourAccomplishValidator : AbstractValidator<PassengerReplacementTourAccomplish>
     {
-        public UpdateTourPriceValidator()
+        public PassengerReplacementTourAccomplishValidator()
         {
+            RuleFor(x => x.OldTourId).NotNull().NotEmpty();
             RuleFor(x => x.TourId).NotNull().NotEmpty();
             RuleFor(x => x.BasePrice).NotEmpty().NotNull().GreaterThan(0);
             RuleFor(x => x.InfantPrice).NotEmpty().NotNull().GreaterThan(0);

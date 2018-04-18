@@ -42,31 +42,36 @@ namespace Tourine.ServiceInterfaces.Teams
             newTeam.SubmitDate = DateTime.Now;
             newTeam.IsPending = true;
 
+            Db.Insert(newTeam);
             foreach (var passenger in passengers)
             {
-                var newPerson = new PassengerList
-                {
-                    PersonId = passenger.PersonId,
-                    TourId = toTour.Id,
-                    OptionType = OptionType.Empty,
-                    PassportDelivered = passenger.PassportDelivered,
-                    HaveVisa = passenger.HaveVisa,
-                    TeamId = newTeam.Id,
-                };
                 if (passenger.Person.IsInfant)
-                    Db.Insert(newPerson);
+                    Db.Insert(new PassengerList
+                    {
+                        PersonId = passenger.PersonId,
+                        TourId = toTour.Id,
+                        OptionType = OptionType.Empty,
+                        PassportDelivered = passenger.PassportDelivered,
+                        HaveVisa = passenger.HaveVisa,
+                        TeamId = newTeam.Id,
+                    });
                 else
                     foreach (var personIncome in passenger.PersonIncomes)
                     {
-                        newPerson.CurrencyFactor = personIncome.CurrencyFactor;
-                        newPerson.IncomeStatus = personIncome.IncomeStatus;
-                        newPerson.ReceivedMoney = personIncome.ReceivedMoney;
-                        newPerson.OptionType = personIncome.OptionType;
-                        Db.Insert(newPerson);
+                        Db.Insert(new PassengerList
+                        {
+                            PersonId = passenger.PersonId,
+                            TourId = toTour.Id,
+                            PassportDelivered = passenger.PassportDelivered,
+                            HaveVisa = passenger.HaveVisa,
+                            TeamId = newTeam.Id,
+                            CurrencyFactor = personIncome.CurrencyFactor,
+                            IncomeStatus = personIncome.IncomeStatus,
+                            ReceivedMoney = personIncome.ReceivedMoney,
+                            OptionType = personIncome.OptionType,
+                        });
                     }
             }
-
-            Db.Insert(newTeam);
             return newTeam;
         }
 

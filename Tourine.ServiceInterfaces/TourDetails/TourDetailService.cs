@@ -17,15 +17,6 @@ namespace Tourine.ServiceInterfaces.TourDetails
             return tour;
         }
 
-        [Authenticate]
-        public void Put(UpdateTourDetail detail)
-        {
-            if (!Db.Exists<TourDetail>(new { Id = detail.TourDetail.Id }))
-                throw HttpError.NotFound("");
-            if (!Db.Exists<Destination>(new { Id = detail.TourDetail.DestinationId }))
-                throw HttpError.NotFound("");
-            Db.Update(detail.TourDetail);
-        }
     }
 
    

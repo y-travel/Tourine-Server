@@ -35,32 +35,6 @@ namespace Tourine.Test
             item.DestinationId.Should().Be(_testDestinationGuid);
         }
 
-        [Test]
-        public void UpdateTourDetail_should_throw_exception()
-        {
-            Client.Invoking(x => x.Put(new UpdateTourDetail
-            {
-                TourDetail = new TourDetail
-                {
-                    Id = Guid.NewGuid(),
-                    DestinationId = _testDestinationGuid
-                }
-            })).ShouldThrow<WebServiceException>();
-        }
-
-        [Test]
-        public void UpdateTourDetail_should_not_throw_exception()
-        {
-            Client.Invoking(x => x.Put(new UpdateTourDetail
-            {
-                TourDetail = new TourDetail
-                {
-                    Id = _testTourDetailGuid,
-                    DestinationId = _testDestinationGuid
-                }
-            })).ShouldNotThrow<WebServiceException>();
-        }
-
         public void CreateTourDetail()
         {
             Db.Insert(new TourDetail

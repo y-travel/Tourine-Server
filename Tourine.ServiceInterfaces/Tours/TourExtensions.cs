@@ -34,27 +34,7 @@ namespace Tourine.ServiceInterfaces.Tours
             }
             return tour;
         }
-        public static Tour CreateBlock(this Tour block, IDbConnection db)
-        {
-            var newBlock = new Tour();
-            newBlock.SafePopulate(block);
-            using (var trans = db.OpenTransaction())
-            {
-                block.CheckFreeSpace(db, block.Capacity);
-                db.Insert(newBlock);
-                foreach (var option in block.Options)
-                {
-                    var tmpOption = new TourOption();
-                    tmpOption.SafePopulate(option);
-                    tmpOption.TourId = newBlock.Id;
-                    //@TODO should be got from user
-                    tmpOption.OptionStatus = option.OptionType.GetDefaultStatus();
-                    db.Insert(tmpOption);
-                }
-                trans.Commit();
-            }
-            return newBlock;
-        }
+
         public static Tour Update(this Tour upsertTour, IDbConnection db, AuthSession session)
         {
             var tour = db.SingleById<Tour>(upsertTour.Id);
@@ -82,27 +62,49 @@ namespace Tourine.ServiceInterfaces.Tours
             return tour;
         }
 
-        public static Tour UpdateBlock(this Tour block, IDbConnection db)
+        public static Tour CreateBlock(this Tour block, IDbConnection db)
         {
-            var oldBlock = db.SingleById<Tour>(block.Id);
-            if (oldBlock == null)
-                throw HttpError.NotFound("Block not found!");
-            if (!db.Exists<Agency>(x => x.Id == block.AgencyId))
-                throw HttpError.NotFound("Agency not found!");
-            oldBlock.CheckFreeSpace(db, block.Capacity);
+            CheckBlock(block, block, db);
+            var newBlock = new Tour();
+            newBlock.SafePopulate(block);
+            newBlock.TourDetailId = GetTourDetail(db, block.ParentId.Value, true).Id;
             using (var trans = db.OpenTransaction())
             {
-                oldBlock.SafePopulate(block);
-                db.Update(oldBlock);
+                db.Insert(newBlock);
                 foreach (var option in block.Options)
                 {
-                    option.TourId = block.Id;//to keep db integration
+                    var tmpOption = new TourOption();
+                    tmpOption.SafePopulate(option);
+                    tmpOption.TourId = newBlock.Id;
+                    //@TODO should be get of user
+                    tmpOption.OptionStatus = option.OptionType.GetDefaultStatus();
+                    db.Insert(tmpOption);
+                }
+                trans.Commit();
+            }
+            return newBlock;
+        }
+
+        public static Tour UpdateBlock(this Tour newBlock, IDbConnection db)
+        {
+            var oldBlock = db.SingleById<Tour>(newBlock.Id);
+            if (oldBlock == null)
+                throw HttpError.NotFound("Block not found!");
+            CheckBlock(oldBlock, newBlock, db);
+
+            using (var trans = db.OpenTransaction())
+            {
+                oldBlock.SafePopulate(newBlock);
+                db.Update(oldBlock);
+                foreach (var option in newBlock.Options)
+                {
+                    option.TourId = newBlock.Id;//to keep db integration
                     db.Update(option);
                 }
                 trans.Commit();
             }
 
-            oldBlock.Options = block.Options;
+            oldBlock.Options = newBlock.Options;
             return oldBlock;
         }
         public static bool Delete(this Tour req, IDbConnection db)
@@ -119,6 +121,19 @@ namespace Tourine.ServiceInterfaces.Tours
                 trans.Commit();
                 return true;
             }
+        }
+
+        public static void CheckBlock(this Tour oldBlock, Tour newBlock, IDbConnection db)
+        {
+            if (!oldBlock.IsBlock)
+                return;
+            if (!db.Exists<Tour>(x => x.Id == newBlock.ParentId))
+                throw HttpError.Forbidden("block parent not found");
+
+            if (!db.Exists<Agency>(x => x.Id == newBlock.AgencyId))
+                throw HttpError.NotFound("Agency not found!");
+
+            oldBlock.CheckFreeSpace(db, newBlock.Capacity);
         }
 
         public static void CheckFreeSpace(this Tour tour, IDbConnection db, int capacity)
@@ -149,6 +164,16 @@ namespace Tourine.ServiceInterfaces.Tours
                 x => x.TourId == tour.Id
             );
 
+        public static TourDetail GetTourDetail(IDbConnection db, Guid id, bool isTourId = false)
+        {
+            var tourDetail = !isTourId
+                ? db.SingleById<TourDetail>(id)
+                : db.Single(db.From<TourDetail, Tour>((x, y) => x.Id == y.TourDetailId && y.Id == id));
+            if (tourDetail == null)
+                throw HttpError.NotFound("");
+
+            return tourDetail;
+        }
         public static bool IsPassengerExist(this Tour tour, Guid forPersonId, IDbConnection db) =>
             db.Exists<PassengerList>(x => x.TourId == tour.Id && x.PersonId == forPersonId);
 

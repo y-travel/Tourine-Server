@@ -2,6 +2,7 @@
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.TourDetails
 {
@@ -10,15 +11,10 @@ namespace Tourine.ServiceInterfaces.TourDetails
         [Authenticate]
         public object Get(GetTourDetail detail)
         {
-            var tour = Db.SingleById<TourDetail>(detail.Id);
-            if (tour == null)
-                throw HttpError.NotFound("");
-
-            return tour;
+            return TourExtensions.GetTourDetail(Db, detail.Id);
         }
 
     }
-
    
 }
 

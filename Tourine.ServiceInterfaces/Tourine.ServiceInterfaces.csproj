@@ -168,8 +168,6 @@
     <Compile Include="Teams\TeamService.cs" />
     <Compile Include="TourDetails\GetTourDetail.cs" />
     <Compile Include="TourDetails\GetTourDetailValidator.cs" />
-    <Compile Include="TourDetails\UpdateTourDetail.cs" />
-    <Compile Include="TourDetails\UpdateTourDetailValidator.cs" />
     <Compile Include="TourDetails\TourDetail.cs" />
     <Compile Include="TourDetails\TourDetailService.cs" />
     <Compile Include="TourineBot.cs" />

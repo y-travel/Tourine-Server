@@ -211,7 +211,7 @@ namespace Tourine.Test
         public void UpdateBlock_should_store_dependecies()
         {
             var id = Guid.NewGuid();
-            Db.Insert(new Tour { Id = id, Capacity = 1, ParentId = id });
+            Db.Insert(new Tour { Id = id, Capacity = 1 });
             Db.Insert(new Agency { Id = id });
             Db.Insert(new TourOption { Id = id });
             var request = new UpsertTour
@@ -243,7 +243,8 @@ namespace Tourine.Test
         public void CreateBlock_should_store_dependecies()
         {
             var id = Guid.NewGuid();
-            Db.Insert(new Tour { Id = id, Capacity = 1 });
+            Db.Insert(new TourDetail { Id = id });
+            Db.Insert(new Tour { Id = id, Capacity = 1, TourDetailId = id });
             Db.Insert(new Agency { Id = id });
             Db.Insert(new TourOption { Id = id });
             var request = new UpsertTour
@@ -257,7 +258,6 @@ namespace Tourine.Test
                 {
                     new TourOption
                     {
-                        
                         OptionType = OptionType.Bus,
                         OptionStatus = OptionStatus.Limited,
                         Price = 1,
@@ -265,15 +265,19 @@ namespace Tourine.Test
                 }
             };
             var newBlock = (Tour)MockService.Post(request);
+            //is options store
             var savedOptions = Db.Select<TourOption>(x => x.TourId == newBlock.Id);
             savedOptions.Count.Should().Be(1);
             savedOptions[0].ShouldBeEquivalentTo(request.Options[0], x => x.Excluding(y => y.SelectedMemberPath.Matches("*Id")));
+            //is detail store
+            var tourDetail = Db.Select<Tour>(x => x.Id == newBlock.Id && x.TourDetailId == id);
+            tourDetail.Count.Should().Be(1);
         }
 
         [Test]
-        public void UpdateTourPrice_should_not_throw_exception()
+        public void PassengerReplacementTourAccomplish_should_not_throw_exception()
         {
-            new Action(() => MockService.Put(new PassengerReplacementTourAccomplish { TourId = _testTourId , BasePrice = 1 , InfantPrice = 1,BusPrice = 1,FoodPrice = 1,RoomPrice = 1}))
+            new Action(() => MockService.Put(new PassengerReplacementTourAccomplish { TourId = _testTourId, BasePrice = 1, InfantPrice = 1, BusPrice = 1, FoodPrice = 1, RoomPrice = 1 }))
                 .ShouldNotThrow<HttpError>();
         }
 

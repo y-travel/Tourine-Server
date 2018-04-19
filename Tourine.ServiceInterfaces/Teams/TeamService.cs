@@ -17,10 +17,10 @@ namespace Tourine.ServiceInterfaces.Teams
         [Authenticate]
         public object Post(UpsertTeam req)
         {
-            if (!Db.Exists<Person>(x => x.Id == req.Buyer.PersonId))
-                throw HttpError.NotFound("");
+            if (!Db.Exists<Person>(x => x.Id == req.Buyer.Person.Id))
+                throw HttpError.NotFound("buyer not found");
             if (!Db.Exists<Tour>(x => x.Id == req.TourId))
-                throw HttpError.NotFound("");
+                throw HttpError.NotFound("tour not found");
 
             var team = new Team();
 
@@ -31,23 +31,22 @@ namespace Tourine.ServiceInterfaces.Teams
                 team.Id = (Guid)req.TeamId;
             }
             var tour = Db.SingleById<Tour>(req.TourId);
-            if (tour.Capacity <= req.Passengers.Count)
-                throw HttpError.NotFound("freeSpace");
+            if (tour.Capacity < req.Passengers.Count)
+                throw HttpError.Forbidden("no free space");
 
 
             using (IDbTransaction dbTrans = Db.OpenTransaction())
             {
                 team.TourId = req.TourId;
-                team.BuyerId = req.Buyer.PersonId;
-                team.Count = req.Passengers.Count + 1;
+                team.BuyerId = req.Buyer.Person.Id;
+                team.Count = req.Passengers.Count;
                 team.BasePrice = req.BasePrice;
                 team.InfantPrice = req.InfantPrice;
                 team.TotalPrice = req.TotalPrice;
-
+                team.BuyerIsPassenger = req.Passengers.Exists(x => x.Person.Id == req.Buyer.Person.Id);
                 Db.Insert(team);
 
                 List<TeamMember> passengers = req.Passengers;
-                passengers.Insert(0, req.Buyer);
                 foreach (var passenger in passengers)
                 {
                     if (passenger.Person.IsInfant)

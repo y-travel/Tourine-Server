@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Teams;
@@ -76,18 +74,13 @@ namespace Tourine.ServiceInterfaces.Tours
             results.Total = results.Results.Count;
             return results;
         }
-        //@TODO omit after freespace added
+
         [Authenticate]
-        public object Get(GetTourFreeSpace getTourFreeSpace)
+        public object Get(GetTourFreeSpace req)
         {
-            if (Db.Exists<Tour>(x => x.Id == getTourFreeSpace.TourId))
-            {
-                var tour = Db.SingleById<Tour>(getTourFreeSpace.TourId);
-                var passengerCount = tour.GetCurrentPassengerCount(Db);
-                var tourBlocksCapacity = tour.GetBlocksCapacity(Db);
-                return (tour.Capacity - tourBlocksCapacity - passengerCount).ToString();
-            }
-            throw HttpError.NotFound("");
+            if (!Db.Exists<Tour>(x => x.Id == req.TourId))
+                throw HttpError.NotFound(ErrorCode.TourNotFound.ToString());
+            return Db.SingleById<Tour>(req.TourId).FreeSpace.ToString();
         }
 
         [Authenticate]
@@ -96,7 +89,8 @@ namespace Tourine.ServiceInterfaces.Tours
             var tour = Db.SingleById<Tour>(req.Id);
             if (tour == null)
                 throw HttpError.NotFound("");
-            tour.Delete(Db);
+            if (tour.IsDeleteable(Db))
+                tour.Delete(Db);
         }
 
         [Authenticate]
@@ -191,11 +185,11 @@ namespace Tourine.ServiceInterfaces.Tours
 
                 var replacedPerson = Db.Select(Db.From<PassengerList>().Where(x => x.TourId == tour.TourId));
 
-                Db.UpdateOnly(new Team { IsPending = false},
+                Db.UpdateOnly(new Team { IsPending = false },
                     onlyFields: t => new { t.IsPending },
-                    where: p => Sql.In(p.Id,replacedPerson.Map(t=> t.TeamId)));
+                    where: p => Sql.In(p.Id, replacedPerson.Map(t => t.TeamId)));
 
-                Db.Delete<PassengerList>(x => Sql.In(x.PersonId, replacedPerson.Map(pl=> pl.PersonId)) && x.TourId == tour.OldTourId);
+                Db.Delete<PassengerList>(x => Sql.In(x.PersonId, replacedPerson.Map(pl => pl.PersonId)) && x.TourId == tour.OldTourId);
                 dbTrans.Commit();
             }
         }

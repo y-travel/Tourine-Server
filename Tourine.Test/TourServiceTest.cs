@@ -7,9 +7,9 @@ using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Places;
+using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
 using Tourine.Test.Common;
@@ -18,20 +18,19 @@ namespace Tourine.Test
 {
     public class TourServiceTest : ServiceTest<TourService>
     {
-        private readonly Guid _testTourId = Guid.NewGuid();
-        private readonly Guid _testTourDetaiGuid = Guid.NewGuid();
-        private readonly Person _leader = new Person { Name = "any" };
+        private readonly TourDetail _tourDetail = new TourDetail();
+        private readonly Tour _tour = new Tour();
+        private readonly Person _person = new Person();
+        private readonly Team _team = new Team();
+        private readonly TourOption _tourOption = new TourOption();
+        private readonly List<TourOption> _optionList = new List<TourOption>();
+        private PassengerList _passenger;
+        private Agency _agency = new Agency();
+
         [SetUp]
         public new void Setup()
         {
             CreateTours();
-            //            AppHost.Session = new AuthSession
-            //            {
-            //                TestMode = true,
-            //                User = new User { Id = Guid.NewGuid(), Role = Role.Admin },
-            //                Agency = new Agency { Id = Guid.NewGuid() },
-            //                Roles = Role.Admin.ParseRole<string>()
-            //            };
         }
 
         [Test]
@@ -44,31 +43,22 @@ namespace Tourine.Test
         [Test]
         public void GetTourOptions_should_return_result()
         {
-            Db.Insert(new TourOption { TourId = _testTourId, Price = 1000, });
-            Db.Insert(new TourOption { TourId = _testTourId, Price = 2000, });
-            Db.Insert(new TourOption { TourId = new Guid(), Price = 2000, });
-
-            var res = (QueryResponse<TourOption>)MockService.Get(new GetTourOptions { TourId = _testTourId });
-            res.Results.Count.Should().Be(2);
+            var res = (QueryResponse<TourOption>)MockService.Get(new GetTourOptions { TourId = _tour.Id });
+            res.Results.Count.Should().Be(1);
         }
 
         [Test]
         public void GetTour_should_return_result()
         {
-            var dto = new GetTour();
-            dto.Id = _testTourId;
-            var tourInfo = Client.Get<Tour>(dto);
-            tourInfo.Id.Should().Be(_testTourId);
+            var res = (Tour)MockService.Get(new GetTour { Id = _tour.Id });
+            res.Id.Should().Be(_tour.Id);
         }
 
         [Test]
         public void GetTour_should_throw_exception()
         {
-            Client.Invoking(t => t.Get(new GetTour
-            {
-                Id = Guid.NewGuid()
-            }))
-                .ShouldThrow<WebServiceException>();
+            new Action(() => MockService.Get(new GetTour { Id = Guid.NewGuid() }))
+                .ShouldThrow<HttpError>();
         }
 
         [Test]
@@ -101,18 +91,39 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void DeleteTour_when_block_is_false_should_remove_tourDetail()
+        public void DeleteTour_when_block_is_true_should_not_remove_tourDetail()
         {
             var tourId = Guid.NewGuid();
             var blockId = Guid.NewGuid();
             var tourDetailId = Guid.NewGuid();
             Db.Insert(new TourDetail { Id = tourDetailId });
-            Db.Insert(new Tour { Id = tourId });
-            Db.Insert(new Tour { Id = blockId, ParentId = tourId });
+            Db.Insert(new Tour { Id = tourId, TourDetailId = tourDetailId });
+            Db.Insert(new Tour { Id = blockId, ParentId = tourId, TourDetailId = tourDetailId });
             //
-            MockService.Delete(new DeleteTour { Id = tourId });
+            MockService.Delete(new DeleteTour { Id = blockId });
             Db.SingleById<TourDetail>(tourDetailId).Should().NotBeNull();
         }
+
+        [Test]
+        public void DeleteTour_when_has_block_should_throw_exception()
+        {
+            var tourId = Guid.NewGuid();
+            var blockId = Guid.NewGuid();
+            var tourDetailId = Guid.NewGuid();
+            Db.Insert(new TourDetail { Id = tourDetailId });
+            Db.Insert(new Tour { Id = tourId, TourDetailId = tourDetailId });
+            Db.Insert(new Tour { Id = blockId, ParentId = tourId, TourDetailId = tourDetailId });
+            new Action(() => MockService.Delete(new DeleteTour { Id = tourId }))
+                .ShouldThrow<HttpError>();
+        }
+
+        [Test]
+        public void DeleteTour_when_has_passenger_should_throw_exception()
+        {
+            new Action(() => MockService.Delete(new DeleteTour { Id = _tour.Id }))
+                            .ShouldThrow<HttpError>();
+        }
+
         [Test]
         public void UpdateTour_should_save_tour()
         {
@@ -187,24 +198,12 @@ namespace Tourine.Test
             savedOptions.Count.Should().Be(1);
             savedOptions[0].ShouldBeEquivalentTo(request.Options[0], x => x.Excluding(y => y.SelectedMemberPath.Matches("*Id")));
         }
-        [Test]
-        public void CreateTour_should_return_exception()
-        {
-            Client.Invoking(x => x.Post(new UpsertTour
-            {
-                BasePrice = 300000,
-                TourDetail = new TourDetail
-                {
-                    DestinationId = Guid.NewGuid()
-                }
-            })).ShouldThrow<WebServiceException>();
-        }
 
         [Test]
         public void GetPersonOfTour_should_return_result()
         {
-            var res = (TourPassengers)MockService.Get(new GetPersonsOfTour { TourId = _testTourId });
-            res.Leader.Id.Should().Be(_leader.Id);
+            var res = (TourPassengers)MockService.Get(new GetPersonsOfTour { TourId = _tour.Id });
+            res.Leader.Id.Should().Be(_person.Id);
         }
 
         [Test]
@@ -277,36 +276,79 @@ namespace Tourine.Test
         [Test]
         public void PassengerReplacementTourAccomplish_should_not_throw_exception()
         {
-            new Action(() => MockService.Put(new PassengerReplacementTourAccomplish { TourId = _testTourId, BasePrice = 1, InfantPrice = 1, BusPrice = 1, FoodPrice = 1, RoomPrice = 1 }))
+            new Action(() => MockService.Put(new PassengerReplacementTourAccomplish { TourId = _tour.Id, BasePrice = 1, InfantPrice = 1, BusPrice = 1, FoodPrice = 1, RoomPrice = 1 }))
                 .ShouldNotThrow<HttpError>();
+        }
+
+        [Test]
+        public void IsDeleteable_should_throw_exception()
+        {
+            try
+            {
+                _tour.IsDeleteable(Db);
+                Assert.Fail();
+            }
+            catch (HttpError)
+            {
+                Assert.IsTrue(true);
+            }
+            catch (Exception)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void GetTourFreeSpace_should_throw_exception()
+        {
+            new Action(() => MockService.Get(new GetTourFreeSpace { TourId = Guid.NewGuid() }))
+                .ShouldThrow<HttpError>();
+        }
+
+        [Test]
+        public void GetTourFreeSpace_should_return_result()
+        {
+            var res = MockService.Get(new GetTourFreeSpace { TourId = _tour.Id });
+            res.Should().Be("0");
+        }
+
+        [Test]
+        public void GetBlocks_should_return_result()
+        {
+            var res = (QueryResponse<Tour>)MockService.Get(new GetBlocks { TourId = _tour.Id });
+            res.Results[0].Id.Should().Be(_tour.Id);
+        }
+
+        [Test]
+        public void FetTourAgency_should_return_result()
+        {
+            var list = (IList<Tour>)MockService.Get(new GetTourAgency {TourId = _tour.Id, LoadChild = false});
+            list[0].AgencyId = _agency.Id;
         }
 
         public void CreateTours()
         {
-            var testDId = Guid.NewGuid();
-            var testPId = Guid.NewGuid();
-            Db.Insert(new Place { Id = testPId, Name = "Bed" });
-            Db.Insert(new Destination { Id = testDId, Name = "Karbala" });
-            Db.Insert(_leader);
-            Db.Insert(new TourDetail
+            
+            _tour.AgencyId = _agency.Id;
+            _tour.TourDetailId = _tourDetail.Id;
+            _tourOption.TourId = _tour.Id;
+            _optionList.Add(_tourOption);
+            _optionList.Add(_tourOption);
+            _optionList.Add(_tourOption);
+            _tourDetail.LeaderId = _person.Id;
+            _passenger = new PassengerList
             {
-                Id = _testTourDetaiGuid,
-                DestinationId = testDId,
-                PlaceId = testPId,
-                LeaderId = _leader.Id,
-            });
+                PersonId = _person.Id,
+                TourId = _tour.Id,
+                TeamId = _team.Id,
+            };
 
-            Db.Insert(new Tour
-            {
-                Id = _testTourId,
-                Code = "123456",
-                Status = TourStatus.Created,
-                Capacity = 50,
-                BasePrice = 1200000,
-                TourDetailId = _testTourDetaiGuid,
-                AgencyId = CurrentAgency.Id,
-
-            });
+            Db.Insert(_tourDetail);
+            Db.Insert(_tour);
+            Db.Insert(_person);
+            Db.Insert(_tourOption);
+            Db.Insert(_passenger);
+            InsertDb(_agency, true);
         }
     }
 }

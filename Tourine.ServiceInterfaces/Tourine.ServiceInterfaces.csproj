@@ -112,6 +112,7 @@
     <Compile Include="Destinations\CreateDestinationValidator.cs" />
     <Compile Include="Destinations\UpdateDestination.cs" />
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
+    <Compile Include="ErrorCode.cs" />
     <Compile Include="OptionType.cs" />
     <Compile Include="Passengers\PassengerReplacement.cs" />
     <Compile Include="Persons\DeleteLeader.cs" />

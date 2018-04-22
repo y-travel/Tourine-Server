@@ -216,5 +216,19 @@ namespace Tourine.ServiceInterfaces.Tours
             db.Delete<Team>(x => x.TourId == tour.Id && x.IsPending);
             //passengerList table updated because of cascade delete
         }
+
+        public static bool IsDeleteable(this Tour tour, IDbConnection db)
+        {
+            var tourPaasengerCount = db.Scalar<PassengerList, int>(
+                x => Sql.CountDistinct(x.PersonId),
+                x => x.TourId == tour.Id
+            );
+            var tourBlockCount = db.Count(db.From<Tour>().Where(x => x.ParentId == tour.Id));
+            if (tourPaasengerCount != 0)
+                throw HttpError.Forbidden(ErrorCode.TourHasPassenger.ToString());
+            if (tourBlockCount != 0)
+                throw HttpError.Forbidden(ErrorCode.TourHasBlock.ToString());
+            return true;
+        }
     }
 }

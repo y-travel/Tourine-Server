@@ -63,7 +63,7 @@ namespace Tourine.ServiceInterfaces.Passengers
                     desTour.ClearPending(Db);
                     newTeamList.Add(teamLogic.CopyPassengers(team, newBlock, sameTeamPassengers));
                 }
-                
+
                 transDb.Commit();
             }
 
@@ -82,6 +82,29 @@ namespace Tourine.ServiceInterfaces.Passengers
             };
             //@TODO ughly
             return result;
+        }
+
+        [Authenticate]
+        public object Get(GetTourTicket req)
+        {
+            if (!Db.Exists<Tour>(x => x.Id == req.TourId))
+                throw HttpError.NotFound(ErrorCode.TourNotFound.ToString());
+
+            var tours = Db.From<Tour>().Where(t => t.Id == req.TourId || t.ParentId == req.TourId);
+
+            var tour = Db.LoadSingleById<Tour>(req.TourId);
+            var leader = Db.SingleById<Person>(tour.TourDetail.LeaderId);
+            var query = Db.From<Person, PassengerList>()
+                .Where<PassengerList>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)))
+                .SelectDistinct(x => x);
+            var passengers = Db.Select(query);
+            var ticket = new Ticket
+            {
+                Tour = tour,
+                Leader = leader,
+                Passengers = passengers,
+            };
+            return ticket;
         }
     }
 

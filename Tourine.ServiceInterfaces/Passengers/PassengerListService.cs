@@ -98,7 +98,30 @@ namespace Tourine.ServiceInterfaces.Passengers
                 .Where<PassengerList>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)))
                 .SelectDistinct(x => x);
             var passengers = Db.Select(query);
-            var ticket = new Ticket
+            var ticket = new TourPersonReport
+            {
+                Tour = tour,
+                Leader = leader,
+                Passengers = passengers,
+            };
+            return ticket;
+        }
+
+        [Authenticate]
+        public object Get(GetTourVisa req)
+        {
+            if (!Db.Exists<Tour>(x => x.Id == req.TourId))
+                throw HttpError.NotFound(ErrorCode.TourNotFound.ToString());
+
+            var tours = Db.From<Tour>().Where(t => t.Id == req.TourId || t.ParentId == req.TourId);
+
+            var tour = Db.LoadSingleById<Tour>(req.TourId);
+            var leader = Db.SingleById<Person>(tour.TourDetail.LeaderId);
+            var query = Db.From<Person, PassengerList>()
+                .Where<PassengerList>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)) && x.HaveVisa == req.Have)
+                .SelectDistinct(x => x);
+            var passengers = Db.Select(query);
+            var ticket = new TourPersonReport
             {
                 Tour = tour,
                 Leader = leader,

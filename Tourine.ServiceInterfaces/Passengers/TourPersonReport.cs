@@ -4,7 +4,7 @@ using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Passengers
 {
-    public class Ticket
+    public class TourPersonReport
     {
         public Tour Tour { get; set; }
         public Person Leader { get; set; }

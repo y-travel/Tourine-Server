@@ -13,6 +13,7 @@ using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
 using Tourine.Test.Common;
+using TourPassengers = Tourine.ServiceInterfaces.Tours.TourPassengers;
 
 namespace Tourine.Test
 {

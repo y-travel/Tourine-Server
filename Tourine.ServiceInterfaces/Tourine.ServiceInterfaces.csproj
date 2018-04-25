@@ -115,8 +115,9 @@
     <Compile Include="ErrorCode.cs" />
     <Compile Include="OptionType.cs" />
     <Compile Include="Passengers\GetTourTicket.cs" />
+    <Compile Include="Passengers\GetTourVisa.cs" />
     <Compile Include="Passengers\PassengerReplacement.cs" />
-    <Compile Include="Passengers\Ticket.cs" />
+    <Compile Include="Passengers\TourPersonReport.cs" />
     <Compile Include="Persons\DeleteLeader.cs" />
     <Compile Include="Persons\UpsertLeader.cs" />
     <Compile Include="Persons\UpsertLeaderValidator.cs" />

@@ -96,6 +96,7 @@ namespace Tourine.ServiceInterfaces.Tours
         [Authenticate]
         public object Get(GetPersonsOfTour tour)
         {
+            var reqTour = Db.LoadSingleById<Tour>(tour.TourId);
             var tours = Db.From<Tour>().Where(t => t.Id == tour.TourId || t.ParentId == tour.TourId);
             var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId)
                 .Where<PassengerList>(pl => Sql.In(pl.TourId, Db.Select(tours).Select(t => t.Id)))
@@ -141,7 +142,7 @@ namespace Tourine.ServiceInterfaces.Tours
             }
             var leader = Db.Single(Db.From<Person, TourDetail>((p, td) => td.Id == mainTour.TourDetailId && p.Id == td.LeaderId));
 
-            var tourPassengers = new TourPassengers { Leader = leader, Passengers = teams };
+            var tourPassengers = new TourPassengers { Tour = reqTour, Leader = leader, Passengers = teams };
             return tourPassengers;
         }
 
@@ -197,6 +198,7 @@ namespace Tourine.ServiceInterfaces.Tours
 
     public class TourPassengers
     {
+        public Tour Tour { get; set; }
         public Person Leader { get; set; }
         public List<TeamMember> Passengers { get; set; }
     }

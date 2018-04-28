@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.Passengers;
+using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 
@@ -229,6 +231,45 @@ namespace Tourine.ServiceInterfaces.Tours
             if (tourBlockCount != 0)
                 throw HttpError.Forbidden(ErrorCode.TourHasBlock.ToString());
             return true;
+        }
+
+        public static List<TourBuyer> GetAgenciesReport(this Tour tour, IDbConnection db)
+        {
+            var blocks = db.LoadSelect(db.From<Tour>().Where(x => x.ParentId == tour.Id));
+            var blockTeams = db.Select<TourBuyer>(db.From<Team, Tour>((x, y) => x.TourId == y.Id)
+                .Where(x => Sql.In(x.TourId, blocks.Map(y => y.Id)))
+                .GroupBy<Tour>(x => x.AgencyId)
+                .Select<Team, Tour>((x, y) => new
+                {
+                    Id = y.AgencyId,
+                    Title = y.AgencyId,
+                    Phone = y.AgencyId,
+                    Count = Sql.Sum(nameof(Team) + "." + nameof(Team.Count)),
+                    Price = Sql.Sum(nameof(Team) + "." + nameof(Team.TotalPrice))
+                }));
+            //@TODO: should fill from database
+            blockTeams.ForEach(x =>
+            {
+                x.Title = blocks.Find(y => y.AgencyId == x.Id).Agency.Name;
+                x.Phone = blocks.Find(y => y.AgencyId == x.Id).Agency.PhoneNumber;
+                x.IsAgency = true;
+            });
+            return blockTeams;
+        }
+
+        public static List<TourBuyer> GetTeamReport(this Tour tour, IDbConnection db)
+        {
+            return db.Select<TourBuyer>(db.From<Team, Person>((t, p) => t.BuyerId == p.Id && t.TourId == tour.Id)
+                .Select<Team, Person>((t, p) => new
+                {
+                    Id = t.Id,
+                    Prefix = p.Name,
+                    Gender = p.Gender,
+                    Title = p.Family,
+                    Phone = p.MobileNumber,
+                    Count = t.Count,
+                    Price = t.TotalPrice,
+                }));
         }
     }
 }

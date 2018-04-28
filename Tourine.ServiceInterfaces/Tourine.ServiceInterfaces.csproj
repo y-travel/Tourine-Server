@@ -114,6 +114,7 @@
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="OptionType.cs" />
+    <Compile Include="Passengers\GetTourBuyers.cs" />
     <Compile Include="Passengers\GetTourTicket.cs" />
     <Compile Include="Passengers\GetTourVisa.cs" />
     <Compile Include="Passengers\PassengerReplacement.cs" />

@@ -54,14 +54,13 @@ namespace Tourine.ServiceInterfaces.Passengers
             using (var transDb = Db.OpenTransaction())
             {
                 newBlock = desTour.ReservePendingBlock(req.Passengers.Count, req.AgencyId, Db);
-                var teamLogic = new TeamLogic(Db);
                 var teamIds = req.Passengers.Map(x => x.TeamId).Distinct().ToList();
                 var teams = Db.LoadSelect(Db.From<Team>().Where(t => Sql.In(t.Id, teamIds)));
                 foreach (var team in teams)
                 {
                     var sameTeamPassengers = req.Passengers.FindAll(t => t.TeamId == team.Id);
                     desTour.ClearPending(Db);
-                    newTeamList.Add(teamLogic.CopyPassengers(team, newBlock, sameTeamPassengers));
+                    newTeamList.Add(new TeamLogic(Db).CopyPassengers(team, newBlock, sameTeamPassengers));
                 }
 
                 transDb.Commit();
@@ -129,6 +128,29 @@ namespace Tourine.ServiceInterfaces.Passengers
             };
             return ticket;
         }
+
+        [Authenticate]
+        public object Get(GetTourBuyers req)
+        {
+            if (!Db.Exists<Tour>(x => x.Id == req.TourId))
+                throw HttpError.NotFound(ErrorCode.TourNotFound.ToString());
+            var tour = Db.SingleById<Tour>(req.TourId);
+            var blocks = tour.GetAgenciesReport(Db);
+            blocks.AddRange(tour.GetTeamReport(Db));
+            return blocks;
+        }
+    }
+
+    public class TourBuyer
+    {
+        public Guid Id { get; set; }
+        public bool Gender { get; set; }
+        public bool IsAgency { get; set; } = false;
+        public string Title { get; set; }
+        public string Prefix { get; set; }
+        public string Phone { get; set; }
+        public int Count { get; set; }
+        public long Price { get; set; }
     }
 
     public class TourTeammember

@@ -4,9 +4,6 @@ CREATE TABLE [dbo].[PassengerList]
 [PersonId] [uniqueidentifier] NOT NULL,
 [TourId] [uniqueidentifier] NOT NULL,
 [OptionType] [bigint] NOT NULL,
-[IncomeStatus] [tinyint] NOT NULL,
-[ReceivedMoney] [bigint] NOT NULL,
-[CurrencyFactor] [float] NOT NULL,
 [PassportDelivered] [bit] NULL,
 [TeamId] [uniqueidentifier] NULL,
 [HaveVisa] [bit] NULL

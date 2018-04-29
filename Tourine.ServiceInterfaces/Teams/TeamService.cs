@@ -62,21 +62,15 @@ namespace Tourine.ServiceInterfaces.Teams
                         });
                     }
                     else
-                        foreach (var personIncome in passenger.PersonIncomes)
+                        Db.Insert(new PassengerList
                         {
-                            Db.Insert(new PassengerList
-                            {
-                                PersonId = passenger.PersonId,
-                                TourId = req.TourId,
-                                CurrencyFactor = personIncome.CurrencyFactor,
-                                IncomeStatus = personIncome.IncomeStatus,
-                                ReceivedMoney = personIncome.ReceivedMoney,
-                                OptionType = personIncome.OptionType,
-                                PassportDelivered = passenger.PassportDelivered,
-                                HaveVisa = passenger.HaveVisa,
-                                TeamId = team.Id,
-                            });
-                        }
+                            PersonId = passenger.PersonId,
+                            TourId = req.TourId,
+                            OptionType =(OptionType)passenger.PersonIncomes.Sum(x => (long)x.OptionType),
+                            PassportDelivered = passenger.PassportDelivered,
+                            HaveVisa = passenger.HaveVisa,
+                            TeamId = team.Id,
+                        });
                 }
                 dbTrans.Commit();
             }
@@ -110,14 +104,15 @@ namespace Tourine.ServiceInterfaces.Teams
                 {
                     x,
                     pl.PassportDelivered,
-                    VisaDelivered = pl.HaveVisa
+                    VisaDelivered = pl.HaveVisa,
+                    pl.OptionType,
                 })
                 .Select<Person, PassengerList>((x, pl) => new
                 {
                     x,
                     pl.PassportDelivered,
                     VisaDelivered = pl.HaveVisa,
-                    SumOptionType = Sql.Sum(nameof(PassengerList) + "." + nameof(PassengerList.OptionType)),
+                    SumOptionType = pl.OptionType,
                 });
 
             var items = Db.Select<TempPerson>(q);

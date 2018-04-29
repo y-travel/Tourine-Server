@@ -21,9 +21,6 @@ namespace Tourine.ServiceInterfaces.Passengers
         public Tour Tour { get; set; }
 
         public OptionType OptionType { get; set; }
-        public long ReceivedMoney { get; set; }
-        public double CurrencyFactor { get; set; }
-        public IncomeStatus IncomeStatus { get; set; }
         public  bool HaveVisa { get; set; }
         public bool PassportDelivered { get; set; }
 

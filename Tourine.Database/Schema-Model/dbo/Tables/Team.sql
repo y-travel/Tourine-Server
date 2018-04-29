@@ -9,7 +9,7 @@ CREATE TABLE [dbo].[Team]
 [BasePrice] [bigint] NULL,
 [TotalPrice] [bigint] NULL,
 [BuyerIsPassenger] [bit] NULL,
-[Status] [tinyint] NULL
+[IsPending] [bit] NULL
 )
 GO
 ALTER TABLE [dbo].[Team] ADD CONSTRAINT [PK_Team_Id] PRIMARY KEY CLUSTERED  ([Id])

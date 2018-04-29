@@ -65,9 +65,6 @@ namespace Tourine.ServiceInterfaces.Teams
                             PassportDelivered = passenger.PassportDelivered,
                             HaveVisa = passenger.HaveVisa,
                             TeamId = newTeam.Id,
-                            CurrencyFactor = personIncome.CurrencyFactor,
-                            IncomeStatus = personIncome.IncomeStatus,
-                            ReceivedMoney = personIncome.ReceivedMoney,
                             OptionType = personIncome.OptionType,
                         });
                     }

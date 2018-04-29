@@ -107,6 +107,7 @@ namespace Tourine.ServiceInterfaces.Tours
                     pl.PassportDelivered,
                     VisaDelivered = pl.HaveVisa,
                     pl.TeamId,
+                    pl.OptionType,
                 })
                 .OrderBy<PassengerList>(pl => pl.TeamId)
                 .OrderBy(p => new { p.Family, p.Name })
@@ -117,7 +118,7 @@ namespace Tourine.ServiceInterfaces.Tours
                     pl.PassportDelivered,
                     VisaDelivered = pl.HaveVisa,
                     pl.TeamId,
-                    SumOptionType = Sql.Sum(nameof(PassengerList) + "." + nameof(PassengerList.OptionType)),
+                    SumOptionType = pl.OptionType,
                 });
 
             var items = Db.Select<TempPerson>(q);

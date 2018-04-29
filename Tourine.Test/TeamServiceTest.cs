@@ -71,7 +71,7 @@ namespace Tourine.Test
             new Action(() => MockService.Post(new UpsertTeam
             {
                 TourId = tour.Id,
-                Buyer = _passengers[0],
+                Buyer = _passengers[0].Person,
                 Passengers = _passengers.GetRange(1, 1)
             }))
                 .ShouldNotThrow<HttpError>();
@@ -83,7 +83,7 @@ namespace Tourine.Test
             new Action(() => MockService.Post(new UpsertTeam
             {
                 TourId = tour.Id,
-                Buyer = _passengers[0],
+                Buyer = _passengers[0].Person,
                 Passengers = _passengers.GetRange(1, 2)
             }))
                 .ShouldThrow<HttpError>();
@@ -113,7 +113,7 @@ namespace Tourine.Test
             var tm = (Team)MockService.Post(new UpsertTeam
             {
                 TourId = tour.Id,
-                Buyer = _passengers[0],
+                Buyer = _passengers[0].Person,
                 Passengers = _passengers.GetRange(1, 1)
             });
 

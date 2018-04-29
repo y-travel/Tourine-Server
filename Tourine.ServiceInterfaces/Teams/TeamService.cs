@@ -17,7 +17,7 @@ namespace Tourine.ServiceInterfaces.Teams
         [Authenticate]
         public object Post(UpsertTeam req)
         {
-            if (!Db.Exists<Person>(x => x.Id == req.Buyer.Person.Id))
+            if (!Db.Exists<Person>(x => x.Id == req.Buyer.Id))
                 throw HttpError.NotFound("buyer not found");
             if (!Db.Exists<Tour>(x => x.Id == req.TourId))
                 throw HttpError.NotFound("tour not found");
@@ -38,12 +38,12 @@ namespace Tourine.ServiceInterfaces.Teams
             using (IDbTransaction dbTrans = Db.OpenTransaction())
             {
                 team.TourId = req.TourId;
-                team.BuyerId = req.Buyer.Person.Id;
+                team.BuyerId = req.Buyer.Id;
                 team.Count = req.Passengers.Count;
                 team.BasePrice = req.BasePrice;
                 team.InfantPrice = req.InfantPrice;
                 team.TotalPrice = req.TotalPrice;
-                team.BuyerIsPassenger = req.Passengers.Exists(x => x.Person.Id == req.Buyer.Person.Id);
+                team.BuyerIsPassenger = req.Passengers.Exists(x => x.Person.Id == req.Buyer.Id);
                 Db.Insert(team);
 
                 List<TeamMember> passengers = req.Passengers;

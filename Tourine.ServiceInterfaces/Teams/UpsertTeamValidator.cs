@@ -7,10 +7,9 @@ namespace Tourine.ServiceInterfaces.Teams
         public UpsertTeamValidator()
         {
             RuleFor(t => t.TourId).NotEmpty().NotNull();
-            RuleFor(t => t.Buyer.Person.Id).NotNull().NotEmpty();
-            RuleFor(t => t.Buyer.PersonIncomes.Count).Equal(3);
-            RuleFor(t => t.Buyer.Person.IsInfant).NotEqual(true);
-            RuleFor(t => t.Buyer.Person.IsUnder5).NotEqual(true);
+            RuleFor(t => t.Buyer.Id).NotNull().NotEmpty();
+            RuleFor(t => t.Buyer.IsInfant).NotEqual(true);
+            RuleFor(t => t.Buyer.IsUnder5).NotEqual(true);
         }
     }
 }

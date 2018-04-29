@@ -240,7 +240,7 @@ namespace Tourine.ServiceInterfaces.Tours
                 .Where(x => Sql.In(x.TourId, blocks.Map(y => y.Id)))
                 .GroupBy<Tour>(x => x.AgencyId)
                 .Select<Team, Tour>((x, y) => new
-                {
+                { 
                     Id = y.AgencyId,
                     Title = y.AgencyId,
                     Phone = y.AgencyId,

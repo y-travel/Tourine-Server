@@ -23,8 +23,8 @@ AS
     WHERE t.ParentId = @tourId
     
     SELECT @mainTourRegistered = COUNT(DISTINCT pl.PersonId)
-    FROM PassengerList pl
-    WHERE pl.TourId = @tourId
+    FROM PassengerList pl , Person p
+    WHERE pl.PersonId = p.Id AND pl.TourId = @tourId AND p.IsInfant <> 1
 
     UPDATE tour SET freeSpace =  @tourCapacity - @subTourCapacity - @mainTourRegistered
     WHERE Id = @tourId

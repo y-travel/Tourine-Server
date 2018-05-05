@@ -78,9 +78,10 @@ namespace Tourine.ServiceInterfaces.Persons
             return AutoQuery.Execute(leaders, query);
         }
 
-      [Authenticate]
         public object Get(GetCurrentPerson person)
         {
+            if (Session.User == null || Session.User.PersonId == Guid.Empty)
+                throw HttpError.NotFound("Current person");
             return Db.SingleById<Person>(Session.User.PersonId);
         }
 
@@ -89,7 +90,7 @@ namespace Tourine.ServiceInterfaces.Persons
         {
             leader.Person.Type = leader.Person.Type | PersonType.Leader;
             Db.Save(leader.Person);
-            
+
             return Db.SingleById<Person>(leader.Person.Id);
         }
 
@@ -98,9 +99,9 @@ namespace Tourine.ServiceInterfaces.Persons
         {
             if (req.Id == null)
                 throw HttpError.NotFound("");
-            if (!Db.Exists<Person>(x=> x.Id == req.Id))
+            if (!Db.Exists<Person>(x => x.Id == req.Id))
                 throw HttpError.NotFound("");
-           var leader = Db.SingleById<Person>(req.Id);
+            var leader = Db.SingleById<Person>(req.Id);
             leader.Type = leader.Type & (~PersonType.Leader);
             Db.Update(leader);
         }

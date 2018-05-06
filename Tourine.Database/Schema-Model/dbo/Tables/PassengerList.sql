@@ -19,17 +19,19 @@ AFTER DELETE
 AS
 DECLARE @teamId UNIQUEIDENTIFIER
 DECLARE @teamCount BIGINT = 0
+
 SELECT @teamId = d.TeamId
 FROM DELETED d
+
   SELECT @teamCount = COUNT(DISTINCT pl.PersonId)
   FROM PassengerList pl
   WHERE pl.TeamId = @teamId
+
   IF (@teamCount = 0) 
     DELETE FROM Team  WHERE Id = @teamId
   ELSE 
     UPDATE Team SET Count = @teamCount 
     WHERE Id = @teamId
-
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -40,6 +42,7 @@ ON [dbo].[PassengerList]
 AFTER INSERT, DELETE, UPDATE
 AS
   DECLARE @curTourId UNIQUEIDENTIFIER
+
   IF EXISTS (SELECT
         *
       FROM inserted)
@@ -52,6 +55,7 @@ AS
     FROM INSERTED i
     EXEC Tourine.dbo.spUpdateTourFreeSpace @tourId = @curTourId
   END
+
   IF EXISTS (SELECT
         *
       FROM inserted)
@@ -63,11 +67,13 @@ AS
       @curTourId = i.TourId
     FROM INSERTED i
     EXEC Tourine.dbo.spUpdateTourFreeSpace @tourId = @curTourId
+
     SELECT
       @curTourId = d.TourId
     FROM DELETED d
     EXEC Tourine.dbo.spUpdateTourFreeSpace @tourId = @curTourId
   END
+
   IF EXISTS (SELECT
         *
       FROM deleted)
@@ -80,9 +86,10 @@ AS
     FROM DELETED d
     EXEC Tourine.dbo.spUpdateTourFreeSpace @tourId = @curTourId
   END
-
 GO
 ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [PK_PassengerList_Id] PRIMARY KEY CLUSTERED  ([Id])
+GO
+ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [UC_PassengerList_PersonId_TourId] UNIQUE NONCLUSTERED  ([TourId], [PersonId])
 GO
 ALTER TABLE [dbo].[PassengerList] ADD CONSTRAINT [FK_PassengerList_Person_Id] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id])
 GO

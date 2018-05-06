@@ -211,23 +211,12 @@
     <Compile Include="Common\AuthProvider.cs" />
     <Compile Include="Common\ContainerExtensions.cs" />
     <Compile Include="Common\CustomStaticFileHandler.cs" />
-    <Compile Include="Common\FluentMigratorRunner.cs" />
     <Compile Include="Common\JsConfigurator.cs" />
-    <Compile Include="Common\MigrationBase.cs" />
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Job.cs" />
-    <Compile Include="Migration\001_20180326-InitDatabase.cs" />
-    <Compile Include="Migration\002_20180326-DevSeed.cs" />
-    <Compile Include="Migration\002_20180330-EnableCascadeDeleteOnTourDependecies.cs" />
-    <Compile Include="Migration\003_20180405-AddBuyerIsPassenger.cs" />
-    <Compile Include="Migration\004_20180410-AddTeamCountTrigger.cs" />
-    <Compile Include="Migration\005_20180417-AddTourFreeSpaceTrigger.cs" />
-    <Compile Include="Migration\006_20180417-AddTeamIsPending.cs" />
-    <Compile Include="Migration\007_20180501-DeleteIncomeFromPassengerList.cs" />
-    <Compile Include="Migration\008_20180506-IgnorePendingPassenger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -238,10 +227,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Migration\002_20180326-DevSeed.sql">
-      <DependentUpon>002_20180326-DevSeed.cs</DependentUpon>
-    </EmbeddedResource>
-    <Content Include="Migration\002_20180330-EnableCascadeDeleteOnTour.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -251,27 +236,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <EmbeddedResource Include="Migration\002_20180330-EnableCascadeDeleteOnTour.sql">
-      <DependentUpon>002_20180330-EnableCascadeDeleteOnTourDependecies.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\003_20180405-AddBuyerIsPassenger.sql">
-      <DependentUpon>003_20180405-AddBuyerIsPassenger.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\004_20180410-AddTeamCountTrigger.sql">
-      <DependentUpon>004_20180410-AddTeamCountTrigger.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\005_20180417-AddTourFreeSpaceTrigger.sql">
-      <DependentUpon>005_20180417-AddTourFreeSpaceTrigger.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\006_20180417-AddTeamIsPending.sql">
-      <DependentUpon>006_20180417-AddTeamIsPending.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\007_20180501-DeleteIncomeFromPassengerList.sql">
-      <DependentUpon>007_20180501-DeleteIncomeFromPassengerList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migration\008_20180506-IgnorePendingPassenger.sql">
-      <DependentUpon>008_20180506-IgnorePendingPassenger.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -288,11 +252,6 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migration\001_20180326-InitDatabase.sql">
-      <DependentUpon>001_20180326-InitDatabase.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

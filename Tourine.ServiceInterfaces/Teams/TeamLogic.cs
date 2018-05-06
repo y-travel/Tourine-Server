@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
@@ -56,18 +57,15 @@ namespace Tourine.ServiceInterfaces.Teams
                         TeamId = newTeam.Id,
                     });
                 else
-                    foreach (var personIncome in passenger.PersonIncomes)
+                    Db.Insert(new PassengerList
                     {
-                        Db.Insert(new PassengerList
-                        {
-                            PersonId = passenger.PersonId,
-                            TourId = toTour.Id,
-                            PassportDelivered = passenger.PassportDelivered,
-                            HaveVisa = passenger.HaveVisa,
-                            TeamId = newTeam.Id,
-                            OptionType = personIncome.OptionType,
-                        });
-                    }
+                        PersonId = passenger.PersonId,
+                        TourId = toTour.Id,
+                        OptionType = (OptionType)passenger.PersonIncomes.Sum(x => (long)x.OptionType),
+                        PassportDelivered = passenger.PassportDelivered,
+                        HaveVisa = passenger.HaveVisa,
+                        TeamId = newTeam.Id,
+                    });
             }
             return newTeam;
         }

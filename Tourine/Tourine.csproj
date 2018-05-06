@@ -227,6 +227,7 @@
     <Compile Include="Migration\005_20180417-AddTourFreeSpaceTrigger.cs" />
     <Compile Include="Migration\006_20180417-AddTeamIsPending.cs" />
     <Compile Include="Migration\007_20180501-DeleteIncomeFromPassengerList.cs" />
+    <Compile Include="Migration\008_20180506-IgnorePendingPassenger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -267,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migration\007_20180501-DeleteIncomeFromPassengerList.sql">
       <DependentUpon>007_20180501-DeleteIncomeFromPassengerList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\008_20180506-IgnorePendingPassenger.sql">
+      <DependentUpon>008_20180506-IgnorePendingPassenger.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

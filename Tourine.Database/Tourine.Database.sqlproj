@@ -270,4 +270,7 @@ Table=[dbo].[VersionInfo];
   <ItemGroup>
     <None Include="Migrations\1.0.1\004_20180501-DeleteIncomeFromPassengerList.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.1\005_20180506-IgnorePendingPassenger.sql" />
+  </ItemGroup>
 </Project>

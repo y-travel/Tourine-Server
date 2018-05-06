@@ -12,6 +12,19 @@ CREATE TABLE [dbo].[Team]
 [IsPending] [bit] NULL
 )
 GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TRIGGER [dbo].[trgUpdateTourFreeSpaceOnTeamUpdate]
+ON [dbo].[Team]
+AFTER UPDATE
+AS
+  DECLARE @curTourId UNIQUEIDENTIFIER
+    SELECT @curTourId = i.TourId
+    FROM INSERTED i
+    EXEC Tourine.dbo.spUpdateTourFreeSpace @tourId = @curTourId
+GO
 ALTER TABLE [dbo].[Team] ADD CONSTRAINT [PK_Team_Id] PRIMARY KEY CLUSTERED  ([Id])
 GO
 ALTER TABLE [dbo].[Team] ADD CONSTRAINT [FK_Team_Person_Id] FOREIGN KEY ([BuyerId]) REFERENCES [dbo].[Person] ([Id])

@@ -12,10 +12,13 @@ namespace Tourine.ServiceInterfaces.Persons
         public IAutoQueryDb AutoQuery { get; set; }
 
         [Authenticate]
-        public object Post(AddNewPerson addNewPerson)
+        public object Post(AddNewPerson req)
         {
-            Db.Insert(addNewPerson.Person);
-            return Db.SingleById<Person>(addNewPerson.Person.Id);
+            var today = DateTime.Today;
+            req.Person.IsInfant = req.Person.CalculateAge(today) < 2;
+            req.Person.IsUnder5 = req.Person.CalculateAge(today) >= 2 && req.Person.CalculateAge(today) < 5;
+            Db.Insert(req.Person);
+            return Db.SingleById<Person>(req.Person.Id);
         }
 
         [Authenticate]

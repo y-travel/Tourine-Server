@@ -23,4 +23,15 @@ namespace Tourine.ServiceInterfaces.Persons
         public bool IsUnder5 { get; set; }
         public bool IsInfant { get; set; }
     }
+
+    public static class PersonExtention
+    {
+        public static int CalculateAge(this Person person, DateTime toYear)
+        {
+            var birthdate = DateTime.Parse(person.BirthDate.ToString());
+            var age = toYear.Year - birthdate.Year;
+            if (birthdate > toYear.AddYears(-age)) age--;
+            return age;
+        }
+    }
 }

@@ -159,6 +159,21 @@ namespace Tourine.Test
             leader.Results[0].Type.Should().Be(PersonType.Passenger);
         }
 
+        [Test]
+        public void CalculatePersonAge()
+        {
+            var today = DateTime.Parse("2018-1-2");
+            var day = today.Day;
+            var infantPersonUpBorder = new Person { BirthDate = DateTime.Parse("2016-1-3") };
+            var under5PersonDownBorder = new Person { BirthDate = DateTime.Parse("2016-1-2") };
+            var under5PersonUpBorder = new Person { BirthDate = DateTime.Parse("2013-1-3") };
+            var adultPersonDownBorder = new Person { BirthDate = DateTime.Parse("2013-1-2") };
+            Assert.AreEqual(infantPersonUpBorder.CalculateAge(today), 1);
+            Assert.AreEqual(under5PersonDownBorder.CalculateAge(today), 2);
+            Assert.AreEqual(under5PersonUpBorder.CalculateAge(today), 4);
+            Assert.AreEqual(adultPersonDownBorder.CalculateAge(today), 5);
+        }
+
         public void CreatePerson()
         {
             var _agencyPerson = new AgencyPerson { AgencyId = _agency.Id, PersonId = _person.Id };

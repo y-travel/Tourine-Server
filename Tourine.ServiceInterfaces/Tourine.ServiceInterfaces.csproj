@@ -112,6 +112,8 @@
     <Compile Include="Destinations\CreateDestinationValidator.cs" />
     <Compile Include="Destinations\UpdateDestination.cs" />
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
+    <Compile Include="Download\DownloadService.cs" />
+    <Compile Include="Download\GetTicketReportTemplate.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="OptionType.cs" />
     <Compile Include="Passengers\GetTourBuyers.cs" />

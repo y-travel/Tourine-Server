@@ -152,7 +152,7 @@
       <Name>Tourine.ServiceInterfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tourine\Tourine.csproj">
-      <Project>{b58020c1-7ec2-4d42-8797-a894739d2b73}</Project>
+      <Project>{7d20ee23-5d34-4e94-a163-ceeb063df07a}</Project>
       <Name>Tourine</Name>
     </ProjectReference>
   </ItemGroup>

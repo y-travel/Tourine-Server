@@ -51,7 +51,7 @@ namespace Tourine.ServiceInterfaces.Tours
             var tour = upsertTour.ConvertTo<Tour>();
 
             return tour.Id == Guid.Empty
-                ? tour.IsBlock ? tour.CreateBlock(Db) : tour.Create(Db, Session)
+                ? tour.Create(Db, Session)
                 : tour.IsBlock ? tour.UpdateBlock(Db) : tour.Update(Db, Session);
         }
 

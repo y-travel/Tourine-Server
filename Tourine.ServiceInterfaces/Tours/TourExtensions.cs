@@ -16,21 +16,25 @@ namespace Tourine.ServiceInterfaces.Tours
         public static Tour Create(this Tour newTour, IDbConnection db, AuthSession session)
         {
             var tour = new Tour();
-
             using (var trans = db.OpenTransaction())
             {
                 tour.SafePopulate(newTour);
-                tour.AgencyId = session.Agency.Id;
+                tour.Options = new List<TourOption>();
+                tour.AgencyId = newTour.IsBlock ? newTour.AgencyId : session.Agency.Id;
+                tour.TourDetailId = newTour.IsBlock ? GetTourDetail(db, tour.ParentId.Value, true).Id : (Guid?)null;
+                CheckTour(tour, tour, db);
                 db.Insert(tour);
-                db.SaveAllReferences(tour);
+                if (!tour.IsBlock)
+                    db.SaveAllReferences(tour);
                 foreach (var option in newTour.Options)
                 {
                     var tmpOption = new TourOption();
                     tmpOption.SafePopulate(option);
                     tmpOption.TourId = tour.Id;
-                    //@TODO should be got from user
+                    //@TODO should be get from user
                     tmpOption.OptionStatus = option.OptionType.GetDefaultStatus();
                     db.Insert(tmpOption);
+                    tour.Options.Add(tmpOption);
                 }
                 trans.Commit();
             }
@@ -64,35 +68,12 @@ namespace Tourine.ServiceInterfaces.Tours
             return tour;
         }
 
-        public static Tour CreateBlock(this Tour block, IDbConnection db)
-        {
-            CheckBlock(block, block, db);
-            var newBlock = new Tour();
-            newBlock.SafePopulate(block);
-            newBlock.TourDetailId = GetTourDetail(db, block.ParentId.Value, true).Id;
-            using (var trans = db.OpenTransaction())
-            {
-                db.Insert(newBlock);
-                foreach (var option in block.Options)
-                {
-                    var tmpOption = new TourOption();
-                    tmpOption.SafePopulate(option);
-                    tmpOption.TourId = newBlock.Id;
-                    //@TODO should be get of user
-                    tmpOption.OptionStatus = option.OptionType.GetDefaultStatus();
-                    db.Insert(tmpOption);
-                }
-                trans.Commit();
-            }
-            return newBlock;
-        }
-
         public static Tour UpdateBlock(this Tour newBlock, IDbConnection db)
         {
             var oldBlock = db.SingleById<Tour>(newBlock.Id);
             if (oldBlock == null)
                 throw HttpError.NotFound("Block not found!");
-            CheckBlock(oldBlock, newBlock, db);
+            CheckTour(oldBlock, newBlock, db);
 
             using (var trans = db.OpenTransaction())
             {
@@ -125,17 +106,15 @@ namespace Tourine.ServiceInterfaces.Tours
             }
         }
 
-        public static void CheckBlock(this Tour oldBlock, Tour newBlock, IDbConnection db)
+        public static void CheckTour(this Tour oldTour, Tour newTour, IDbConnection db)
         {
-            if (!oldBlock.IsBlock)
-                return;
-            if (!db.Exists<Tour>(x => x.Id == newBlock.ParentId))
+            if (oldTour.IsBlock && !db.Exists<Tour>(x => x.Id == newTour.ParentId))
                 throw HttpError.Forbidden("block parent not found");
 
-            if (!db.Exists<Agency>(x => x.Id == newBlock.AgencyId))
+            if (!db.Exists<Agency>(x => x.Id == newTour.AgencyId))
                 throw HttpError.NotFound("Agency not found!");
 
-            oldBlock.CheckFreeSpace(db, newBlock.Capacity);
+            oldTour.CheckFreeSpace(db, newTour.Capacity);
         }
 
         public static void CheckFreeSpace(this Tour tour, IDbConnection db, int capacity)
@@ -240,7 +219,7 @@ namespace Tourine.ServiceInterfaces.Tours
                 .Where(x => Sql.In(x.TourId, blocks.Map(y => y.Id)))
                 .GroupBy<Tour>(x => x.AgencyId)
                 .Select<Team, Tour>((x, y) => new
-                { 
+                {
                     Id = y.AgencyId,
                     Title = y.AgencyId,
                     Phone = y.AgencyId,

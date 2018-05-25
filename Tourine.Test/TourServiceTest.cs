@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
@@ -168,27 +169,14 @@ namespace Tourine.Test
         public void CreateTour_should_save_tour()
         {
             var id = Guid.Empty;
+            var agencyId = Guid.NewGuid();
+            Db.Insert(new Agency { Id = agencyId });
             var request = new UpsertTour
             {
                 Id = id,
-                Capacity = 1,
-                BasePrice = 3000,
-                TourDetail = new TourDetail
-                {
-                    Id = id,
-                    DestinationId = Guid.NewGuid(),
-                    StartDate = DateTime.Now,
-                    PlaceId = Guid.NewGuid()
-                },
-                Options = new[]
-                {
-                    new TourOption
-                    {
-                        OptionType = OptionType.Bus,
-                        OptionStatus = OptionStatus.Limited,
-                        Price = 1,
-                    }
-                }.ToList(),
+                AgencyId = agencyId,
+                TourDetail = new TourDetail { Id = id },
+                Options = new[] { new TourOption { Price = 1 } }.ToList(),
             };
             //act
             var returnedTour = (Tour)MockService.Post(request);
@@ -197,9 +185,29 @@ namespace Tourine.Test
             savedTourDetail.ShouldBeEquivalentTo(request.TourDetail);
             var savedOptions = Db.Select<TourOption>(x => x.TourId == returnedTour.Id);
             savedOptions.Count.Should().Be(1);
-            savedOptions[0].ShouldBeEquivalentTo(request.Options[0], x => x.Excluding(y => y.SelectedMemberPath.Matches("*Id")));
+            savedOptions[0].Price.Should().Be(request.Options[0].Price);
         }
 
+        [Test]
+        public void Create_block_should_return_correct_options()
+        {
+            var id = Guid.Empty;
+            var agencyId = Guid.NewGuid();
+            Db.Insert(new Agency { Id = agencyId });
+            var request = new UpsertTour
+            {
+                Id = id,
+                AgencyId = agencyId,
+                TourDetail = new TourDetail { Id = id },
+                Options = new[] { new TourOption { Price = 1, TourId = new Guid() } }.ToList(),
+            };
+            //act
+            var returnedTour = (Tour)MockService.Post(request);
+            //assert
+            returnedTour.Options[0].Id.Should().NotBe(request.Options[0].Id);
+            returnedTour.Options[0].TourId.Should().Be(returnedTour.Id);
+            returnedTour.Options[0].Price.Should().Be(request.Options[0].Price);
+        }
         [Test]
         public void GetPersonOfTour_should_return_result()
         {
@@ -323,13 +331,13 @@ namespace Tourine.Test
         [Test]
         public void FetTourAgency_should_return_result()
         {
-            var list = (IList<Tour>)MockService.Get(new GetTourAgency {TourId = _tour.Id, LoadChild = false});
+            var list = (IList<Tour>)MockService.Get(new GetTourAgency { TourId = _tour.Id, LoadChild = false });
             list[0].AgencyId = _agency.Id;
         }
 
         public void CreateTours()
         {
-            
+
             _tour.AgencyId = _agency.Id;
             _tour.TourDetailId = _tourDetail.Id;
             _tourOption.TourId = _tour.Id;

@@ -31,8 +31,8 @@ namespace Tourine.ServiceInterfaces.Teams
                 team.Id = (Guid)req.TeamId;
             }
             var tour = Db.SingleById<Tour>(req.TourId);
-            if (tour.Capacity < req.Passengers.Count)
-                throw HttpError.Forbidden("no free space");
+            if (tour.FreeSpace < req.Passengers.Count)
+                throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
 
 
             using (IDbTransaction dbTrans = Db.OpenTransaction())

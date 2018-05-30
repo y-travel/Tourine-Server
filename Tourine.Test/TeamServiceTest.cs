@@ -15,7 +15,7 @@ namespace Tourine.Test
 {
     public class TeamServiceTest : ServiceTest<TeamService>
     {
-        private readonly Tour tour = new Tour { Capacity = 2 };
+        private readonly Tour tour = new Tour { Capacity = 2 , FreeSpace = 2};
         private readonly Person person_1 = new Person();
         private readonly Person person_2 = new Person();
         private readonly Person person_3 = new Person();
@@ -78,15 +78,27 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void UpsertTeam_should_throw_exception()//why: not free enugh space in this tour
+        public void UpsertTeam_should_throw_exception()//why: not free enugh space in this tour (have 2 free space but need 3)
         {
             new Action(() => MockService.Post(new UpsertTeam
             {
                 TourId = tour.Id,
                 Buyer = _passengers[0].Person,
-                Passengers = _passengers.GetRange(1, 2)
+                Passengers = _passengers
             }))
                 .ShouldThrow<HttpError>();
+        }
+
+        [Test]
+        public void UpsertTeam_should_not_throw_exception()
+        {
+            new Action(() => MockService.Post(new UpsertTeam
+                {
+                    TourId = tour.Id,
+                    Buyer = _passengers[0].Person,
+                    Passengers = _passengers.GetRange(1, 2)
+                }))
+                .ShouldNotThrow<HttpError>();
         }
 
         [Test]

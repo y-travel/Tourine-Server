@@ -125,14 +125,10 @@ namespace Tourine.ServiceInterfaces.Tours
                 return;
             var parentTour = db.SingleById<Tour>(tour.ParentId);
             if (parentTour == null)
-                throw HttpError.NotFound("parent tour");
-            var blocksCapacity = parentTour.GetBlocksCapacity(db);
-            var parentPassengerCount = parentTour.GetCurrentPassengerCount(db);
+                throw HttpError.NotFound(ErrorCode.NotFound.ToString());
 
-            if (parentTour.Capacity - blocksCapacity - parentPassengerCount +
-                (tour.Id != Guid.Empty ? tour.Capacity : 0) < capacity
-            )
-                throw HttpError.Forbidden("There is no free space!");
+            if (parentTour.FreeSpace < capacity)
+                throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
         }
 
         public static int GetBlocksCapacity(this Tour tour, IDbConnection db) =>

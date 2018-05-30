@@ -381,6 +381,88 @@ namespace Tourine.Test
                 .ShouldNotThrow<HttpError>();
         }
 
+        [Test]
+        public void UpsertTour_should_throw_space_exception()
+        {
+            var id = Guid.NewGuid();
+            var agency = new Agency();
+            var parentTourDetail = new TourDetail();
+            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 2, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
+            Db.Insert(parentTour);
+            Db.Insert(parentTourDetail);
+            Db.Insert(agency);
+            Db.Insert(new Tour { Id = id, ParentId = parentTour.Id });
+            Db.Insert(new TourDetail { Id = id });
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                Capacity = 3,
+                ParentId = parentTour.Id,
+                BasePrice = 3000,
+                AgencyId = agency.Id,
+                TourDetail = new TourDetail
+                {
+                    Id = id,
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid()
+                },
+                Options = new[]
+                {
+                    new TourOption
+                    {
+                        Id = id,
+                        OptionType = OptionType.Bus,
+                        Price = 1,
+                    }
+                }.ToList(),
+            };
+
+            new Action(() => MockService.Post(request))
+                .ShouldThrow<HttpError>();
+        }
+
+        [Test]
+        public void UpsertTour_should_not_throw_space_exception()
+        {
+            var id = Guid.NewGuid();
+            var agency = new Agency();
+            var parentTourDetail = new TourDetail();
+            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 2, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
+            Db.Insert(parentTour);
+            Db.Insert(parentTourDetail);
+            Db.Insert(agency);
+            Db.Insert(new Tour { Id = id, ParentId = parentTour.Id });
+            Db.Insert(new TourDetail { Id = id });
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                Capacity = 2,
+                ParentId = parentTour.Id,
+                BasePrice = 3000,
+                AgencyId = agency.Id,
+                TourDetail = new TourDetail
+                {
+                    Id = id,
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid()
+                },
+                Options = new[]
+                {
+                    new TourOption
+                    {
+                        Id = id,
+                        OptionType = OptionType.Bus,
+                        Price = 1,
+                    }
+                }.ToList(),
+            };
+
+            new Action(() => MockService.Post(request))
+                .ShouldNotThrow<HttpError>();
+        }
+
         public void CreateTours()
         {
 

@@ -335,6 +335,52 @@ namespace Tourine.Test
             list[0].AgencyId = _agency.Id;
         }
 
+        [Test]
+        public void UpdateTour_should_throw_exception()
+        {
+            var id = Guid.NewGuid();
+            var tourDetail = new TourDetail { Id = id };
+            Db.Insert(new Tour { Id = id, Capacity = 10, FreeSpace = 2, TourDetailId = id });
+            Db.Insert(tourDetail);
+            var request = new UpsertTour
+            {
+                Id = id,
+                TourDetail = tourDetail,
+                Capacity = 7,
+            };
+
+            new Action(() => MockService.Post(request))
+                .ShouldThrow<HttpError>().WithMessage(ErrorCode.NotEnoughFreeSpace.ToString());
+        }
+
+        [Test]
+        public void UpdateTour_should_not_throw_exception()
+        {
+            var id = Guid.NewGuid();
+            var tourDetail = new TourDetail { Id = id };
+            Db.Insert(new Tour { Id = id, Capacity = 10, FreeSpace = 8, TourDetailId = id });
+            Db.Insert(tourDetail);
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                Id = id,
+                TourDetail = tourDetail,
+                Capacity = 8,
+                Options = new List<TourOption>
+                {
+                    new TourOption
+                    {
+                        OptionType = OptionType.Bus,
+                        OptionStatus = OptionStatus.Limited,
+                        Price = 1,
+                    }
+                }
+            };
+
+            new Action(() => MockService.Post(request))
+                .ShouldNotThrow<HttpError>();
+        }
+
         public void CreateTours()
         {
 

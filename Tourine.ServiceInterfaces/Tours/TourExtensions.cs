@@ -47,6 +47,8 @@ namespace Tourine.ServiceInterfaces.Tours
             var tourDetail = db.SingleById<TourDetail>(upsertTour.TourDetail.Id);
             if (tour == null || tourDetail == null)
                 throw HttpError.NotFound($"tourId:{upsertTour.Id} tourDetailId:{upsertTour.TourDetail.Id}");
+            if (!tour.CapacityChangeIsAllowed(upsertTour.Capacity))
+                throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
             using (var dbTrans = db.OpenTransaction())
             {
                 tour.SafePopulate(upsertTour);
@@ -249,6 +251,11 @@ namespace Tourine.ServiceInterfaces.Tours
                     Count = t.Count,
                     Price = t.TotalPrice,
                 }));
+        }
+
+        public static bool CapacityChangeIsAllowed(this Tour tour, int toCap)
+        {
+            return tour.Capacity - tour.FreeSpace <= toCap;
         }
     }
 }

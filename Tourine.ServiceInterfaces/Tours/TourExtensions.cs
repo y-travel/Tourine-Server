@@ -48,7 +48,7 @@ namespace Tourine.ServiceInterfaces.Tours
             if (tour == null || tourDetail == null)
                 throw HttpError.NotFound($"tourId:{upsertTour.Id} tourDetailId:{upsertTour.TourDetail.Id}");
             if (!tour.CapacityChangeIsAllowed(upsertTour.Capacity))
-                throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
+                throw HttpError.Forbidden(ErrorCode.ExtraSpaceReserved.ToString());
             using (var dbTrans = db.OpenTransaction())
             {
                 tour.SafePopulate(upsertTour);
@@ -74,7 +74,9 @@ namespace Tourine.ServiceInterfaces.Tours
         {
             var oldBlock = db.SingleById<Tour>(newBlock.Id);
             if (oldBlock == null)
-                throw HttpError.NotFound("Block not found!");
+                throw HttpError.NotFound(ErrorCode.TourNotFound.ToString());
+            if (!oldBlock.CapacityChangeIsAllowed(newBlock.Capacity))
+                throw HttpError.Forbidden(ErrorCode.ExtraSpaceReserved.ToString());
             CheckTour(oldBlock, newBlock, db);
 
             using (var trans = db.OpenTransaction())
@@ -116,10 +118,10 @@ namespace Tourine.ServiceInterfaces.Tours
             if (!db.Exists<Agency>(x => x.Id == newTour.AgencyId))
                 throw HttpError.NotFound("Agency not found!");
 
-            oldTour.CheckFreeSpace(db, newTour.Capacity);
+            oldTour.CheckFreeSpace(db, newTour.Capacity, oldTour == newTour);
         }
 
-        public static void CheckFreeSpace(this Tour tour, IDbConnection db, int capacity)
+        public static void CheckFreeSpace(this Tour tour, IDbConnection db, int capacity, bool isCreation = false)
         {
             if (!tour.IsBlock)
                 return;
@@ -127,7 +129,9 @@ namespace Tourine.ServiceInterfaces.Tours
             if (parentTour == null)
                 throw HttpError.NotFound(ErrorCode.NotFound.ToString());
 
-            if (parentTour.FreeSpace < capacity)
+            if (!isCreation && parentTour.FreeSpace + tour.Capacity < capacity)
+                throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
+            if(isCreation && parentTour.FreeSpace < capacity)
                 throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
         }
 
@@ -249,9 +253,9 @@ namespace Tourine.ServiceInterfaces.Tours
                 }));
         }
 
-        public static bool CapacityChangeIsAllowed(this Tour tour, int toCap)
+        public static bool CapacityChangeIsAllowed(this Tour tour, int newCapacity)
         {
-            return tour.Capacity - tour.FreeSpace <= toCap;
+            return tour.Capacity - tour.FreeSpace <= newCapacity;
         }
     }
 }

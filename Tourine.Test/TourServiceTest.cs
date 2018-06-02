@@ -336,7 +336,7 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void UpdateTour_should_throw_exception()
+        public void UpdateTour_should_throw_exception()//Why:(Update tour) because of new capacity is less than reseved space
         {
             var id = Guid.NewGuid();
             var tourDetail = new TourDetail { Id = id };
@@ -350,11 +350,11 @@ namespace Tourine.Test
             };
 
             new Action(() => MockService.Post(request))
-                .ShouldThrow<HttpError>().WithMessage(ErrorCode.NotEnoughFreeSpace.ToString());
+                .ShouldThrow<HttpError>().WithMessage(ErrorCode.ExtraSpaceReserved.ToString());
         }
 
         [Test]
-        public void UpdateTour_should_not_throw_exception()
+        public void UpdateTour_should_not_throw_exception()//Why:(Update tour) tour can be reduce size to reserved space 
         {
             var id = Guid.NewGuid();
             var tourDetail = new TourDetail { Id = id };
@@ -365,7 +365,7 @@ namespace Tourine.Test
             {
                 Id = id,
                 TourDetail = tourDetail,
-                Capacity = 8,
+                Capacity = 2,
                 Options = new List<TourOption>
                 {
                     new TourOption
@@ -382,16 +382,99 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void UpsertTour_should_throw_space_exception()
+        public void UpsertTour_should_throw_extra_space_reseved_exeption()//Why:(Update block) block new capacity should be >= reserved space
         {
             var id = Guid.NewGuid();
             var agency = new Agency();
             var parentTourDetail = new TourDetail();
-            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 2, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
+            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 10, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
             Db.Insert(parentTour);
             Db.Insert(parentTourDetail);
             Db.Insert(agency);
-            Db.Insert(new Tour { Id = id, ParentId = parentTour.Id });
+            Db.Insert(new Tour { Id = id, ParentId = parentTour.Id, Capacity = 3, FreeSpace = 1 });
+            Db.Insert(new TourDetail { Id = id });
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                Id = id,
+                Capacity = 1,
+                ParentId = parentTour.Id,
+                BasePrice = 3000,
+                AgencyId = agency.Id,
+                TourDetail = new TourDetail
+                {
+                    Id = id,
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid()
+                },
+                Options = new[]
+                {
+                    new TourOption
+                    {
+                        Id = id,
+                        OptionType = OptionType.Bus,
+                        Price = 1,
+                    }
+                }.ToList(),
+            };
+
+            new Action(() => MockService.Post(request))
+                .ShouldThrow<HttpError>().WithMessage(ErrorCode.ExtraSpaceReserved.ToString());
+        }
+
+        [Test]
+        public void UpsertTour_should_not_throw_extra_space_reseved_exeption()//Why:(Update block) block new capacity should be >= reserved space
+        {
+            var id = Guid.NewGuid();
+            var agency = new Agency();
+            var parentTourDetail = new TourDetail();
+            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 10, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
+            Db.Insert(parentTour);
+            Db.Insert(parentTourDetail);
+            Db.Insert(agency);
+            Db.Insert(new Tour { Id = id, ParentId = parentTour.Id, Capacity = 3, FreeSpace = 1 });
+            Db.Insert(new TourDetail { Id = id });
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                Id = id,
+                Capacity = 2,
+                ParentId = parentTour.Id,
+                BasePrice = 3000,
+                AgencyId = agency.Id,
+                TourDetail = new TourDetail
+                {
+                    Id = id,
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid()
+                },
+                Options = new[]
+                {
+                    new TourOption
+                    {
+                        Id = id,
+                        OptionType = OptionType.Bus,
+                        Price = 1,
+                    }
+                }.ToList(),
+            };
+
+            new Action(() => MockService.Post(request))
+                .ShouldNotThrow<HttpError>();
+        }
+
+        [Test]
+        public void UpsertTour_should_throw_space_exception()//Why:(Create block) block capacity is biger than parent free space
+        {
+            var id = Guid.NewGuid();
+            var agency = new Agency();
+            var parentTourDetail = new TourDetail();
+            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 10, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
+            Db.Insert(parentTour);
+            Db.Insert(parentTourDetail);
+            Db.Insert(agency);
             Db.Insert(new TourDetail { Id = id });
             Db.Insert(new TourOption { Id = id });
             var request = new UpsertTour
@@ -423,12 +506,12 @@ namespace Tourine.Test
         }
 
         [Test]
-        public void UpsertTour_should_not_throw_space_exception()
+        public void UpsertTour_should_not_throw_space_exception()//Why:(Create block) block size is lessThan/equal parent freeSpace
         {
             var id = Guid.NewGuid();
             var agency = new Agency();
             var parentTourDetail = new TourDetail();
-            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 2, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
+            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 10, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
             Db.Insert(parentTour);
             Db.Insert(parentTourDetail);
             Db.Insert(agency);
@@ -461,6 +544,90 @@ namespace Tourine.Test
 
             new Action(() => MockService.Post(request))
                 .ShouldNotThrow<HttpError>();
+        }
+
+        [Test]
+        public void UpsertTour_should_update_block()//Why:(Update block) block new capacity  <= parent freeSpace + tour old capacity
+        {
+            var id = Guid.NewGuid();
+            var agency = new Agency();
+            var parentTourDetail = new TourDetail();
+            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 10, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
+            Db.Insert(parentTour);
+            Db.Insert(parentTourDetail);
+            Db.Insert(agency);
+            Db.Insert(new Tour { Id = id, ParentId = parentTour.Id, Capacity = 3 });
+            Db.Insert(new TourDetail { Id = id });
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                Id = id,
+                Capacity = 5,
+                ParentId = parentTour.Id,
+                BasePrice = 3000,
+                AgencyId = agency.Id,
+                TourDetail = new TourDetail
+                {
+                    Id = id,
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid()
+                },
+                Options = new[]
+                {
+                    new TourOption
+                    {
+                        Id = id,
+                        OptionType = OptionType.Bus,
+                        Price = 1,
+                    }
+                }.ToList(),
+            };
+
+            new Action(() => MockService.Post(request))
+                .ShouldNotThrow<HttpError>();
+        }
+
+        [Test]
+        public void UpsertTour_should_throw_free_space_exeption()//Why:(Update block) block new capacity should be <= parent freeSpace + tour old capacity
+        {
+            var id = Guid.NewGuid();
+            var agency = new Agency();
+            var parentTourDetail = new TourDetail();
+            var parentTour = new Tour { Id = Guid.NewGuid(), Capacity = 10, FreeSpace = 2, AgencyId = agency.Id, TourDetailId = parentTourDetail.Id };
+            Db.Insert(parentTour);
+            Db.Insert(parentTourDetail);
+            Db.Insert(agency);
+            Db.Insert(new Tour { Id = id, ParentId = parentTour.Id, Capacity = 3 });
+            Db.Insert(new TourDetail { Id = id });
+            Db.Insert(new TourOption { Id = id });
+            var request = new UpsertTour
+            {
+                Id = id,
+                Capacity = 6,
+                ParentId = parentTour.Id,
+                BasePrice = 3000,
+                AgencyId = agency.Id,
+                TourDetail = new TourDetail
+                {
+                    Id = id,
+                    DestinationId = Guid.NewGuid(),
+                    StartDate = DateTime.Now,
+                    PlaceId = Guid.NewGuid()
+                },
+                Options = new[]
+                {
+                    new TourOption
+                    {
+                        Id = id,
+                        OptionType = OptionType.Bus,
+                        Price = 1,
+                    }
+                }.ToList(),
+            };
+
+            new Action(() => MockService.Post(request))
+                .ShouldThrow<HttpError>();
         }
 
         public void CreateTours()

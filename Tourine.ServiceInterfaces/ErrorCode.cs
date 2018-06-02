@@ -7,5 +7,6 @@
         TourHasPassenger = 3,
         TourHasBlock = 4,
         NotEnoughFreeSpace = 5,
+        ExtraSpaceReserved = 6,
     }
 }

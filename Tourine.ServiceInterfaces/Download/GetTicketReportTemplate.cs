@@ -1,37 +1,45 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
 using ServiceStack;
 using ServiceStack.Web;
 
 namespace Tourine.ServiceInterfaces.Download
 {
-    [Route("/download/ticketReportTemplate","GET")]
+    [Route("/download/ticketReportTemplate", "GET")]
     public class GetTicketReportTemplate : IReturn<HttpResult>
     {
     }
 
-    public class FileStreamResult : IHasOptions, IStreamWriter
+    public class FileResult : IHasOptions, IStreamWriterAsync
     {
-        private readonly Stream _responseStream;
-        public IDictionary<string, string> Options { get; }
+        private readonly FileInfo _fileInfo;
+        public IDictionary<string, string> Options { get; set; }
 
-        public FileStreamResult(Stream responseStream)
+        public FileResult(FileInfo fileInfo)
         {
-            _responseStream = responseStream;
+            var contentType = MimeMapping.GetMimeMapping(fileInfo.Name);
+            _fileInfo = fileInfo;
+
             Options = new Dictionary<string, string>
             {
-                {"Content-Type","application/octet-stream" },
-                {"Content-Disposition","attachment; filename=\"" + "ticketReport" + ".xlsx\";" }
+                {HttpHeaders.AcceptRanges, "bytes"},
+                {HttpHeaders.ContentDisposition,$"attachment; filename={fileInfo.Name}" },
+                {HttpHeaders.ContentType, contentType},
             };
         }
 
-        public void WriteTo(Stream responseStream)
+        public Task WriteToAsync(Stream responseStream, CancellationToken token = new CancellationToken())
         {
-            if ( _responseStream == null)
-                return;
-            _responseStream.WriteTo(responseStream);
-            responseStream.Flush();
-            responseStream.Dispose();
+            return Task.Run(() =>
+            {
+                using (var fs = _fileInfo.OpenRead())
+                {
+                    fs.WriteTo(responseStream);
+                }
+            }, token);
         }
     }
 }

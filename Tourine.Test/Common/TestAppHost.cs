@@ -12,6 +12,7 @@ using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyPersons;
 using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces.Download;
 using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Places;
@@ -35,13 +36,13 @@ namespace Tourine.Test.Common
 
         public AuthSession Session { get; set; }
 
-        public AuthProvider mockAuthProvider = Mock.Create<Tourine.Common.AuthProvider>();
+        public AuthProvider MockAuthProvider = Mock.Create<Tourine.Common.AuthProvider>();
         public Agency CurrentAgency { get; set; } = new Agency();
         public User CurrentUser { get; set; } = new User();
         public TestAppHost() : base("test", typeof(AppService).Assembly)
         {
             TestMode = true;
-            ConnectionFactory = new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider,true);
+            ConnectionFactory = new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider, true);
             Session = new AuthSession { Agency = CurrentAgency, User = CurrentUser };
         }
 
@@ -62,30 +63,21 @@ namespace Tourine.Test.Common
         public override void Configure(Container container)
         {
             JsConfig.EmitCamelCaseNames = true;
-            //
-            //            SetConfig(new HostConfig
-            //            {
-            //                DebugMode = true,
-            //                Return204NoContentForEmptyResponse = true,
-            //            });
             container.Register<IDbConnectionFactory>(ConnectionFactory);
             container.Register<TourineBot>(MockBot);
             container.RegisterFactory<IAuthSession>(() => Session);
-            container.RegisterAutoWired<AgencyService>();
-            container.RegisterAutoWired<AgencyPersonService>();
-            container.RegisterAutoWired<DestinationService>();
-            container.RegisterAutoWired<PersonService>();
-            container.RegisterAutoWired<PlaceService>();
-            container.RegisterAutoWired<PassengerListService>();
-            container.RegisterAutoWired<TeamService>();
-            container.RegisterAutoWired<TourDetailService>();
-            container.RegisterAutoWired<TourService>();
-            container.RegisterAutoWired<UserService>();
-            container.RegisterAutoWired<AutoQuery>();
+//            RegisterServicesAsAutoWired(container);
             container.RegisterFactory<IRequest>(() => new MockHttpRequest());
             Plugins.Add(new AutoQueryFeature());
-            Plugins.Add(new AuthFeature(() => new AuthSession { UserAuthId = Session.UserAuthId }, new IAuthProvider[] { mockAuthProvider }));
+            Plugins.Add(new AuthFeature(() => new AuthSession { UserAuthId = Session.UserAuthId }, new IAuthProvider[] { MockAuthProvider }));
             InitDb();
+        }
+
+        private void RegisterServicesAsAutoWired(Container container)
+        {
+            var serviceTypes = new[]{typeof(AgencyService),typeof(AgencyPersonService), typeof(DestinationService), typeof(PersonService), typeof(PlaceService),
+                typeof(PassengerListService),typeof(DownloadService), typeof(AutoQuery), typeof(UserService), typeof(TourService), typeof(TourDetailService), typeof(TeamService),};
+            container.RegisterAutoWiredTypes(serviceTypes);
         }
 
         public void InitDb()
@@ -93,12 +85,11 @@ namespace Tourine.Test.Common
             TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place),
                 typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Person),
                 typeof(Person), typeof(TourDetail), typeof(Team),
-                typeof(Service), typeof(AgencyPerson),typeof(TourOption),typeof(PassengerList) };//should be fill with tables
+                typeof(Service), typeof(AgencyPerson),typeof(TourOption),typeof(PassengerList) };
 
             using (var db = ConnectionFactory.OpenDbConnection())
             {
                 db.CreateTables(false, TablesTypes);
-                //                db.Insert(new object[] { CurrentAgency, CurrentUser });
                 db.Insert(CurrentAgency);
                 db.Insert(CurrentUser);
             }

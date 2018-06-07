@@ -114,7 +114,7 @@
     <Compile Include="Destinations\UpdateDestination.cs" />
     <Compile Include="Destinations\UpdateDestinationValidator.cs" />
     <Compile Include="Download\DownloadService.cs" />
-    <Compile Include="Download\GetTicketReportTemplate.cs" />
+    <Compile Include="Download\GetReportTemplate.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="OptionType.cs" />
     <Compile Include="Passengers\GetTourBuyers.cs" />
@@ -122,6 +122,7 @@
     <Compile Include="Passengers\GetTourVisa.cs" />
     <Compile Include="Passengers\PassengerReplacement.cs" />
     <Compile Include="Passengers\TourPersonReport.cs" />
+    <Compile Include="PathHelper.cs" />
     <Compile Include="Persons\DeleteLeader.cs" />
     <Compile Include="Persons\UpsertLeader.cs" />
     <Compile Include="Persons\UpsertLeaderValidator.cs" />

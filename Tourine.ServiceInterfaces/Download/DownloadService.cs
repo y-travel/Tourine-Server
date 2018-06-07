@@ -7,10 +7,10 @@ namespace Tourine.ServiceInterfaces.Download
 {
     public class DownloadService : AppService
     {
-        public object Get(GetTicketReportTemplate req)
+        public object Get(GetReportTemplate req)
         {
-            var fileFullPath = $@"{PublicExtensions.GetRootDirectory()}\bin\tourinetemplate1.xlsx";
-            return new HttpResult(new FileInfo(fileFullPath), MimeMapping.GetMimeMapping(fileFullPath));
+            var templatePath = Path.Combine(PathHelper.GetAssetsPath(), $"{Enum.GetName(typeof(ReportType), req.ReportType)}Template.xlsx");
+            return new HttpResult(new FileInfo(templatePath), MimeMapping.GetMimeMapping(templatePath));
         }
     }
 }

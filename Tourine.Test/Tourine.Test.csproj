@@ -114,7 +114,8 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Telerik.JustMock, Version=2018.1.117.2, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
+    <Reference Include="Telerik.JustMock, Version=2018.2.511.5, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\JustMock.2018.1.117.2\lib\Net\Telerik.JustMock.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -127,6 +128,7 @@
     <Compile Include="Common\AuthProviderTest.cs" />
     <Compile Include="DestinationServiceTest.cs" />
     <Compile Include="Common\ServerTest.cs" />
+    <Compile Include="DownloadServiceTest.cs" />
     <Compile Include="PassengerListServiceTest.cs" />
     <Compile Include="PersonServiceTest.cs" />
     <Compile Include="PlaceServiceTest.cs" />

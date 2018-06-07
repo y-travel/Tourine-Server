@@ -10,10 +10,5 @@ namespace Tourine.ServiceInterfaces
     {
         public static bool ContainAttribute<T>(this T source, Type attributeType) =>
             typeof(T).GetProperties().FirstOrDefault(x => Attribute.IsDefined(x, attributeType)) != null;
-
-        public static string GetRootDirectory()
-        {
-            return HostContext.AppHost?.VirtualFileSources?.RootDirectory.RealPath ?? "";
-        }
     }
 }

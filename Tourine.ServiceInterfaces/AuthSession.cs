@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Net;
 using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.OrmLite;
@@ -39,8 +40,8 @@ namespace Tourine.ServiceInterfaces
         public static AuthSession GetAuthSession(this IRequest request, IDbConnection db)
         {
             var session = request.SessionAs<AuthSession>();
-            Guid id;
-            id = Guid.TryParse(session.UserAuthId, out id) ? id : Guid.Empty;
+            if (!Guid.TryParse(session.UserAuthId, out var id))
+                throw new HttpError(HttpStatusCode.NotFound);
             session.User = session.User ?? db.SingleById<User>(id);
             var agencyPerson = db.Single<AgencyPerson>(x => x.PersonId == session.User.PersonId);
             var customer = db.SingleById<Person>(agencyPerson.PersonId);

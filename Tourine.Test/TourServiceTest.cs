@@ -211,7 +211,7 @@ namespace Tourine.Test
         [Test]
         public void GetPersonOfTour_should_return_result()
         {
-            var res = (TourPassengers)MockService.Get(new GetPersonsOfTour { TourId = _tour.Id });
+            var res = (TourPassengers)MockService.Get(new GetTourPassengers { TourId = _tour.Id });
             res.Leader.Id.Should().Be(_person.Id);
         }
 

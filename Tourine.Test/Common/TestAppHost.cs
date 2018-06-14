@@ -12,10 +12,10 @@ using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Agencies;
 using Tourine.ServiceInterfaces.AgencyPersons;
 using Tourine.ServiceInterfaces.Destinations;
-using Tourine.ServiceInterfaces.Download;
 using Tourine.ServiceInterfaces.Passengers;
 using Tourine.ServiceInterfaces.Persons;
 using Tourine.ServiceInterfaces.Places;
+using Tourine.ServiceInterfaces.Reports;
 using Tourine.ServiceInterfaces.Teams;
 using Tourine.ServiceInterfaces.TourDetails;
 using Tourine.ServiceInterfaces.Tours;
@@ -76,7 +76,7 @@ namespace Tourine.Test.Common
         private void RegisterServicesAsAutoWired(Container container)
         {
             var serviceTypes = new[]{typeof(AgencyService),typeof(AgencyPersonService), typeof(DestinationService), typeof(PersonService), typeof(PlaceService),
-                typeof(PassengerListService),typeof(DownloadService), typeof(AutoQuery), typeof(UserService), typeof(TourService), typeof(TourDetailService), typeof(TeamService),};
+                typeof(PassengerListService),typeof(ReportService), typeof(AutoQuery), typeof(UserService), typeof(TourService), typeof(TourDetailService), typeof(TeamService),};
             container.RegisterAutoWiredTypes(serviceTypes);
         }
 

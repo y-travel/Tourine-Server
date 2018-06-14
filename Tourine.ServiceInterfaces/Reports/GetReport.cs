@@ -1,9 +1,9 @@
 ﻿using ServiceStack;
 
-namespace Tourine.ServiceInterfaces.Download
+namespace Tourine.ServiceInterfaces.Reports
 {
-    [Route("/download/ticketReportTemplate", "GET")]
-    public class GetReportTemplate : IReturn<HttpResult>
+    [Route("/reports/{ReportType}", "GET")]
+    public class GetReport : IReturn<HttpResult>
     {
         public ReportType ReportType { get; set; }
     }

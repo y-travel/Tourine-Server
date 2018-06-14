@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
@@ -131,7 +132,7 @@ namespace Tourine.ServiceInterfaces.Tours
 
             if (!isCreation && parentTour.FreeSpace + tour.Capacity < capacity)
                 throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
-            if(isCreation && parentTour.FreeSpace < capacity)
+            if (isCreation && parentTour.FreeSpace < capacity)
                 throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
         }
 
@@ -194,11 +195,7 @@ namespace Tourine.ServiceInterfaces.Tours
             return newBlock;
         }
 
-        public static void ClearPending(this Tour tour, IDbConnection db)
-        {
-            db.Delete<Team>(x => x.TourId == tour.Id && x.IsPending);
-            //passengerList table updated because of cascade delete
-        }
+        public static void ClearPending(this Tour tour, IDbConnection db) => db.Delete<Team>(x => x.TourId == tour.Id && x.IsPending);
 
         public static bool IsDeleteable(this Tour tour, IDbConnection db)
         {
@@ -253,9 +250,58 @@ namespace Tourine.ServiceInterfaces.Tours
                 }));
         }
 
-        public static bool CapacityChangeIsAllowed(this Tour tour, int newCapacity)
+        public static bool CapacityChangeIsAllowed(this Tour tour, int newCapacity) => tour.Capacity - tour.FreeSpace <= newCapacity;
+
+        public static TourPassengers GetPassengers(IDbConnection Db, Guid tourId)
         {
-            return tour.Capacity - tour.FreeSpace <= newCapacity;
+            var reqTour = Db.LoadSingleById<Tour>(tourId);
+            var tours = Db.From<Tour>().Where(t => t.Id == tourId || t.ParentId == tourId);
+            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId)
+                .Where<PassengerList>(pl => Sql.In(pl.TourId, Db.Select(tours).Select(t => t.Id)))
+                .GroupBy<Person, PassengerList>((x, pl) => new
+                {
+                    x,
+                    pl.TourId,
+                    pl.PassportDelivered,
+                    VisaDelivered = pl.HaveVisa,
+                    pl.TeamId,
+                    pl.OptionType,
+                })
+                .OrderBy<PassengerList>(pl => pl.TeamId)
+                .OrderBy(p => new { p.Family, p.Name })
+                .Select<Person, PassengerList>((x, pl) => new
+                {
+                    x,
+                    pl.TourId,
+                    pl.PassportDelivered,
+                    VisaDelivered = pl.HaveVisa,
+                    pl.TeamId,
+                    SumOptionType = pl.OptionType,
+                });
+
+            var items = Db.Select<TempPerson>(q);
+
+            var mainTour = Db.Single<Tour>(x => x.Id == tourId);
+
+            var teams = new List<TeamMember>();
+
+            foreach (var item in items)
+            {
+                var t = new TeamMember
+                {
+                    Person = item.ConvertTo<Person>(),
+                    PersonId = item.Id,
+                    PersonIncomes = item.SumOptionType.GetListOfTypes(),
+                    HaveVisa = item.VisaDelivered,
+                    PassportDelivered = item.PassportDelivered,
+                    TourId = item.TourId,
+                    TeamId = item.TeamId,
+                };
+                teams.Add(t);
+            }
+            var leader = Db.Single(Db.From<Person, TourDetail>((p, td) => td.Id == mainTour.TourDetailId && p.Id == td.LeaderId));
+
+            return new TourPassengers { Tour = reqTour, Leader = leader, Passengers = teams };
         }
     }
 }

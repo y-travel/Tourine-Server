@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Tourine.ServiceInterfaces.Teams;
-using Tourine.ServiceInterfaces.Tours;
+using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.ServiceInterfaces.Reports.Data
 {

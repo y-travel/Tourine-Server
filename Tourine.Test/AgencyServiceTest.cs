@@ -4,10 +4,8 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.FluentValidation.Results;
 using ServiceStack.FluentValidation.TestHelper;
-using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.AgencyPersons;
-using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Users;
+using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
 namespace Tourine.Test

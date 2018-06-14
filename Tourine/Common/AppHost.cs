@@ -16,6 +16,7 @@ using ServiceStack.OrmLite;
 using ServiceStack.VirtualPath;
 using ServiceStack.Web;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Common;
 using ValidationException = ServiceStack.FluentValidation.ValidationException;
 
 namespace Tourine.Common

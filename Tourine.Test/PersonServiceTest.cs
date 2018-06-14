@@ -5,9 +5,8 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.AgencyPersons;
-using Tourine.ServiceInterfaces.Persons;
+using Tourine.ServiceInterfaces.Common;
+using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
 namespace Tourine.Test

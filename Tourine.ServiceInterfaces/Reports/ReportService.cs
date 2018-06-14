@@ -7,6 +7,7 @@ using System.Web;
 using DevExpress.XtraReports.UI;
 using ServiceStack;
 using ServiceStack.Web;
+using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Reports.Data;
 
 namespace Tourine.ServiceInterfaces.Reports

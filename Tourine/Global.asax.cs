@@ -7,6 +7,8 @@ using ServiceStack.OrmLite.SqlServer;
 using StackExchange.Profiling;
 using Tourine.Common;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Bot;
+using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine
 {

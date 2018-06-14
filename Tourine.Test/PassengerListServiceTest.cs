@@ -9,12 +9,8 @@ using ServiceStack;
 using ServiceStack.Html;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.Passengers;
-using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Teams;
-using Tourine.ServiceInterfaces.TourDetails;
-using Tourine.ServiceInterfaces.Tours;
+using Tourine.ServiceInterfaces.Common;
+using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
 namespace Tourine.Test

@@ -3,8 +3,8 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.Users;
+using Tourine.ServiceInterfaces.Common;
+using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.Test.Common
 {

@@ -4,8 +4,7 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Places;
-using Tourine.ServiceInterfaces.Users;
+using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
 namespace Tourine.Test

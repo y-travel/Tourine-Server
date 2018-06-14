@@ -5,10 +5,8 @@ using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
-using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.AgencyPersons;
-using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Users;
+using Tourine.ServiceInterfaces.Common;
+using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.ServiceInterfaces
 {

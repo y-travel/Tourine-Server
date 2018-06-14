@@ -3,7 +3,8 @@ using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.FluentValidation.TestHelper;
-using Tourine.ServiceInterfaces.Destinations;
+using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
 namespace Tourine.Test

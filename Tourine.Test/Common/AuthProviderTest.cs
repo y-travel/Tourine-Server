@@ -3,8 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using ServiceStack;
 using Telerik.JustMock;
-using Tourine.ServiceInterfaces.AgencyPersons;
-using Tourine.ServiceInterfaces.Users;
+using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Models;
 using AuthProvider = Tourine.Common.AuthProvider;
 
 namespace Tourine.Test.Common

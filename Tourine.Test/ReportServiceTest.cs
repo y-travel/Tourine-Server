@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using ServiceStack;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Reports;
 using Tourine.Test.Common;
 

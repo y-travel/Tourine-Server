@@ -5,6 +5,7 @@ using ServiceStack.OrmLite;
 using Telerik.JustMock;
 using Tourine.Common;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine.Test.Common
 {

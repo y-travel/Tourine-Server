@@ -6,7 +6,7 @@ using Tourine.ServiceInterfaces.Tours;
 
 namespace Tourine.ServiceInterfaces.Passengers
 {
-    public class PassengerList
+    public class PassengerList //@TODO rename to Passenger
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -21,7 +21,8 @@ namespace Tourine.ServiceInterfaces.Passengers
         public Tour Tour { get; set; }
 
         public OptionType OptionType { get; set; }
-        public  bool HaveVisa { get; set; }
+        [Alias("HaveVisa")]
+        public bool HasVisa { get; set; }
         public bool PassportDelivered { get; set; }
 
         [References(typeof(Team))]

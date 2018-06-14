@@ -57,7 +57,7 @@ namespace Tourine.ServiceInterfaces.Teams
                             TourId = req.TourId,
                             OptionType = OptionType.Empty,
                             PassportDelivered = passenger.PassportDelivered,
-                            HaveVisa = passenger.HaveVisa,
+                            HasVisa = passenger.HasVisa,
                             TeamId = team.Id,
                         });
                     }
@@ -66,9 +66,9 @@ namespace Tourine.ServiceInterfaces.Teams
                         {
                             PersonId = passenger.PersonId,
                             TourId = req.TourId,
-                            OptionType =(OptionType)passenger.PersonIncomes.Sum(x => (long)x.OptionType),
+                            OptionType = passenger.OptionType,
                             PassportDelivered = passenger.PassportDelivered,
-                            HaveVisa = passenger.HaveVisa,
+                            HasVisa = passenger.HasVisa,
                             TeamId = team.Id,
                         });
                 }
@@ -104,14 +104,14 @@ namespace Tourine.ServiceInterfaces.Teams
                 {
                     x,
                     pl.PassportDelivered,
-                    VisaDelivered = pl.HaveVisa,
+                    VisaDelivered = pl.HasVisa,
                     pl.OptionType,
                 })
                 .Select<Person, PassengerList>((x, pl) => new
                 {
                     x,
                     pl.PassportDelivered,
-                    VisaDelivered = pl.HaveVisa,
+                    VisaDelivered = pl.HasVisa,
                     SumOptionType = pl.OptionType,
                 });
 
@@ -127,8 +127,8 @@ namespace Tourine.ServiceInterfaces.Teams
                 {
                     Person = item.ConvertTo<Person>(),
                     PersonId = item.Id,
-                    PersonIncomes = item.SumOptionType.GetListOfTypes(),
-                    HaveVisa = item.VisaDelivered,
+                    OptionType = item.SumOptionType,
+                    HasVisa = item.VisaDelivered,
                     PassportDelivered = item.PassportDelivered
                 };
                 teams.Add(t);

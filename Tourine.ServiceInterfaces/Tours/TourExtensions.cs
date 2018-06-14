@@ -263,7 +263,7 @@ namespace Tourine.ServiceInterfaces.Tours
                     x,
                     pl.TourId,
                     pl.PassportDelivered,
-                    VisaDelivered = pl.HaveVisa,
+                    VisaDelivered = pl.HasVisa,
                     pl.TeamId,
                     pl.OptionType,
                 })
@@ -274,7 +274,7 @@ namespace Tourine.ServiceInterfaces.Tours
                     x,
                     pl.TourId,
                     pl.PassportDelivered,
-                    VisaDelivered = pl.HaveVisa,
+                    VisaDelivered = pl.HasVisa,
                     pl.TeamId,
                     SumOptionType = pl.OptionType,
                 });
@@ -291,8 +291,8 @@ namespace Tourine.ServiceInterfaces.Tours
                 {
                     Person = item.ConvertTo<Person>(),
                     PersonId = item.Id,
-                    PersonIncomes = item.SumOptionType.GetListOfTypes(),
-                    HaveVisa = item.VisaDelivered,
+                    OptionType = item.SumOptionType,
+                    HasVisa = item.VisaDelivered,
                     PassportDelivered = item.PassportDelivered,
                     TourId = item.TourId,
                     TeamId = item.TeamId,

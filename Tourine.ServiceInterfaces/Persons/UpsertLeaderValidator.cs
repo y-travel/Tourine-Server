@@ -2,7 +2,7 @@
 
 namespace Tourine.ServiceInterfaces.Persons
 {
-    class UpsertLeaderValidator : AbstractValidator<UpsertLeader>
+    public class UpsertLeaderValidator : AbstractValidator<UpsertLeader>
     {
         public UpsertLeaderValidator()
         {

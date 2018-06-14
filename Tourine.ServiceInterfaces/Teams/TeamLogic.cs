@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using DevExpress.XtraPrinting.Native;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Agencies;
@@ -53,7 +54,7 @@ namespace Tourine.ServiceInterfaces.Teams
                         TourId = toTour.Id,
                         OptionType = OptionType.Empty,
                         PassportDelivered = passenger.PassportDelivered,
-                        HaveVisa = passenger.HaveVisa,
+                        HasVisa = passenger.HasVisa,
                         TeamId = newTeam.Id,
                     });
                 else
@@ -61,9 +62,9 @@ namespace Tourine.ServiceInterfaces.Teams
                     {
                         PersonId = passenger.PersonId,
                         TourId = toTour.Id,
-                        OptionType = (OptionType)passenger.PersonIncomes.Sum(x => (long)x.OptionType),
+                        OptionType = passenger.OptionType,
                         PassportDelivered = passenger.PassportDelivered,
-                        HaveVisa = passenger.HaveVisa,
+                        HasVisa = passenger.HasVisa,
                         TeamId = newTeam.Id,
                     });
             }
@@ -87,9 +88,10 @@ namespace Tourine.ServiceInterfaces.Teams
                 if (passenger.Person.IsUnder5)
                 {
                     totalPrice += tour.BasePrice;
-                    totalPrice -= passenger.PersonIncomes.Exists(x => x.OptionType == OptionType.Bus) ? 0 : tourOptions.Find(x => x.OptionType == OptionType.Bus).Price;
-                    totalPrice -= passenger.PersonIncomes.Exists(x => x.OptionType == OptionType.Room) ? 0 : tourOptions.Find(x => x.OptionType == OptionType.Room).Price;
-                    totalPrice -= passenger.PersonIncomes.Exists(x => x.OptionType == OptionType.Food) ? 0 : tourOptions.Find(x => x.OptionType == OptionType.Food).Price;
+                    foreach (int value in Enum.GetValues(typeof(OptionType)))
+                        totalPrice -= ((int)passenger.OptionType & value) == 0
+                             ? tourOptions.Find(x => x.OptionType == OptionType.Bus).Price
+                             : 0;
                 }
                 else if (passenger.Person.IsInfant)
                     totalPrice += tour.InfantPrice;

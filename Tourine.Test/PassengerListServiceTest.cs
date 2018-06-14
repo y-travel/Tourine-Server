@@ -107,9 +107,9 @@ namespace Tourine.Test
             Db.Insert(_tour);
             Db.Insert(_tourDetail);
             Db.Insert(_team);
-            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Bus, HaveVisa = true });
-            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Room, HaveVisa = true });
-            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Food, HaveVisa = true });
+            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Bus, HasVisa = true });
+            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Room, HasVisa = true });
+            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Food, HasVisa = true });
         }
     }
 }

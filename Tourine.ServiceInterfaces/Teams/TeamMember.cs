@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ServiceStack.DataAnnotations;
 using Tourine.ServiceInterfaces.Persons;
 
 namespace Tourine.ServiceInterfaces.Teams
@@ -8,8 +9,9 @@ namespace Tourine.ServiceInterfaces.Teams
     {
         public Guid PersonId { get; set; }
         public Person Person { get; set; }
-        public List<PersonIncome> PersonIncomes { get; set; }
-        public bool HaveVisa { get; set; }
+        public OptionType OptionType { get; set; }
+        [Alias("HaveVisa")]
+        public bool HasVisa { get; set; }
         public bool PassportDelivered { get; set; }
         public Guid TourId { get; set; }
         public Guid TeamId { get; set; }
@@ -20,6 +22,6 @@ namespace Tourine.ServiceInterfaces.Teams
         public OptionType OptionType { get; set; }
         public long ReceivedMoney { get; set; }
         public IncomeStatus IncomeStatus { get; set; }
-        public double CurrencyFactor { get; set; } = 1 ;
+        public double CurrencyFactor { get; set; } = 1;
     }
 }

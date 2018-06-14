@@ -15,47 +15,24 @@ namespace Tourine.Test
 {
     public class TeamServiceTest : ServiceTest<TeamService>
     {
-        private readonly Tour tour = new Tour { Capacity = 2 , FreeSpace = 2};
-        private readonly Person person_1 = new Person();
-        private readonly Person person_2 = new Person();
-        private readonly Person person_3 = new Person();
+        private readonly Tour _tour = new Tour { Capacity = 2, FreeSpace = 2 };
+        private readonly Person _person1 = new Person();
+        private readonly Person _person2 = new Person();
+        private readonly Person _person3 = new Person();
 
         private readonly List<TeamMember> _passengers = new List<TeamMember>();
-        List<PersonIncome> personIncomes = new List<PersonIncome>();
-        private readonly PersonIncome personBusIncome = new PersonIncome
-        {
-            OptionType = OptionType.Bus,
-            IncomeStatus = IncomeStatus.Settled,
-            ReceivedMoney = 12000
-        };
-        private readonly PersonIncome personFoodIncome = new PersonIncome
-        {
-            OptionType = OptionType.Food,
-            IncomeStatus = IncomeStatus.Settled,
-            ReceivedMoney = 15000
-        };
-        private readonly PersonIncome personRoomIncome = new PersonIncome
-        {
-            OptionType = OptionType.Room,
-            IncomeStatus = IncomeStatus.Settled,
-            ReceivedMoney = 18000
-        };
-
 
         [SetUp]
         public new void Setup()
         {
-            personIncomes.Add(personBusIncome);
-            personIncomes.Add(personFoodIncome);
-            personIncomes.Add(personRoomIncome);
 
-            var teamMember_1 = new TeamMember { PersonId = person_1.Id, PersonIncomes = personIncomes, Person = person_1 };
-            var teamMember_2 = new TeamMember { PersonId = person_2.Id, PersonIncomes = personIncomes, Person = person_2 };
-            var teamMember_3 = new TeamMember { PersonId = person_3.Id, PersonIncomes = personIncomes, Person = person_3 };
+            var teamMember1 = new TeamMember { PersonId = _person1.Id, OptionType = OptionType.Bus, Person = _person1 };
+            var teamMember2 = new TeamMember { PersonId = _person2.Id, OptionType = OptionType.Food, Person = _person2 };
+            var teamMember3 = new TeamMember { PersonId = _person3.Id, OptionType = OptionType.Room, Person = _person3 };
 
-            _passengers.Add(teamMember_1);
-            _passengers.Add(teamMember_2);
-            _passengers.Add(teamMember_3);
+            _passengers.Add(teamMember1);
+            _passengers.Add(teamMember2);
+            _passengers.Add(teamMember3);
 
             CreateTeam();
             AppHost.Session = new AuthSession
@@ -70,7 +47,7 @@ namespace Tourine.Test
         {
             new Action(() => MockService.Post(new UpsertTeam
             {
-                TourId = tour.Id,
+                TourId = _tour.Id,
                 Buyer = _passengers[0].Person,
                 Passengers = _passengers.GetRange(1, 1)
             }))
@@ -82,7 +59,7 @@ namespace Tourine.Test
         {
             new Action(() => MockService.Post(new UpsertTeam
             {
-                TourId = tour.Id,
+                TourId = _tour.Id,
                 Buyer = _passengers[0].Person,
                 Passengers = _passengers
             }))
@@ -93,27 +70,27 @@ namespace Tourine.Test
         public void UpsertTeam_should_not_throw_exception()
         {
             new Action(() => MockService.Post(new UpsertTeam
-                {
-                    TourId = tour.Id,
-                    Buyer = _passengers[0].Person,
-                    Passengers = _passengers.GetRange(1, 2)
-                }))
+            {
+                TourId = _tour.Id,
+                Buyer = _passengers[0].Person,
+                Passengers = _passengers.GetRange(1, 2)
+            }))
                 .ShouldNotThrow<HttpError>();
         }
 
         [Test]
         public void GetTourTeams_shoudl_return_result()
         {
-            Db.Insert(new Team { Buyer = person_1, BuyerId = person_1.Id, Tour = tour, TourId = tour.Id });
+            Db.Insert(new Team { Buyer = _person1, BuyerId = _person1.Id, Tour = _tour, TourId = _tour.Id });
 
-            var res = (QueryResponse<Team>)MockService.Get(new GetTourTeams { TourId = tour.Id });
+            var res = (QueryResponse<Team>)MockService.Get(new GetTourTeams { TourId = _tour.Id });
             res.Results.Count.Should().Be(1);
         }
 
         [Test]
         public void DeleteTeam_shoudl_not_throw_exception()
         {
-            var team = new Team { Buyer = person_1, BuyerId = person_1.Id, Tour = tour, TourId = tour.Id };
+            var team = new Team { Buyer = _person1, BuyerId = _person1.Id, Tour = _tour, TourId = _tour.Id };
             Db.Insert(team);
             new Action(() => MockService.Delete(new DeleteTeam { TeamId = team.Id }))
                 .ShouldNotThrow<HttpError>();
@@ -124,7 +101,7 @@ namespace Tourine.Test
         {
             var tm = (Team)MockService.Post(new UpsertTeam
             {
-                TourId = tour.Id,
+                TourId = _tour.Id,
                 Buyer = _passengers[0].Person,
                 Passengers = _passengers.GetRange(1, 1)
             });
@@ -135,10 +112,10 @@ namespace Tourine.Test
 
         public void CreateTeam()
         {
-            Db.Insert(person_1);
-            Db.Insert(person_2);
-            Db.Insert(person_3);
-            Db.Insert(tour);
+            Db.Insert(_person1);
+            Db.Insert(_person2);
+            Db.Insert(_person3);
+            Db.Insert(_tour);
         }
     }
 }

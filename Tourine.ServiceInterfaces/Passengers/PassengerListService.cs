@@ -117,7 +117,7 @@ namespace Tourine.ServiceInterfaces.Passengers
             var tour = Db.LoadSingleById<Tour>(req.TourId);
             var leader = Db.SingleById<Person>(tour.TourDetail.LeaderId);
             var query = Db.From<Person, PassengerList>()
-                .Where<PassengerList>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)) && x.HaveVisa == req.Have)
+                .Where<PassengerList>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)) && x.HasVisa == req.Have)
                 .SelectDistinct(x => x);
             var passengers = Db.Select(query);
             var ticket = new TourPersonReport

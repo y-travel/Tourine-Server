@@ -17,7 +17,7 @@ namespace Tourine.ServiceInterfaces
             Db = db;
         }
 
-        public Team CopyPassengers(Team fromTeam, Tour toTour, List<TeamMember> passengers)
+        public Team CopyPassengers(Team fromTeam, Tour toTour, List<PassengerInfo> passengers)
         {
             //@TODO: check existance with list (not per one query)
             if (passengers.TrueForAll(x => toTour.IsPassengerExist(x.Person.Id, Db)))
@@ -73,7 +73,7 @@ namespace Tourine.ServiceInterfaces
 
         }
 
-        public long CalculateTotalPrice(List<TeamMember> passengers,
+        public long CalculateTotalPrice(List<PassengerInfo> passengers,
             Tour tour)
         {
             var tourOptions = Db.Select(Db.From<TourOption>().Where(to => to.TourId == tour.Id));

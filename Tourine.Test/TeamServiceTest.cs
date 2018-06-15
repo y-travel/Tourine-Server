@@ -18,15 +18,15 @@ namespace Tourine.Test
         private readonly Person _person2 = new Person();
         private readonly Person _person3 = new Person();
 
-        private readonly List<TeamMember> _passengers = new List<TeamMember>();
+        private readonly List<PassengerInfo> _passengers = new List<PassengerInfo>();
 
         [SetUp]
         public new void Setup()
         {
 
-            var teamMember1 = new TeamMember { PersonId = _person1.Id, OptionType = OptionType.Bus, Person = _person1 };
-            var teamMember2 = new TeamMember { PersonId = _person2.Id, OptionType = OptionType.Food, Person = _person2 };
-            var teamMember3 = new TeamMember { PersonId = _person3.Id, OptionType = OptionType.Room, Person = _person3 };
+            var teamMember1 = new PassengerInfo { PersonId = _person1.Id, OptionType = OptionType.Bus, Person = _person1 };
+            var teamMember2 = new PassengerInfo { PersonId = _person2.Id, OptionType = OptionType.Food, Person = _person2 };
+            var teamMember3 = new PassengerInfo { PersonId = _person3.Id, OptionType = OptionType.Room, Person = _person3 };
 
             _passengers.Add(teamMember1);
             _passengers.Add(teamMember2);

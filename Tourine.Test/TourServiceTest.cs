@@ -10,7 +10,6 @@ using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
-using TourPassengers = Tourine.ServiceInterfaces.TourPassengers;
 
 namespace Tourine.Test
 {

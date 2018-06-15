@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Common;
@@ -146,15 +145,6 @@ namespace Tourine.ServiceInterfaces
                 dbTrans.Commit();
             }
         }
-    }
-
-    public class TourPassengers
-    {
-        //@TODO omit
-        public Tour Tour { get; set; }
-        //@TODO omit
-        public Person Leader { get; set; }
-        public List<TeamMember> Passengers { get; set; }
     }
 }
 

@@ -44,7 +44,7 @@ namespace Tourine.ServiceInterfaces
                 team.BuyerIsPassenger = req.Passengers.Exists(x => x.Person.Id == req.Buyer.Id);
                 Db.Insert(team);
 
-                List<TeamMember> passengers = req.Passengers;
+                List<PassengerInfo> passengers = req.Passengers;
                 foreach (var passenger in passengers)
                 {
                     if (passenger.Person.IsInfant)
@@ -117,11 +117,11 @@ namespace Tourine.ServiceInterfaces
 
             var mainTeam = Db.Single<Team>(x => x.Id == team.TeamId);
 
-            var teams = new List<TeamMember>();
+            var teams = new List<PassengerInfo>();
 
             foreach (var item in items)
             {
-                var t = new TeamMember
+                var t = new PassengerInfo
                 {
                     Person = item.ConvertTo<Person>(),
                     PersonId = item.Id,
@@ -169,12 +169,6 @@ namespace Tourine.ServiceInterfaces
                 dbTrans.Commit();
             }
         }
-    }
-
-    public class TeamPassengers
-    {
-        public Person Buyer { get; set; }
-        public List<TeamMember> Passengers { get; set; }
     }
 
     public class TempPerson

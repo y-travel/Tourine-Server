@@ -7,6 +7,12 @@ using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine.ServiceInterfaces.Models
 {
+    public class TeamPassengers
+    {
+        public Person Buyer { get; set; }
+        public List<PassengerInfo> Passengers { get; set; }
+    }
+
     [Route("/notify/tour/{TourId}/buyers/", "POST")]
     public class SendNotifyToTourBuyers : IReturn
     {
@@ -14,7 +20,7 @@ namespace Tourine.ServiceInterfaces.Models
         public string Msg { get; set; }
     }
 
-    public class TeamMember
+    public class PassengerInfo
     {
         public Guid PersonId { get; set; }
         public Person Person { get; set; }
@@ -43,7 +49,7 @@ namespace Tourine.ServiceInterfaces.Models
         public Guid? TeamId { get; set; }
         public Guid TourId { get; set; }
         public Person Buyer { get; set; }
-        public List<TeamMember> Passengers { get; set; }
+        public List<PassengerInfo> Passengers { get; set; }
         public long InfantPrice { get; set; }
         public long BasePrice { get; set; }
         public long TotalPrice { get; set; }
@@ -82,26 +88,26 @@ namespace Tourine.ServiceInterfaces.Models
         public Team Team { get; set; }
     }
 
-    [Route("/tours/{OldTourId}/teams/list","PUT")]
+    [Route("/tours/{OldTourId}/teams/list", "PUT")]
     public class PassengerReplacementTeamAccomplish : IReturnVoid
     {
         public Guid OldTourId { get; set; }
         public List<Team> Teams { get; set; }
     }
 
-    [Route("/tours/{TourId}/teams","GET")]
-    public class GetTourTeams: QueryDb<Team>
+    [Route("/tours/{TourId}/teams", "GET")]
+    public class GetTourTeams : QueryDb<Team>
     {
         public Guid TourId { get; set; }
     }
 
     [Route("/teams/{TeamId}/persons/", "GET")]
-    public class GetPersonsOfTeam : IReturn<IList<TeamMember>>
+    public class GetPersonsOfTeam : IReturn<IList<PassengerInfo>>
     {
         public Guid TeamId { get; set; }
     }
 
-    [Route("/tours/teams/{TeamId}","DELETE")]
+    [Route("/tours/teams/{TeamId}", "DELETE")]
     public class DeleteTeam
     {
         [QueryDbField(Field = "Id")]
@@ -129,9 +135,6 @@ namespace Tourine.ServiceInterfaces.Models
         public long BasePrice { get; set; }
         public long TotalPrice { get; set; }
         public bool BuyerIsPassenger { get; set; } = true;
-
-        [Ignore]
-        public List<TeamMember> Type { get; set; }
 
         public bool IsPending { get; set; }
     }

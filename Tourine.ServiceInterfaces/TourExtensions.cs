@@ -280,11 +280,11 @@ namespace Tourine.ServiceInterfaces
 
             var mainTour = Db.Single<Tour>(x => x.Id == tourId);
 
-            var teams = new List<TeamMember>();
+            var teams = new List<PassengerInfo>();
 
             foreach (var item in items)
             {
-                var t = new TeamMember
+                var t = new PassengerInfo
                 {
                     Person = item.ConvertTo<Person>(),
                     PersonId = item.Id,

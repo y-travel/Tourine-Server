@@ -7,11 +7,38 @@ using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine.ServiceInterfaces.Models
 {
-    [Route("/notify/tour/{TourId}/passengers/", "POST")]
-    public class SendNotifyToTourPassengers : IReturn
+    public class PassengerList //@TODO rename to Passenger
     {
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        [References(typeof(Person))]
+        public Guid PersonId { get; set; }
+        [Reference]
+        public Person Person { get; set; }
+
+        [References(typeof(Tour))]
         public Guid TourId { get; set; }
-        public string Msg { get; set; }
+        [Reference]
+        public Tour Tour { get; set; }
+
+        public OptionType OptionType { get; set; }
+        [Alias("HaveVisa")]
+        public bool HasVisa { get; set; }
+        public bool PassportDelivered { get; set; }
+
+        [References(typeof(Team))]
+        public Guid TeamId { get; set; }
+        [Reference]
+        public Team Team { get; set; }
+    }
+
+    public class TourPassengers
+    {
+        //@TODO omit
+        public Tour Tour { get; set; }
+        //@TODO omit
+        public Person Leader { get; set; }
+        public List<PassengerInfo> Passengers { get; set; }
     }
 
     public class TourPersonReport
@@ -19,6 +46,13 @@ namespace Tourine.ServiceInterfaces.Models
         public Tour Tour { get; set; }
         public Person Leader { get; set; }
         public List<Person> Passengers { get; set; }
+    }
+
+    [Route("/notify/tour/{TourId}/passengers/", "POST")]
+    public class SendNotifyToTourPassengers : IReturn
+    {
+        public Guid TourId { get; set; }
+        public string Msg { get; set; }
     }
 
     public class PutServiceForPassengerValidator : AbstractValidator<PutServiceForPassenger>
@@ -60,7 +94,7 @@ namespace Tourine.ServiceInterfaces.Models
         public Guid TourId { get; set; }
         public Guid DestTourId { get; set; }
         public Guid AgencyId { get; set; }
-        public List<TeamMember> Passengers { get; set; }
+        public List<PassengerInfo> Passengers { get; set; }
     }
 
     [Route("/tours/{TourId}/visa/{Have}")]
@@ -89,28 +123,4 @@ namespace Tourine.ServiceInterfaces.Models
         public Guid TourId { get; set; }
     }
 
-    public class PassengerList //@TODO rename to Passenger
-    {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
-        [References(typeof(Person))]
-        public Guid PersonId { get; set; }
-        [Reference]
-        public Person Person { get; set; }
-
-        [References(typeof(Tour))]
-        public Guid TourId { get; set; }
-        [Reference]
-        public Tour Tour { get; set; }
-
-        public OptionType OptionType { get; set; }
-        [Alias("HaveVisa")]
-        public bool HasVisa { get; set; }
-        public bool PassportDelivered { get; set; }
-
-        [References(typeof(Team))]
-        public Guid TeamId { get; set; }
-        [Reference]
-        public Team Team { get; set; }
-    }
 }

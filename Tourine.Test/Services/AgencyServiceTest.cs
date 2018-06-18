@@ -2,13 +2,11 @@
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
-using ServiceStack.FluentValidation.Results;
-using ServiceStack.FluentValidation.TestHelper;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
-namespace Tourine.Test
+namespace Tourine.Test.Services
 {
     public class AgencyServiceTest : ServiceTest<AgencyService>
     {

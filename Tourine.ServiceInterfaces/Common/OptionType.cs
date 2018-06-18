@@ -24,17 +24,19 @@ namespace Tourine.ServiceInterfaces.Common
                     return OptionStatus.Limited;
                 case OptionType.Food:
                     return OptionStatus.Unlimited;
+                case OptionType.Empty:
+                    return OptionStatus.Limited;
                 default:
                     return OptionStatus.Limited;
             }
         }
-        public static string GetEmojis(this OptionType OptionType)
+        public static string GetEmojis(this OptionType optionType)
         {
             string emojies = "";
             var types = new List<OptionType>();
             foreach (OptionType r in Enum.GetValues(typeof(OptionType)))
             {
-                if ((OptionType & r) == r)
+                if ((optionType & r) == r)
                 {
                     types.Add(r);
                 }
@@ -62,10 +64,10 @@ namespace Tourine.ServiceInterfaces.Common
             return emojies;
         }
 
-        public static string GetEmoji(this OptionType OptionType)
+        public static string GetEmoji(this OptionType optionType)
         {
 
-            switch (OptionType)
+            switch (optionType)
             {
                 case OptionType.Room:
                     return "🛏";
@@ -78,9 +80,9 @@ namespace Tourine.ServiceInterfaces.Common
                     return "🚫";
             }
         }
-        public static string GetDescription(this OptionType OptionType)
+        public static string GetDescription(this OptionType optionType)
         {
-            switch (OptionType)
+            switch (optionType)
             {
                 case OptionType.Room:
                     return "( تخت )";

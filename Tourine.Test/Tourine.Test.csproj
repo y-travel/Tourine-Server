@@ -120,26 +120,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgencyPersonServiceTest.cs" />
-    <Compile Include="AgencyServiceTest.cs" />
-    <Compile Include="Common\GlobalFixture.cs" />
+    <Compile Include="FormatterTest.cs" />
+    <Compile Include="Services\AgencyPersonServiceTest.cs" />
+    <Compile Include="Services\AgencyServiceTest.cs" />
     <Compile Include="Common\InsertHelper.cs" />
     <Compile Include="Common\TestAppHost.cs" />
-    <Compile Include="Common\AuthProviderTest.cs" />
-    <Compile Include="DestinationServiceTest.cs" />
-    <Compile Include="Common\ServerTest.cs" />
-    <Compile Include="ReportServiceTest.cs" />
-    <Compile Include="PassengerListServiceTest.cs" />
-    <Compile Include="PersonServiceTest.cs" />
-    <Compile Include="PlaceServiceTest.cs" />
+    <Compile Include="AuthProviderTest.cs" />
+    <Compile Include="Services\DestinationServiceTest.cs" />
+    <Compile Include="Services\ReportServiceTest.cs" />
+    <Compile Include="Services\PassengerListServiceTest.cs" />
+    <Compile Include="Services\PersonServiceTest.cs" />
+    <Compile Include="Services\PlaceServiceTest.cs" />
     <Compile Include="RoleTest.cs" />
     <Compile Include="Common\ServiceTest.cs" />
-    <Compile Include="TeamServiceTest.cs" />
-    <Compile Include="TourDetailServiceTest.cs" />
+    <Compile Include="StringsTest.cs" />
+    <Compile Include="Services\TeamServiceTest.cs" />
+    <Compile Include="Services\TourDetailServiceTest.cs" />
     <Compile Include="TourineBotTest.cs" />
-    <Compile Include="TourServiceTest.cs" />
+    <Compile Include="Services\TourServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserServiceTest.cs" />
+    <Compile Include="Services\UserServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

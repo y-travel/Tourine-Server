@@ -14,6 +14,6 @@ namespace Tourine.ServiceInterfaces.Reports.Data
         public int BedCount { get; set; }
 
         public int FoodCount { get; set; }
-        public List<PassengerInfo> Tours { get; set; }
+        public List<PassengerInfo> PassengersInfos { get; set; }
     }
 }

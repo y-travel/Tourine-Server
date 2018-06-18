@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
-using ServiceStack;
-using ServiceStack.Html;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
-namespace Tourine.Test
+namespace Tourine.Test.Services
 {
     public class PassengerListServiceTest : ServiceTest<PassengerListService>
     {
@@ -23,7 +18,7 @@ namespace Tourine.Test
         private readonly Person _person = new Person { Name = "name", Family = "family", MobileNumber = "mobileNumber" };
 
         [SetUp]
-        public new void setup()
+        public void setup()
         {
             CreateSampleTour();
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,7 +8,7 @@ using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
-namespace Tourine.Test
+namespace Tourine.Test.Services
 {
     public class PersonServiceTest : ServiceTest<PersonService>
     {

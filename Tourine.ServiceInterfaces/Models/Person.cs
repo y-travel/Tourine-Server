@@ -1,5 +1,6 @@
 ﻿using System;
 using ServiceStack;
+using ServiceStack.DataAnnotations;
 using ServiceStack.FluentValidation;
 using Tourine.ServiceInterfaces.Common;
 
@@ -50,19 +51,19 @@ namespace Tourine.ServiceInterfaces.Models
         public Guid? Id { get; set; }
     }
 
-    [Route("/persons/leaders","GET")]
+    [Route("/persons/leaders", "GET")]
     public class GetLeaders : QueryDb<Person>
     {
     }
 
-    [Route("/persons/current","GET")]
+    [Route("/persons/current", "GET")]
     public class GetCurrentPerson : IReturn<Person>
     {
     }
 
     [Route("/persons/search/{Str}/agency{AgencyId}/", "GET")]
     [Route("/persons/search/{Str}", "GET")]
-    public class FindPersonInAgency : QueryDb<Person> , IJoin<Person, AgencyPerson>
+    public class FindPersonInAgency : QueryDb<Person>, IJoin<Person, AgencyPerson>
     {
         public Guid? AgencyId { get; set; }
         public string Str { get; set; }
@@ -92,7 +93,7 @@ namespace Tourine.ServiceInterfaces.Models
         }
     }
 
-    [Route("/persons/leaders/{Id}","DELETE")]
+    [Route("/persons/leaders/{Id}", "DELETE")]
     public class DeleteLeader : IReturnVoid
     {
         public Guid Id { get; set; }
@@ -109,6 +110,9 @@ namespace Tourine.ServiceInterfaces.Models
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public string Family { get; set; }
+
+        [Ignore]
+        public string DisplayTitle => this.GetDisplayTitle();
         public string EnglishName { get; set; }
         public string EnglishFamily { get; set; }
         public string MobileNumber { get; set; }

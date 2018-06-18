@@ -5,9 +5,10 @@ using ServiceStack;
 using Telerik.JustMock;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Models;
+using Tourine.Test.Common;
 using AuthProvider = Tourine.Common.AuthProvider;
 
-namespace Tourine.Test.Common
+namespace Tourine.Test
 {
     public class AuthProviderTest 
     {

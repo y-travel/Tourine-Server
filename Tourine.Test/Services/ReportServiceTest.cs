@@ -1,12 +1,11 @@
 ﻿using System.IO;
 using NUnit.Framework;
 using ServiceStack;
-using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Reports;
 using Tourine.Test.Common;
 
-namespace Tourine.Test
+namespace Tourine.Test.Services
 {
     public class ReportServiceTest : ServiceTest<ReportService>
     {

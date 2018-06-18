@@ -8,7 +8,7 @@ using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
-namespace Tourine.Test
+namespace Tourine.Test.Services
 {
     public class UserServiceTest : ServiceTest<UserService>
     {

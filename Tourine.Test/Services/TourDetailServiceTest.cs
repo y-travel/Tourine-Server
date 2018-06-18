@@ -1,13 +1,12 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
-using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
-namespace Tourine.Test
+namespace Tourine.Test.Services
 {
     public class TourDetailServiceTest : ServiceTest<TourDetailService>
     {

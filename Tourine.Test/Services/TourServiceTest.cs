@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
@@ -11,7 +10,7 @@ using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
 
-namespace Tourine.Test
+namespace Tourine.Test.Services
 {
     public class TourServiceTest : ServiceTest<TourService>
     {

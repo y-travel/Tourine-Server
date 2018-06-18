@@ -3,7 +3,6 @@ using System.Linq;
 using ServiceStack;
 using Tourine.ServiceInterfaces.Models;
 using System.Collections.Generic;
-using DevExpress.Utils;
 
 namespace Tourine.ServiceInterfaces.Common
 {
@@ -12,24 +11,29 @@ namespace Tourine.ServiceInterfaces.Common
         public static string GetDisplayTitle(this Person person) =>
             $"{(!person.IsInfant ? (person.Gender ? Strings.Mr : Strings.Mrs) : "")} {person.Name} {person.Family}";
 
-        public static string GetDisplayTitle(this OptionType optionType, bool reverse = false) =>
-            reverse
-                ? $"{"WithOut".Loc()} "
-                : $"";
+        public static string GetDisplayTitle(this OptionType optionType, bool reverse = false)
+        {
+            if (optionType == OptionType.Empty)
+                return "WithoutOption".Loc();
+            var options = (reverse ? ~optionType : optionType).GetMaskArray<OptionType>();
+            if (options.Length == 0 || options.Length == Enum.GetNames(typeof(OptionType)).Length - 1)
+                return "";
+            var formattedOption = options.Select(x => x.Loc()).Join("/");
+            return reverse
+                ? $"{"Without".Loc()} {formattedOption}"
+                : $"{"With".Loc()} {formattedOption}";
+        }
 
         public static string GetItems(this Enum item) => Enum.GetNames(item.GetType()).Select(x => x.Loc()).Join("/");
 
-        public static IEnumerable<T> MaskToList<T>(this Enum mask)
+        public static string[] GetMaskArray<T>(this Enum mask)
         {
             if (typeof(T).IsSubclassOf(typeof(Enum)) == false)
                 throw new ArgumentException();
             return Enum.GetValues(typeof(T))
                 .Cast<Enum>()
-                .Where(predicate: m =>
-                {
-                    return mask.HasAnyFlag(m);
-                })
-                .Cast<T>();
+                .Where(predicate: x => (int)Enum.Parse(typeof(OptionType), x.ToString()) > 0 && mask.HasFlag(x))
+                .Select(x => x.ToString()).ToArray();
         }
     }
 }

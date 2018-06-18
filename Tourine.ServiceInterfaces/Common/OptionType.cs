@@ -5,7 +5,7 @@ using Tourine.ServiceInterfaces.Models;
 namespace Tourine.ServiceInterfaces.Common
 {
     [Flags]
-    public enum OptionType : long
+    public enum OptionType
     {
         Empty = 0,
         Room = 1,
@@ -35,18 +35,10 @@ namespace Tourine.ServiceInterfaces.Common
             string emojies = "";
             var types = new List<OptionType>();
             foreach (OptionType r in Enum.GetValues(typeof(OptionType)))
-            {
-                if ((optionType & r) == r)
-                {
-                    types.Add(r);
-                }
-                else
-                {
-                    types.Add(OptionType.Empty);
-                }
-            }
+                types.Add((optionType & r) == r ? r : OptionType.Empty);
+
             types.RemoveAt(0);
-            foreach (OptionType t in types)
+            foreach (var t in types)
             {
                 switch (t)
                 {

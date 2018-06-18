@@ -10,12 +10,19 @@ namespace Tourine.ServiceInterfaces.Common
         public const string Bed = "تخت";
         public const string Food = "غذا";
         public const string Seat = "صندلی";
-        public const string WithOut = "بدون";
-        public static string Loc(this string str) => (Dynamic.Dictionary.ContainsKey(str) ? Dynamic.Dictionary[str] : str).ToString();
-        public static class Dynamic
+        public const string Without = "بدون";
+        public const string WithoutOption = "بدون خدمات";
+        public const string With = "با";
+    }
+
+    public static class StringsExtensions
+    {
+        public static string Loc(this string str) => (Store.Dictionary.ContainsKey(str) ? Store.Dictionary[str] : str).ToString();
+
+        public static class Store
         {
             public static Hashtable Dictionary = new Hashtable();
-            static Dynamic()
+            static Store()
             {
                 FillWithStringsConstants();
                 CustomTranslation();
@@ -32,9 +39,9 @@ namespace Tourine.ServiceInterfaces.Common
             }
             internal static void CustomTranslation()
             {
-                Dictionary[nameof(OptionType.Room)] = Bed;
-                Dictionary[nameof(OptionType.Food)] = Food;
-                Dictionary[nameof(OptionType.Bus)] = Seat;
+                Dictionary[nameof(OptionType.Room)] = Strings.Bed;
+                Dictionary[nameof(OptionType.Food)] = Strings.Food;
+                Dictionary[nameof(OptionType.Bus)] = Strings.Seat;
 
             }
 

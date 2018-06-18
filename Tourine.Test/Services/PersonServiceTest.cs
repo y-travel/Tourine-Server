@@ -21,8 +21,9 @@ namespace Tourine.Test.Services
         private readonly Person _person = new Person { NationalCode = "0123456789", Family = "any", Type = PersonType.Passenger | PersonType.Leader };
         private readonly Agency _agency = new Agency();
         [SetUp]
-        public new void Setup()
+        protected override void Setup()
         {
+            base.Setup();
             CreatePerson();
             //            AppHost.Session = new AuthSession
             //            {

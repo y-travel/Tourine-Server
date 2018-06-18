@@ -8,25 +8,25 @@ using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.ServiceInterfaces
 {
-    public class PassengerListService : AppService
+    public class PassengerService : AppService
     {
         public IAutoQueryDb AutoQueryDb { get; set; }
         public object Post(PostServiceForPassenger forPassenger)
         {
-            forPassenger.PassengerList.Id = Guid.NewGuid();
-            Db.Insert(forPassenger.PassengerList);
-            return Db.SingleById<PassengerList>(forPassenger.PassengerList.Id);
+            forPassenger.Passenger.Id = Guid.NewGuid();
+            Db.Insert(forPassenger.Passenger);
+            return Db.SingleById<Passenger>(forPassenger.Passenger.Id);
         }
 
         public void Put(PutServiceForPassenger forPassenger)
         {
-            if (!Db.Exists<PassengerList>(new { Id = forPassenger.PassengerList.Id }))
+            if (!Db.Exists<Passenger>(new { Id = forPassenger.Passenger.Id }))
                 throw HttpError.NotFound("");
-            if (!Db.Exists<Person>(new { Id = forPassenger.PassengerList.PersonId }))
+            if (!Db.Exists<Person>(new { Id = forPassenger.Passenger.PersonId }))
                 throw HttpError.NotFound("");
-            if (!Db.Exists<Tour>(new { Id = forPassenger.PassengerList.TourId }))
+            if (!Db.Exists<Tour>(new { Id = forPassenger.Passenger.TourId }))
                 throw HttpError.NotFound("");
-            Db.Update(forPassenger.PassengerList);
+            Db.Update(forPassenger.Passenger);
         }
 
         public object Get(GetServiceOfTour serviceOfTour)
@@ -91,8 +91,8 @@ namespace Tourine.ServiceInterfaces
 
             var tour = Db.LoadSingleById<Tour>(req.TourId);
             var leader = Db.SingleById<Person>(tour.TourDetail.LeaderId);
-            var query = Db.From<Person, PassengerList>()
-                .Where<PassengerList>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)))
+            var query = Db.From<Person, Passenger>()
+                .Where<Passenger>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)))
                 .SelectDistinct(x => x);
             var passengers = Db.Select(query);
             var ticket = new TourPersonReport
@@ -114,8 +114,8 @@ namespace Tourine.ServiceInterfaces
 
             var tour = Db.LoadSingleById<Tour>(req.TourId);
             var leader = Db.SingleById<Person>(tour.TourDetail.LeaderId);
-            var query = Db.From<Person, PassengerList>()
-                .Where<PassengerList>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)) && x.HasVisa == req.Have)
+            var query = Db.From<Person, Passenger>()
+                .Where<Passenger>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)) && x.HasVisa == req.Have)
                 .SelectDistinct(x => x);
             var passengers = Db.Select(query);
             var ticket = new TourPersonReport

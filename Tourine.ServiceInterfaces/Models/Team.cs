@@ -7,6 +7,31 @@ using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine.ServiceInterfaces.Models
 {
+    public class Team
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        [References(typeof(Tour))]
+        public Guid TourId { get; set; }
+        [Reference]
+        public Tour Tour { get; set; }
+
+        public int Count { get; set; }
+        public DateTime SubmitDate { get; set; } = DateTime.Now;
+
+        [References(typeof(Person))]
+        public Guid BuyerId { get; set; }
+        [Reference]
+        public Person Buyer { get; set; }
+
+        public long InfantPrice { get; set; }
+        public long BasePrice { get; set; }
+        public long TotalPrice { get; set; }
+        public bool BuyerIsPassenger { get; set; } = true;
+
+        public bool IsPending { get; set; }
+    }
+
     public class TeamPassengers
     {
         public Person Buyer { get; set; }
@@ -25,6 +50,7 @@ namespace Tourine.ServiceInterfaces.Models
         public Guid PersonId { get; set; }
         public Person Person { get; set; }
         public OptionType OptionType { get; set; }
+        public string OptionDisplay => OptionType.GetDisplayTitle(true);
         [Alias("HaveVisa")]
         public bool HasVisa { get; set; }
         public bool PassportDelivered { get; set; }
@@ -114,28 +140,4 @@ namespace Tourine.ServiceInterfaces.Models
         public Guid TeamId { get; set; }
     }
 
-    public class Team
-    {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
-        [References(typeof(Tour))]
-        public Guid TourId { get; set; }
-        [Reference]
-        public Tour Tour { get; set; }
-
-        public int Count { get; set; }
-        public DateTime SubmitDate { get; set; } = DateTime.Now;
-
-        [References(typeof(Person))]
-        public Guid BuyerId { get; set; }
-        [Reference]
-        public Person Buyer { get; set; }
-
-        public long InfantPrice { get; set; }
-        public long BasePrice { get; set; }
-        public long TotalPrice { get; set; }
-        public bool BuyerIsPassenger { get; set; } = true;
-
-        public bool IsPending { get; set; }
-    }
 }

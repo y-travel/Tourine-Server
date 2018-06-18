@@ -7,7 +7,8 @@ using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine.ServiceInterfaces.Models
 {
-    public class PassengerList //@TODO rename to Passenger
+    [Alias("PassengerList")]
+    public class Passenger //@TODO rename to Passenger
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -59,33 +60,33 @@ namespace Tourine.ServiceInterfaces.Models
     {
         public PutServiceForPassengerValidator()
         {
-            RuleFor(s => s.PassengerList.Id).NotEmpty();
-            RuleFor(s => s.PassengerList.PersonId).NotEmpty();
-            RuleFor(s => s.PassengerList.TourId).NotEmpty();
-            RuleFor(s => s.PassengerList.OptionType).NotEmpty();
+            RuleFor(s => s.Passenger.Id).NotEmpty();
+            RuleFor(s => s.Passenger.PersonId).NotEmpty();
+            RuleFor(s => s.Passenger.TourId).NotEmpty();
+            RuleFor(s => s.Passenger.OptionType).NotEmpty();
         }
     }
 
     [Route("/service", "PUT")]
     public class PutServiceForPassenger : IReturn
     {
-        public PassengerList PassengerList { get; set; }
+        public Passenger Passenger { get; set; }
     }
 
     public class PostServiceForPassengerValidator : AbstractValidator<PostServiceForPassenger>
     {
         public PostServiceForPassengerValidator()
         {
-            RuleFor(s => s.PassengerList.PersonId).NotEmpty();
-            RuleFor(s => s.PassengerList.TourId).NotEmpty();
-            RuleFor(s => s.PassengerList.OptionType).NotEmpty();
+            RuleFor(s => s.Passenger.PersonId).NotEmpty();
+            RuleFor(s => s.Passenger.TourId).NotEmpty();
+            RuleFor(s => s.Passenger.OptionType).NotEmpty();
         }
     }
 
     [Route("/service", "POST")]
-    public class PostServiceForPassenger : IReturn<PassengerList>
+    public class PostServiceForPassenger : IReturn<Passenger>
     {
-        public PassengerList PassengerList { get; set; }
+        public Passenger Passenger { get; set; }
     }
 
     [Route("/tours/{TourId}/passengers/toTour/{DestTourId}/{AgencyId}", "POST")]
@@ -118,7 +119,7 @@ namespace Tourine.ServiceInterfaces.Models
     }
 
     [Route("/service/{TourId}")]
-    public class GetServiceOfTour : QueryDb<PassengerList, Person>
+    public class GetServiceOfTour : QueryDb<Passenger, Person>
     {
         public Guid TourId { get; set; }
     }

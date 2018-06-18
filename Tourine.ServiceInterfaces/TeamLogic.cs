@@ -45,7 +45,7 @@ namespace Tourine.ServiceInterfaces
             foreach (var passenger in passengers)
             {
                 if (passenger.Person.IsInfant)
-                    Db.Insert(new PassengerList
+                    Db.Insert(new Passenger
                     {
                         PersonId = passenger.PersonId,
                         TourId = toTour.Id,
@@ -55,7 +55,7 @@ namespace Tourine.ServiceInterfaces
                         TeamId = newTeam.Id,
                     });
                 else
-                    Db.Insert(new PassengerList
+                    Db.Insert(new Passenger
                     {
                         PersonId = passenger.PersonId,
                         TourId = toTour.Id,

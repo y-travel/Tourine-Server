@@ -135,13 +135,13 @@ namespace Tourine.ServiceInterfaces
                     onlyFields: t => new { t.Price },
                     @where: p => p.Id == tour.TourId && p.OptionType == OptionType.Food);
 
-                var replacedPerson = Db.Select(Db.From<PassengerList>().Where(x => x.TourId == tour.TourId));
+                var replacedPerson = Db.Select(Db.From<Passenger>().Where(x => x.TourId == tour.TourId));
 
                 Db.UpdateOnly(new Team { IsPending = false },
                     onlyFields: t => new { t.IsPending },
                     @where: p => Sql.In(p.Id, replacedPerson.Map(t => t.TeamId)));
 
-                Db.Delete<PassengerList>(x => Sql.In(x.PersonId, replacedPerson.Map(pl => pl.PersonId)) && x.TourId == tour.OldTourId);
+                Db.Delete<Passenger>(x => Sql.In(x.PersonId, replacedPerson.Map(pl => pl.PersonId)) && x.TourId == tour.OldTourId);
                 dbTrans.Commit();
             }
         }

@@ -14,8 +14,9 @@ namespace Tourine.Test.Services
         private readonly Guid _testDestGuid = Guid.NewGuid();
         private readonly Destination _destination = new Destination();
         [SetUp]
-        public new void Setup()
+        protected override void Setup()
         {
+            base.Setup();
             CreateDestination();
         }
 

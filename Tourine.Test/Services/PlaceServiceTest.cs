@@ -13,8 +13,9 @@ namespace Tourine.Test.Services
     {
         private readonly Guid _testGuid = Guid.NewGuid();
         [SetUp]
-        public new void Setup()
+        protected override void Setup()
         {
+            base.Setup();
             Db.Insert(new Place
             {
                 Id = _testGuid,

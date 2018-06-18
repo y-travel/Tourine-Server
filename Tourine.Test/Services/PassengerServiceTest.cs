@@ -10,7 +10,7 @@ using Tourine.Test.Common;
 
 namespace Tourine.Test.Services
 {
-    public class PassengerListServiceTest : ServiceTest<PassengerListService>
+    public class PassengerServiceTest : ServiceTest<PassengerService>
     {
         private readonly Tour _tour = new Tour { Capacity = 20 };
         private readonly TourDetail _tourDetail = new TourDetail();
@@ -18,8 +18,9 @@ namespace Tourine.Test.Services
         private readonly Person _person = new Person { Name = "name", Family = "family", MobileNumber = "mobileNumber" };
 
         [SetUp]
-        public void setup()
+        protected override void Setup()
         {
+            base.Setup();
             CreateSampleTour();
         }
 
@@ -98,9 +99,9 @@ namespace Tourine.Test.Services
             Db.Insert(_tour);
             Db.Insert(_tourDetail);
             Db.Insert(_team);
-            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Bus, HasVisa = true });
-            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Room, HasVisa = true });
-            Db.Insert(new PassengerList { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Food, HasVisa = true });
+            Db.Insert(new Passenger { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Bus, HasVisa = true });
+            Db.Insert(new Passenger { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Room, HasVisa = true });
+            Db.Insert(new Passenger { PersonId = _person.Id, TourId = _tour.Id, TeamId = _person.Id, OptionType = OptionType.Food, HasVisa = true });
         }
     }
 }

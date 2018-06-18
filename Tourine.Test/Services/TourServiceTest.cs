@@ -20,12 +20,13 @@ namespace Tourine.Test.Services
         private readonly Team _team = new Team();
         private readonly TourOption _tourOption = new TourOption();
         private readonly List<TourOption> _optionList = new List<TourOption>();
-        private PassengerList _passenger;
+        private Passenger _passenger;
         private Agency _agency = new Agency();
 
         [SetUp]
-        public new void Setup()
+        protected override void Setup()
         {
+            base.Setup();
             CreateTours();
         }
 
@@ -634,7 +635,7 @@ namespace Tourine.Test.Services
             _optionList.Add(_tourOption);
             _optionList.Add(_tourOption);
             _tourDetail.LeaderId = _person.Id;
-            _passenger = new PassengerList
+            _passenger = new Passenger
             {
                 PersonId = _person.Id,
                 TourId = _tour.Id,

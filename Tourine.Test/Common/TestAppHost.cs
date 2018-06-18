@@ -68,7 +68,7 @@ namespace Tourine.Test.Common
         private void RegisterServicesAsAutoWired(Container container)
         {
             var serviceTypes = new[]{typeof(AgencyService),typeof(AgencyPersonService), typeof(DestinationService), typeof(PersonService), typeof(PlaceService),
-                typeof(PassengerListService),typeof(ReportService), typeof(AutoQuery), typeof(UserService), typeof(TourService), typeof(TourDetailService), typeof(TeamService),};
+                typeof(PassengerService),typeof(ReportService), typeof(AutoQuery), typeof(UserService), typeof(TourService), typeof(TourDetailService), typeof(TeamService),};
             container.RegisterAutoWiredTypes(serviceTypes);
         }
 
@@ -77,7 +77,7 @@ namespace Tourine.Test.Common
             TablesTypes = new[] { typeof(Tour), typeof(User), typeof(Agency), typeof(Place),
                 typeof(PriceDetail), typeof(Destination), typeof(Currency), typeof(Person),
                 typeof(Person), typeof(TourDetail), typeof(Team),
-                typeof(Service), typeof(AgencyPerson),typeof(TourOption),typeof(PassengerList) };
+                typeof(Service), typeof(AgencyPerson),typeof(TourOption),typeof(Passenger) };
 
             using (var db = ConnectionFactory.OpenDbConnection())
             {

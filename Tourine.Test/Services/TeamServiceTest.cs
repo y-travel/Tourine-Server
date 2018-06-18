@@ -21,9 +21,9 @@ namespace Tourine.Test.Services
         private readonly List<PassengerInfo> _passengers = new List<PassengerInfo>();
 
         [SetUp]
-        public new void Setup()
+        protected override void Setup()
         {
-
+            base.Setup();
             var teamMember1 = new PassengerInfo { PersonId = _person1.Id, OptionType = OptionType.Bus, Person = _person1 };
             var teamMember2 = new PassengerInfo { PersonId = _person2.Id, OptionType = OptionType.Food, Person = _person2 };
             var teamMember3 = new PassengerInfo { PersonId = _person3.Id, OptionType = OptionType.Room, Person = _person3 };

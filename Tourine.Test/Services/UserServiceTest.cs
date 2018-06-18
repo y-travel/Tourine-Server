@@ -16,8 +16,9 @@ namespace Tourine.Test.Services
         private readonly Guid _testCustomerGuid = Guid.NewGuid();
 
         [SetUp]
-        public new void Setup()
+        protected override void Setup()
         {
+            base.Setup();
             CreateUsers();
             AppHost.Session = new AuthSession
             {

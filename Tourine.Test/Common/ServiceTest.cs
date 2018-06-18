@@ -27,7 +27,7 @@ namespace Tourine.Test.Common
         protected T MockService { get; set; }
         protected IDbConnection Db { get; set; }
         [SetUp]
-        protected void Setup()
+        protected virtual void Setup()
         {
             MockService = AppHost.Container.Resolve<T>();
             Db = AppHost.ConnectionFactory.OpenDbConnection();

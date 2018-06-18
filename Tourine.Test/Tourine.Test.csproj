@@ -128,7 +128,7 @@
     <Compile Include="AuthProviderTest.cs" />
     <Compile Include="Services\DestinationServiceTest.cs" />
     <Compile Include="Services\ReportServiceTest.cs" />
-    <Compile Include="Services\PassengerListServiceTest.cs" />
+    <Compile Include="Services\PassengerServiceTest.cs" />
     <Compile Include="Services\PersonServiceTest.cs" />
     <Compile Include="Services\PlaceServiceTest.cs" />
     <Compile Include="RoleTest.cs" />

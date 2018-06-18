@@ -35,7 +35,7 @@ namespace Tourine.ServiceInterfaces
 
         public void Post(SendNotifyToTourPassengers tour)
         {
-            var q = Db.From<Person, PassengerList>((p, s) => s.TourId == tour.TourId && p.Id == s.PersonId)
+            var q = Db.From<Person, Passenger>((p, s) => s.TourId == tour.TourId && p.Id == s.PersonId)
                     .GroupBy(p => new { p.Id, p.ChatId, p.Name, p.Family })
                     .Select<Person>(p => new { p.Id, p.ChatId, p.Name, p.Family });
             var passengers = Db.Select(q);

@@ -17,8 +17,9 @@ namespace Tourine.Test.Services
         private readonly AgencyPerson _agencyPerson = new AgencyPerson();
 
         [SetUp]
-        public new void Setup()
+        protected override void Setup()
         {
+            base.Setup();
             CreateAgency();
         }
 

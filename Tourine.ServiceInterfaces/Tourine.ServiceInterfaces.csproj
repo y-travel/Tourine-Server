@@ -143,8 +143,8 @@
     <Compile Include="Bot\PersonServiceReport.cs" />
     <Compile Include="Common\PersonType.cs" />
     <Compile Include="Common\IncomeStatus.cs" />
-    <Compile Include="Models\PassengerList.cs" />
-    <Compile Include="PassengerListService.cs" />
+    <Compile Include="Models\Passenger.cs" />
+    <Compile Include="PassengerService.cs" />
     <Compile Include="Reports\Data\PassengerReportData.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="PersonService.cs" />

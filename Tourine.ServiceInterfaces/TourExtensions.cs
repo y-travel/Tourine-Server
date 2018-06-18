@@ -140,7 +140,7 @@ namespace Tourine.ServiceInterfaces
             );
 
         public static int GetCurrentPassengerCount(this Tour tour, IDbConnection db) =>
-            db.Scalar<PassengerList, int>(
+            db.Scalar<Passenger, int>(
                 x => Sql.CountDistinct(x.PersonId),
                 x => x.TourId == tour.Id
             );
@@ -156,7 +156,7 @@ namespace Tourine.ServiceInterfaces
             return tourDetail;
         }
         public static bool IsPassengerExist(this Tour tour, Guid forPersonId, IDbConnection db) =>
-            db.Exists<PassengerList>(x => x.TourId == tour.Id && x.PersonId == forPersonId);
+            db.Exists<Passenger>(x => x.TourId == tour.Id && x.PersonId == forPersonId);
 
         public static Tour ReservePendingBlock(this Tour block, int capacity, Guid toAgency, IDbConnection db)
         {
@@ -196,7 +196,7 @@ namespace Tourine.ServiceInterfaces
 
         public static bool IsDeleteable(this Tour tour, IDbConnection db)
         {
-            var tourPaasengerCount = db.Scalar<PassengerList, int>(
+            var tourPaasengerCount = db.Scalar<Passenger, int>(
                 x => Sql.CountDistinct(x.PersonId),
                 x => x.TourId == tour.Id
             );
@@ -253,9 +253,9 @@ namespace Tourine.ServiceInterfaces
         {
             var reqTour = Db.LoadSingleById<Tour>(tourId);
             var tours = Db.From<Tour>().Where(t => t.Id == tourId || t.ParentId == tourId);
-            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId)
-                .Where<PassengerList>(pl => Sql.In(pl.TourId, Db.Select(tours).Select(t => t.Id)))
-                .GroupBy<Person, PassengerList>((x, pl) => new
+            var q = Db.From<Person, Passenger>((p, pl) => p.Id == pl.PersonId)
+                .Where<Passenger>(pl => Sql.In(pl.TourId, Db.Select(tours).Select(t => t.Id)))
+                .GroupBy<Person, Passenger>((x, pl) => new
                 {
                     x,
                     pl.TourId,
@@ -264,9 +264,9 @@ namespace Tourine.ServiceInterfaces
                     pl.TeamId,
                     pl.OptionType,
                 })
-                .OrderBy<PassengerList>(pl => pl.TeamId)
+                .OrderBy<Passenger>(pl => pl.TeamId)
                 .OrderBy(p => new { p.Family, p.Name })
-                .Select<Person, PassengerList>((x, pl) => new
+                .Select<Person, Passenger>((x, pl) => new
                 {
                     x,
                     pl.TourId,

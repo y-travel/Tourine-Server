@@ -24,7 +24,7 @@ namespace Tourine.ServiceInterfaces
 
             if (req.TeamId.HasValue)
             {
-                Db.Delete<PassengerList>(x => x.TeamId == req.TeamId);
+                Db.Delete<Passenger>(x => x.TeamId == req.TeamId);
                 Db.Delete<Team>(x => x.Id == req.TeamId);
                 team.Id = (Guid)req.TeamId;
             }
@@ -49,7 +49,7 @@ namespace Tourine.ServiceInterfaces
                 {
                     if (passenger.Person.IsInfant)
                     {
-                        Db.Insert(new PassengerList
+                        Db.Insert(new Passenger
                         {
                             PersonId = passenger.PersonId,
                             TourId = req.TourId,
@@ -60,7 +60,7 @@ namespace Tourine.ServiceInterfaces
                         });
                     }
                     else
-                        Db.Insert(new PassengerList
+                        Db.Insert(new Passenger
                         {
                             PersonId = passenger.PersonId,
                             TourId = req.TourId,
@@ -97,15 +97,15 @@ namespace Tourine.ServiceInterfaces
         [Authenticate]
         public object Get(GetPersonsOfTeam team)
         {
-            var q = Db.From<Person, PassengerList>((p, pl) => p.Id == pl.PersonId && pl.TeamId == team.TeamId)
-                .GroupBy<Person, PassengerList>((x, pl) => new
+            var q = Db.From<Person, Passenger>((p, pl) => p.Id == pl.PersonId && pl.TeamId == team.TeamId)
+                .GroupBy<Person, Passenger>((x, pl) => new
                 {
                     x,
                     pl.PassportDelivered,
                     VisaDelivered = pl.HasVisa,
                     pl.OptionType,
                 })
-                .Select<Person, PassengerList>((x, pl) => new
+                .Select<Person, Passenger>((x, pl) => new
                 {
                     x,
                     pl.PassportDelivered,
@@ -164,8 +164,8 @@ namespace Tourine.ServiceInterfaces
                     }
                         , @where: p => p.Id == team.Id);
                 }
-                var replacedPerson = Db.Select(Db.From<PassengerList>().Where(x => Sql.In(x.TeamId, teamList.Teams.Map(t => t.Id))).Select(p => new { p.PersonId }));
-                Db.Delete<PassengerList>(x => Sql.In(x.PersonId, replacedPerson.Map(p => p.PersonId)) && x.TourId == teamList.OldTourId);
+                var replacedPerson = Db.Select(Db.From<Passenger>().Where(x => Sql.In(x.TeamId, teamList.Teams.Map(t => t.Id))).Select(p => new { p.PersonId }));
+                Db.Delete<Passenger>(x => Sql.In(x.PersonId, replacedPerson.Map(p => p.PersonId)) && x.TourId == teamList.OldTourId);
                 dbTrans.Commit();
             }
         }

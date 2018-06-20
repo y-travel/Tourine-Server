@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormatterTest.cs" />
+    <Compile Include="PassengerReportDataTest.cs" />
     <Compile Include="Services\AgencyPersonServiceTest.cs" />
     <Compile Include="Services\AgencyServiceTest.cs" />
     <Compile Include="Common\InsertHelper.cs" />

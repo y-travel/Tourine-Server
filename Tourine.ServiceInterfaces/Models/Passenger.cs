@@ -7,8 +7,8 @@ using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine.ServiceInterfaces.Models
 {
-    [Alias("PassengerList")]
-    public class Passenger //@TODO rename to Passenger
+    [Alias("PassengerList")] //@TODO should be removed
+    public class Passenger
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -23,7 +23,7 @@ namespace Tourine.ServiceInterfaces.Models
         public Tour Tour { get; set; }
 
         public OptionType OptionType { get; set; }
-        [Alias("HaveVisa")]
+        [Alias("HaveVisa")]//@TODO should be removed
         public bool HasVisa { get; set; }
         public bool PassportDelivered { get; set; }
 
@@ -31,6 +31,24 @@ namespace Tourine.ServiceInterfaces.Models
         public Guid TeamId { get; set; }
         [Reference]
         public Team Team { get; set; }
+    }
+
+    [Alias("PassengerList")]
+    public class PassengerInfo
+    {
+        [References(typeof(Person))]
+        public Guid PersonId { get; set; }
+        [Reference]
+        public Person Person { get; set; }
+        public OptionType OptionType { get; set; }
+
+        [Ignore]
+        public string OptionDisplay => Person.IsInfant || Person.IsUnder5 ? OptionType.GetDisplayTitle(true) : Strings.Adult;
+        [Alias("HaveVisa")]
+        public bool HasVisa { get; set; }
+        public bool PassportDelivered { get; set; }
+        public Guid TourId { get; set; }
+        public Guid TeamId { get; set; }
     }
 
     public class TourPassengers

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,45 +17,43 @@ namespace Tourine.ServiceInterfaces.Reports
     {
         public object Get(GetReport req)
         {
-            var templatePath = Path.Combine(PathHelper.GetAssetsPath(), $"{Enum.GetName(typeof(ReportType), req.ReportType)}Template.xlsx");
-            return new HttpResult(new FileInfo(templatePath), MimeMapping.GetMimeMapping(templatePath));
+            return ReportFactory.GetTourPassengersReport(Db, req.TourId, DateTime.Now);
         }
     }
 
     public class ReportFactory
     {
-        public static HttpResult GetTourPassengersReport(PassengerReportData data)
+        public static object GetTourPassengersReport(IDbConnection db, Guid tourId, DateTime reportDate)
         {
-            var report = new PassengerReport();
-            report.DataSource = data;
+            var report = new PassengerReport { DataSource = new object[] { new PassengerReportData(db, tourId) } };
+            report.Parameters["reportDate"].Value = reportDate;
             var memoryStream = new MemoryStream();
             report.ExportToPdf(memoryStream);
-            return new HttpResult(new PdfResult(memoryStream));
+            return new PdfResult(memoryStream);
         }
     }
 
     public class PdfResult : IHasOptions, IStreamWriterAsync
     {
-        private readonly Stream _responseStream;
+        public Stream ResponseStream;
         public IDictionary<string, string> Options { get; }
 
         public PdfResult(Stream responseStream, string defaultName = "pdf")
         {
-            _responseStream = responseStream;
+            ResponseStream = responseStream;
             Options = new Dictionary<string, string>
             {
                 {"Content-Type","application/pdf" },
-                {"Content-Disposition", $"attachment; filename={defaultName}.pdf\";" }
+                {"Content-Disposition", $"attachment; filename={defaultName}.pdf" }
             };
         }
-
         public Task WriteToAsync(Stream responseStream, CancellationToken token = new CancellationToken())
         {
             return Task.Run(() =>
             {
-                if (_responseStream == null)
+                if (ResponseStream == null)
                     return;
-                _responseStream.WriteTo(responseStream);
+                ResponseStream.WriteTo(responseStream);
                 responseStream.Flush();
                 responseStream.Dispose();
             }, token);

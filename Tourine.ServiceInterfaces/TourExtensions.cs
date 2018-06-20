@@ -133,18 +133,6 @@ namespace Tourine.ServiceInterfaces
                 throw HttpError.Forbidden(ErrorCode.NotEnoughFreeSpace.ToString());
         }
 
-        public static int GetBlocksCapacity(this Tour tour, IDbConnection db) =>
-            db.Scalar<Tour, int>(
-                t => Sql.Sum(t.Capacity),
-                predicate: t => t.ParentId == tour.Id
-            );
-
-        public static int GetCurrentPassengerCount(this Tour tour, IDbConnection db) =>
-            db.Scalar<Passenger, int>(
-                x => Sql.CountDistinct(x.PersonId),
-                x => x.TourId == tour.Id
-            );
-
         public static TourDetail GetTourDetail(IDbConnection db, Guid id, bool isTourId = false)
         {
             var tourDetail = !isTourId

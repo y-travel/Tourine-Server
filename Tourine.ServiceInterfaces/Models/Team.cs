@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 using ServiceStack.FluentValidation;
-using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine.ServiceInterfaces.Models
 {
@@ -24,6 +23,8 @@ namespace Tourine.ServiceInterfaces.Models
         [Reference]
         public Person Buyer { get; set; }
 
+        [Ignore]
+        public List<PassengerInfo> Passengers { get; set; }
         public long InfantPrice { get; set; }
         public long BasePrice { get; set; }
         public long TotalPrice { get; set; }
@@ -43,19 +44,6 @@ namespace Tourine.ServiceInterfaces.Models
     {
         public Guid TourId { get; set; }
         public string Msg { get; set; }
-    }
-
-    public class PassengerInfo
-    {
-        public Guid PersonId { get; set; }
-        public Person Person { get; set; }
-        public OptionType OptionType { get; set; }
-        public string OptionDisplay => OptionType.GetDisplayTitle(true);
-        [Alias("HaveVisa")]
-        public bool HasVisa { get; set; }
-        public bool PassportDelivered { get; set; }
-        public Guid TourId { get; set; }
-        public Guid TeamId { get; set; }
     }
 
     public class UpsertTeamValidator : AbstractValidator<UpsertTeam>

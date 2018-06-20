@@ -13,6 +13,7 @@ namespace Tourine.ServiceInterfaces.Common
         public const string Without = "بدون";
         public const string WithoutOption = "بدون خدمات";
         public const string With = "با";
+        public const string Adult = "بزرگسال";
     }
 
     public static class StringsExtensions

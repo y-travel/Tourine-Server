@@ -1,6 +1,6 @@
 ﻿namespace Tourine.ServiceInterfaces.Reports
 {
-    partial class PassengerReport
+    partial class VisaReport
     {
         /// <summary>
         /// Required designer variable.
@@ -582,7 +582,7 @@
             // 
             this.reportDate.Name = "reportDate";
             // 
-            // PassengerReport
+            // VisaReport
             // 
             this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
             this.Detail,

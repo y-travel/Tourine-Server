@@ -11,9 +11,12 @@ namespace Tourine.ServiceInterfaces.Common
         public const string Food = "غذا";
         public const string Seat = "صندلی";
         public const string Without = "بدون";
-        public const string WithoutOption = "بدون خدمات";
+        public const string NoneOption = "بدون خدمات";
         public const string With = "با";
         public const string Adult = "بزرگسال";
+        public const string PassengerReportFileName = "لیست مسافرین تور";
+        public const string TicketReportFileName = "لیست بلیط";
+        public const string VisaReportFileName = "لیست ویزا";
     }
 
     public static class StringsExtensions

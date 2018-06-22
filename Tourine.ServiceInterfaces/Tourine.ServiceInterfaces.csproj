@@ -126,6 +126,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Data\TicketReportData.cs" />
+    <Compile Include="Reports\Data\VisaReportData.cs" />
+    <Compile Include="Reports\VisaReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\VisaReport.Designer.cs">
+      <DependentUpon>VisaReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\TicketReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\TicketReport.Designer.cs">
+      <DependentUpon>TicketReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\PassengerReport.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -180,6 +194,13 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\VisaReport.resx">
+      <DependentUpon>VisaReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\TicketReport.resx">
+      <DependentUpon>TicketReport.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\PassengerReport.resx">
       <DependentUpon>PassengerReport.cs</DependentUpon>

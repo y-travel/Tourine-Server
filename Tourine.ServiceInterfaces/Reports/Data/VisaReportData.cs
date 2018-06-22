@@ -8,7 +8,7 @@ using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.ServiceInterfaces.Reports.Data
 {
-    public class PassengerReportData
+    public class VisaReportData
     {
         private IDbConnection Db { get; }
         public Guid TourId { get; }
@@ -22,7 +22,7 @@ namespace Tourine.ServiceInterfaces.Reports.Data
 
         public int FoodCount { get; set; }
         public List<PassengerInfo> PassengersInfos { get; set; }
-        public PassengerReportData(IDbConnection db, Guid? tourId)
+        public VisaReportData(IDbConnection db, Guid? tourId)
         {
             Db = db;
             if (!tourId.HasValue)

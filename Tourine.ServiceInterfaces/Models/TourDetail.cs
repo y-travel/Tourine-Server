@@ -33,6 +33,8 @@ namespace Tourine.ServiceInterfaces.Models
         public int Duration { get; set; }
         public DateTime StartDate { get; set; }
 
+        [Ignore]
+        public DateTime EndDate => StartDate.AddDays(Duration);
         [References(typeof(Place))]
         public Guid PlaceId { get; set; }
         [Reference]

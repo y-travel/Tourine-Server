@@ -8,21 +8,18 @@ using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.ServiceInterfaces.Reports.Data
 {
-    public class PassengerReportData
+    public class TicketReportData
     {
         private IDbConnection Db { get; }
         public Guid TourId { get; }
-        public int PassengerCount { get; set; }
-
         public int AdultCount { get; set; }
 
         public int InfantCount { get; set; }
 
-        public int BedCount { get; set; }
-
-        public int FoodCount { get; set; }
         public List<PassengerInfo> PassengersInfos { get; set; }
-        public PassengerReportData(IDbConnection db, Guid? tourId)
+
+        public TourDetail TourDetail { get; set; }
+        public TicketReportData(IDbConnection db, Guid? tourId)
         {
             Db = db;
             if (!tourId.HasValue)
@@ -33,12 +30,10 @@ namespace Tourine.ServiceInterfaces.Reports.Data
 
         public void FillData(Guid tourId)
         {
+            TourDetail = Db.Select<TourDetail>(Db.From<Tour, TourDetail>((x, y) => x.Id == tourId && y.Id == x.TourDetailId)).FirstOrDefault();
             PassengersInfos = Db.LoadSelect<PassengerInfo>().Where(x => x.TourId == TourId).ToList();
-            PassengerCount = PassengersInfos.Count;
             InfantCount = PassengersInfos.Count(x => x.Person.IsInfant);
             AdultCount = PassengersInfos.Count(x => !x.Person.IsUnder5 && !x.Person.IsInfant);
-            BedCount = PassengersInfos.Count(x => x.OptionType.HasFlag(OptionType.Room));
-            FoodCount = PassengersInfos.Count(x => x.OptionType.HasFlag(OptionType.Food));
         }
     }
 }

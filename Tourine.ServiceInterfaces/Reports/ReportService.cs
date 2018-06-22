@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using DevExpress.XtraReports.UI;
 using ServiceStack;
 using ServiceStack.Web;
@@ -17,16 +16,55 @@ namespace Tourine.ServiceInterfaces.Reports
     {
         public object Get(GetReport req)
         {
-            return ReportFactory.GetTourPassengersReport(Db, req.TourId, DateTime.Now);
+            return new ReportFactory(Db).GetReport(req);
         }
     }
 
     public class ReportFactory
     {
-        public static object GetTourPassengersReport(IDbConnection db, Guid tourId, DateTime reportDate)
+        public IDbConnection Db { get; }
+
+        public ReportFactory(IDbConnection db)
         {
-            var report = new PassengerReport { DataSource = new object[] { new PassengerReportData(db, tourId) } };
-            report.Parameters["reportDate"].Value = reportDate;
+            Db = db;
+        }
+
+        public object GetReport(GetReport request)
+        {
+            switch (request.ReportType)
+            {
+                case ReportType.TourPassenger:
+                    return GetTourPassengersReport(request.TourId);
+                case ReportType.Ticket:
+                    return GetTicketReport(request.TourId);
+                case ReportType.Visa:
+                    return GetVisaReport(request.TourId);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private object GetTicketReport(Guid tourId)
+        {
+            var report = new TicketReport { DataSource = new object[] { new TicketReportData(Db, tourId) } };
+            report.Parameters["reportDate"].Value = DateTime.Now;
+            return GetPdfResult(report, Strings.TicketReportFileName);
+        }
+
+        private object GetVisaReport(Guid requestTourId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetTourPassengersReport(Guid tourId)
+        {
+            var report = new PassengerReport { DataSource = new object[] { new PassengerReportData(Db, tourId) } };
+            report.Parameters["reportDate"].Value = DateTime.Now;
+            return GetPdfResult(report, Strings.PassengerReportFileName);
+        }
+
+        private object GetPdfResult(XtraReport report, string filename)
+        {
             var memoryStream = new MemoryStream();
             report.ExportToPdf(memoryStream);
             return new PdfResult(memoryStream);

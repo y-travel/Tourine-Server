@@ -15,7 +15,7 @@ using Tourine.Test.Common;
 
 namespace Tourine.Test
 {
-    public class PassengerReportDataTest : ServiceTest<ReportService>
+    public class ReportDataTest : ServiceTest<ReportService>
     {
         public Guid CurrentTourId = Guid.NewGuid();
         public static object[][] PassengerTestCases =
@@ -41,15 +41,30 @@ namespace Tourine.Test
             }
         }
         [Test]
-        public void FillData_should_be_fill_all_fields()
+        public void PassengerReport_should_be_fill_all_fields()
         {
             var reportData = new PassengerReportData(Db, CurrentTourId);
 
+            reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);
             reportData.PassengerCount.Should().Be(4);
             reportData.AdultCount.Should().Be(2);
             reportData.InfantCount.Should().Be(1);
             reportData.BedCount.Should().Be(1);
             reportData.FoodCount.Should().Be(4);
+        }
+
+        [Test]
+        public void TicketReport_should_be_fill_all_fields()
+        {
+            var tour = new InsertHelper<TourDetail>(Db, new TourDetail())
+                 .Insert(x => new Tour { Id = CurrentTourId, TourDetailId = x.Id, TourDetail = x }).Result;
+            var reportData = new TicketReportData(Db, CurrentTourId);
+
+            reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);
+            reportData.TourDetail.Id.Should().Be(tour.TourDetailId.Value);
+            reportData.AdultCount.Should().Be(2);
+            reportData.InfantCount.Should().Be(1);
+
         }
 
     }

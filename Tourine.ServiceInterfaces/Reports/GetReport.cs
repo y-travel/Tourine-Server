@@ -11,7 +11,8 @@ namespace Tourine.ServiceInterfaces.Reports
     }
     public enum ReportType
     {
-        Tour = 1,
+        TourPassenger = 1,
         Ticket = 2,
+        Visa = 3,
     }
 }

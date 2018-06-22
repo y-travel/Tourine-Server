@@ -14,6 +14,8 @@ namespace Tourine.ServiceInterfaces.Models
 
         [Ignore]
         public string DisplayTitle => this.GetDisplayTitle();
+        [Ignore]
+        public string DisplayTitleEn => this.GetDisplayTitleEn();
         public string EnglishName { get; set; }
         public string EnglishFamily { get; set; }
         public string MobileNumber { get; set; }

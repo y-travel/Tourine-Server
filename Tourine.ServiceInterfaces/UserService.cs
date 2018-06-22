@@ -13,6 +13,8 @@ namespace Tourine.ServiceInterfaces
         [Authenticate]
         public object Get(GetUser request)
         {
+            if (!Db.Exists<User>(x => x.Id == request.Id))
+                throw HttpError.NotFound(ErrorCode.UserNotFound.ToString());
             var user = Db.SingleById<User>(request.Id);
             Db.LoadReferences(user);
             user.Roles = user.Role.ParseRole<Role>();
@@ -31,7 +33,7 @@ namespace Tourine.ServiceInterfaces
         public void Put(PutUser putUser)
         {
             if (!Db.Exists<User>(new { Id = putUser.User.Id }))
-                throw HttpError.NotFound("");
+                throw HttpError.NotFound(ErrorCode.UserNotFound.ToString());
             Db.Update(putUser.User);
         }
     }

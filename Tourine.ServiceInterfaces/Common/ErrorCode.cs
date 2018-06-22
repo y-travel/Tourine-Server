@@ -8,5 +8,7 @@
         TourHasBlock = 4,
         NotEnoughFreeSpace = 5,
         ExtraSpaceReserved = 6,
+        PersonNotFound = 7,
+        UserNotFound = 8
     }
 }

@@ -247,7 +247,7 @@ namespace Tourine.Test.Services
         {
             var id = Guid.NewGuid();
             Db.Insert(new TourDetail { Id = id });
-            Db.Insert(new Tour { Id = id, Capacity = 1, TourDetailId = id });
+            Db.Insert(new Tour { Id = id, Capacity = 1, TourDetailId = id , FreeSpace = 1});
             Db.Insert(new Agency { Id = id });
             Db.Insert(new TourOption { Id = id });
             var request = new UpsertTour

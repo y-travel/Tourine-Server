@@ -12,24 +12,13 @@ namespace Tourine.Test.Services
 {
     public class PersonServiceTest : ServiceTest<PersonService>
     {
-        private readonly Guid _testUserGuid = Guid.NewGuid();
-        private readonly Guid _testPersonGuid = Guid.NewGuid();
-        private readonly Guid _testTeamGuid = Guid.NewGuid();
-        private readonly Guid _testTourGuid = Guid.NewGuid();
-        private readonly Guid _testAgencyGuid = Guid.NewGuid();
-
-        private readonly Person _person = new Person { NationalCode = "0123456789", Family = "any", Type = PersonType.Passenger | PersonType.Leader };
+        private readonly Person _person = new Person { BirthDate = DateTime.Now, NationalCode = "0123456789", Family = "any", Type = PersonType.Passenger | PersonType.Leader };
         private readonly Agency _agency = new Agency();
         [SetUp]
         protected override void Setup()
         {
             base.Setup();
             CreatePerson();
-            //            AppHost.Session = new AuthSession
-            //            {
-            //                TestMode = true,
-            //                User = new User { Id = _testUserGuid ,PersonId = _testPersonGuid , Username = "testu"}
-            //            };
         }
 
         [Test]
@@ -137,8 +126,7 @@ namespace Tourine.Test.Services
         {
             var person = (Person)MockService.Get(new GetCurrentPerson());
             person.Should().NotBeNull();
-            person.Id.Should().Be(_testPersonGuid);
-            person.Name.Should().Be("testu");
+            person.Id.Should().Be(_person.Id);
         }
 
         [Test]
@@ -162,69 +150,23 @@ namespace Tourine.Test.Services
         public void CalculatePersonAge()
         {
             var today = DateTime.Parse("2018-1-2");
-            var day = today.Day;
-            var infantPersonUpBorder = new Person { BirthDate = DateTime.Parse("2016-1-3") };
-            var under5PersonDownBorder = new Person { BirthDate = DateTime.Parse("2016-1-2") };
-            var under5PersonUpBorder = new Person { BirthDate = DateTime.Parse("2013-1-3") };
-            var adultPersonDownBorder = new Person { BirthDate = DateTime.Parse("2013-1-2") };
-            Assert.AreEqual(infantPersonUpBorder.CalculateAge(today), 1);
-            Assert.AreEqual(under5PersonDownBorder.CalculateAge(today), 2);
-            Assert.AreEqual(under5PersonUpBorder.CalculateAge(today), 4);
-            Assert.AreEqual(adultPersonDownBorder.CalculateAge(today), 5);
+            var infantUpBorder = new Person { BirthDate = today.AddYears(-2).AddDays(1) };
+            var noneOptionDownBOrder = new Person { BirthDate = today.AddYears(-2) };
+            var noneOptionUpBorder = new Person { BirthDate = today.AddYears(-5).AddDays(1) };
+            var adultDownBorder = new Person { BirthDate = today.AddYears(-5) };
+            Assert.AreEqual(infantUpBorder.CalculateAge(today), 1);
+            Assert.AreEqual(noneOptionDownBOrder.CalculateAge(today), 2);
+            Assert.AreEqual(noneOptionUpBorder.CalculateAge(today), 4);
+            Assert.AreEqual(adultDownBorder.CalculateAge(today), 5);
         }
 
         public void CreatePerson()
         {
-            var _agencyPerson = new AgencyPerson { AgencyId = _agency.Id, PersonId = _person.Id };
+            var agencyPerson = new AgencyPerson { AgencyId = _agency.Id, PersonId = _person.Id };
             InsertDb(_person);
             InsertDb(_agency);
-            InsertDb(_agencyPerson);
-            //            Db.Insert(new User
-            //            {
-            //                Id = _testUserGuid,
-            //                PersonId = _testPersonGuid
-            //            });
-            //            Db.Insert(new Person
-            //            {
-            //                Id = _testPersonGuid,
-            //                Name = "emaN",
-            //                Family = "Bghr",
-            //                MobileNumber = "09125412168",
-            //                NationalCode = "0012234567",
-            //                Type = PersonType.Leader
-            //            });
-            //
-            //            Db.Insert(new Team
-            //            {
-            //                Id = _testTeamGuid,
-            //                TourId = _testTourGuid,
-            //                Count = 2,
-            //                Price = 12,
-            //                SubmitDate = DateTime.Now
-            //            });
-            //
-            //            Db.Insert(new TeamPerson
-            //            {
-            //                Id = Guid.NewGuid(),
-            //                PersonId = _testPersonGuid,
-            //                TeamId = _testTeamGuid
-            //            });
-            //
-            //
-            //            Db.Insert(new Agency
-            //            {
-            //                Id = _testAgencyGuid,
-            //                Name = "Taha",
-            //                PhoneNumber = "132456789"
-            //            });
-            //
-            //            Db.Insert(new Tour
-            //            {
-            //                Id = _testTourGuid,
-            //                AgencyId = _testAgencyGuid,
-            //                Status = TourStatus.Created,
-            //                TourDetailId = Guid.NewGuid()
-            //            });
+            InsertDb(agencyPerson);
+            InsertDb(new User { PersonId = _person.Id }, true);
         }
     }
 }

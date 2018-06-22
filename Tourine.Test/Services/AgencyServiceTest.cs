@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
+using ServiceStack.FluentValidation.TestHelper;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.Test.Common;
@@ -40,9 +41,17 @@ namespace Tourine.Test.Services
         [Test]
         public void GetAgencies_should_return_results()
         {
-            var results = (QueryResponse<Agency>)MockService.Get(new GetAgencies());
+            var results = (QueryResponse<Agency>)MockService.Get(new GetAgencies { IsAll = true });
             results.Results.Count.Should().Be(1);
         }
+
+        [Test]
+        public void GetAgencies_should_return_empty()//why: should not return own agency
+        {
+            var results = (QueryResponse<Agency>)MockService.Get(new GetAgencies { IsAll = false });
+            results.Results.Count.Should().Be(0);
+        }
+
 
         [Test]
         public void UpdateAgency_should_throw_exception()
@@ -60,13 +69,14 @@ namespace Tourine.Test.Services
                 .ShouldNotThrow<HttpError>();
         }
 
-//        [Test]
-//        public void CreateAgency_should_return_inserted_result()
-//        {
-//            _agency.Id = Guid.NewGuid();
-//            var agency = (Agency)MockService.Post(new CreateAgency { Agency = _agency });
-//            agency.ShouldBeEquivalentTo(_agency);
-//        }
+        [Test]
+        public void CreateAgency_should_return_inserted_result()
+        {
+            _agency.Id = Guid.NewGuid();
+            _person.Id = Guid.NewGuid();
+            var agency = (Agency)MockService.Post(new CreateAgency { Agency = _agency, Person = _person });
+            agency.ShouldBeEquivalentTo(_agency);
+        }
 
         private void CreateAgency()
         {
@@ -86,8 +96,8 @@ namespace Tourine.Test.Services
         [Test]
         public void CreateAgencyValidator_should_throw_error()
         {
-            var _agency = new Agency {Name = "",PhoneNumber = ""};
-            var createAgency = new CreateAgency {Agency = _agency};
+            var agency = new Agency {Name = "",PhoneNumber = ""};
+            var createAgency = new CreateAgency {Agency = agency , Person = new Person()};
             var validator = new CreateAgencyValidator();
             var results = validator.Validate(createAgency);
             Assert.False(results.IsValid);

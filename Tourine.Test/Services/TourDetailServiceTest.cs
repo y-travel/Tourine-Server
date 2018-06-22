@@ -18,17 +18,12 @@ namespace Tourine.Test.Services
         {
             base.Setup();
             CreateTourDetail();
-            AppHost.Session = new AuthSession
-            {
-                TestMode = true,
-                User = new User {Id = Guid.NewGuid()}
-            };
         }
 
         [Test]
         public void GetTourDetail_should_return_result()
         {
-            var item = (TourDetail)MockService.Get(new GetTourDetail {Id = _testTourDetailGuid});
+            var item = (TourDetail)MockService.Get(new GetTourDetail { Id = _testTourDetailGuid });
 
             item.DestinationId.Should().Be(_testDestinationGuid);
         }
@@ -42,7 +37,7 @@ namespace Tourine.Test.Services
                 PlaceId = Guid.NewGuid(),
             });
 
-            Db.Insert(new Destination {Id = _testDestinationGuid, Name = "destination"});
+            Db.Insert(new Destination { Id = _testDestinationGuid });
         }
 
     }

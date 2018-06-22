@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DevExpress.XtraRichEdit.Model.History;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 using ServiceStack.FluentValidation;

@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack;
+using ServiceStack.FluentValidation.TestHelper;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Common;
@@ -12,118 +13,64 @@ namespace Tourine.Test.Services
 {
     public class UserServiceTest : ServiceTest<UserService>
     {
-        private readonly Guid _testUserId = Guid.NewGuid();
-        private readonly Guid _testCustomerGuid = Guid.NewGuid();
+        private readonly Person _person = new Person();
+        private readonly User _user = new User { Password = "pass", Username = "username", Role = Role.Admin | Role.Agency };
 
         [SetUp]
         protected override void Setup()
         {
             base.Setup();
             CreateUsers();
-            AppHost.Session = new AuthSession
-            {
-                TestMode = true,
-                User = new User { Id = _testUserId }
-            };
         }
 
         [Test]
         public void GetUser_should_throw_exception()
         {
-            Client.Invoking(x => x.Get(new GetUser { Id = Guid.NewGuid() }))
-                .ShouldThrow<WebServiceException>();
+            new Action(() => MockService.Get(new GetUser { Id = Guid.NewGuid() }))
+                .ShouldThrow<HttpError>().WithMessage(ErrorCode.UserNotFound.ToString());
         }
 
         [Test]
         public void GetUser_should_return_User()
         {
-            var userInfo = Client.Get<User>(new GetUser { Id = _testUserId });
-            userInfo.Should().NotBeNull();
-            userInfo.Roles.Should().Contain(Role.Admin);
-            userInfo.Roles.Should().Contain(Role.Agency);
-        }
-
-        [Test]
-        public void PostUser_should_throw_exception()
-        {
-            Client.Invoking(x => x.Post(new PostUser
-            {
-                User = new User
-                {
-                    PersonId = Guid.NewGuid(),
-                    Username = "",
-                    Password = "123456789",
-                    Role = Role.Admin
-                }
-            })).ShouldThrow<WebServiceException>();
-
-
-        }
-
-        [Test]
-        public void PostUser_should_not_throw_exception()
-        {
-            Client.Invoking(x => x.Post(new PostUser
-            {
-                User = new User
-                {
-                    PersonId = Guid.NewGuid(),
-                    Username = "test",
-                    Password = "12345678",
-                    Role = Role.Admin
-
-                }
-            })).ShouldNotThrow<WebServiceException>();
+            var result = (User)MockService.Get(new GetUser { Id = _user.Id });
+            result.Id.ShouldBeEquivalentTo(_user.Id);
+            result.Roles.Should().Contain(Role.Admin);
+            result.Roles.Should().Contain(Role.Agency);
         }
 
         [Test]
         public void PutUser_should_throw_exception()
         {
-            Client.Invoking(u => u.Put(new PutUser
-            {
-                User = new User
-                {
-                    Id = Guid.NewGuid(),
-                    PersonId = Guid.NewGuid(),
-                    Password = "12346789",
-                    Username = "validUserName",
-                    Role = Role.Admin
-                }
-            })).ShouldThrow<WebServiceException>();
+            new Action(() => MockService.Put( new PutUser {User = new User()}))
+                .ShouldThrow<HttpError>().WithMessage(ErrorCode.UserNotFound.ToString());
         }
 
         [Test]
         public void PutUser_should_not_throw_exception()
         {
-            Client.Invoking(u => u.Put(new PutUser
-            {
-                User = new User
-                {
-                    Id = _testUserId,
-                    PersonId = Guid.NewGuid(),
-                    Password = "vaidPass",
-                    Username = "validUserName",
-                    Role = Role.Admin
-                }
-            })).ShouldNotThrow<WebServiceException>();
+            new Action(()=> MockService.Put(new PutUser{User = _user}))
+                .ShouldNotThrow();
         }
+
         public void CreateUsers()
         {
-            Db.Insert(new User
-            {
-                Id = _testUserId,
-                Username = "aias",
-                Password = "pass",
-                PersonId = _testCustomerGuid,
-                Role = Role.Admin | Role.Agency
-            });
-            Db.Insert(new Person
-            {
-                Id = _testCustomerGuid,
-                Name = "CName",
-                Family = "CFamily",
-                MobileNumber = "09123456789"
-            });
+            _user.PersonId = _person.Id;
+            InsertDb(_user, true);
+            InsertDb(_person,true);
         }
     }
+
+    public class UserValidatorTest
+    {
+        [Test]
+        public void PostUser_should_throw_error()
+        {
+            var validator = new PostUserValidator();
+            validator.ShouldHaveValidationErrorFor(x => x.User.Password, string.Empty);
+            validator.ShouldHaveValidationErrorFor(x => x.User.Username,string.Empty);
+            validator.ShouldHaveValidationErrorFor(x => x.User.PersonId, Guid.Empty);
+        }
+    }
+
 }

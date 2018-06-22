@@ -44,7 +44,7 @@ namespace Tourine.ServiceInterfaces.Models
     [Route("/agencies/{IsAll}", "GET")]
     public class GetAgencies : QueryDb<Agency>
     {
-        public bool IsAll { get; set; }
+        public bool IsAll { get; set; } = true;
     }
 
     [Route("/agencies/find/str", "GET")]

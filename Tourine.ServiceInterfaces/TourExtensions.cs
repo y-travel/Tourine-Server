@@ -36,7 +36,7 @@ namespace Tourine.ServiceInterfaces
                 }
                 trans.Commit();
             }
-            return tour;
+            return db.SingleById<Tour>(tour.Id);
         }
 
         public static Tour Update(this Tour upsertTour, IDbConnection db, AuthSession session)

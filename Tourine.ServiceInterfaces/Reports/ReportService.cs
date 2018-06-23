@@ -67,7 +67,7 @@ namespace Tourine.ServiceInterfaces.Reports
         {
             var memoryStream = new MemoryStream();
             report.ExportToPdf(memoryStream);
-            return new PdfResult(memoryStream);
+            return new PdfResult(memoryStream, filename);
         }
     }
 

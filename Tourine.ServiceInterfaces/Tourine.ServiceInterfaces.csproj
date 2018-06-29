@@ -110,6 +110,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+  <Compile Include="..\Tourine\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Common\Formatter.cs" />
     <Compile Include="Common\Strings.cs" />
     <Compile Include="Models\Agency.cs" />

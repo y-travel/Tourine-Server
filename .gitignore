@@ -159,3 +159,6 @@ $RECYCLE.BIN/
 
 # Redgate work file
 *.jfm
+
+#Add Yaml CI config
+!.vsts-ci.yml

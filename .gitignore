@@ -162,3 +162,4 @@ $RECYCLE.BIN/
 
 #Add Yaml CI config
 !.vsts-ci.yml
+Tourine.Web

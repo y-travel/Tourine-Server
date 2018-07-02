@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using ServiceStack.OrmLite;
-using Tourine.ServiceInterfaces;
 using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Models;
 using Tourine.ServiceInterfaces.Reports;
@@ -37,7 +33,7 @@ namespace Tourine.Test
         {
             new InsertHelper<TourDetail>(Db, new TourDetail())
                 .Insert(x => new Tour { Id = tourId, TourDetailId = x.Id, TourDetail = x })
-                .Insert(x => new Tour { Id = SampleBlockId, ParentId = tourId });
+                .Insert(x => new Tour { Id = SampleBlockId, TourDetailId = x.TourDetailId, ParentId = tourId });
             foreach (var testCase in PassengerTestCases)
             {
                 new InsertHelper<Person>(Db, (Person)testCase[0])
@@ -62,6 +58,7 @@ namespace Tourine.Test
         {
             var tour = Db.Select<Tour>(x => x.Id == CurrentTourId).FirstOrDefault();
             var reportData = new TicketReportData(Db, CurrentTourId);
+
             reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);
             reportData.TourDetail.Id.Should().Be(tour.TourDetailId.Value);
             reportData.AdultCount.Should().Be(2);
@@ -69,6 +66,18 @@ namespace Tourine.Test
 
         }
 
+        [Test]
+        public void VisaReport_should_be_fill_all_fields()
+        {
+            var block = Db.Select<Tour>(x => x.Id == SampleBlockId).FirstOrDefault();
+            block.Agency = new InsertHelper<Agency>(Db, new Agency()).Result;
+            Db.Save(block, true);
+            var reportData = new VisaReportData(Db, CurrentTourId);
 
+            reportData.TourDetail.Id.Should().Be(block.TourDetailId.Value);
+            reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);
+            reportData.BuyerNames.Count.Should().Be(PassengerTestCases.Length);
+            reportData.BuyerNames.ContainsValue(block.Agency.DisplayTitle).Should().BeTrue();
+        }
     }
 }

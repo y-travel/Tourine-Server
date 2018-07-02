@@ -51,9 +51,11 @@ namespace Tourine.ServiceInterfaces.Reports
             return GetPdfResult(report, Strings.TicketReportFileName);
         }
 
-        private object GetVisaReport(Guid requestTourId)
+        private object GetVisaReport(Guid tourId)
         {
-            throw new NotImplementedException();
+            var report = new VisaReport { DataSource = new object[] { new VisaReportData(Db, tourId) } };
+            report.Parameters["reportDate"].Value = DateTime.Now;
+            return GetPdfResult(report, Strings.VisaReportFileName);
         }
 
         public object GetTourPassengersReport(Guid tourId)

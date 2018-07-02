@@ -13,6 +13,6 @@ namespace Tourine.ServiceInterfaces
         public static string GetBuyerName(this PassengerInfo passenger, Guid currentTourId, IDbConnection db) =>
             passenger.TourId == currentTourId 
             ? passenger.Person.DisplayTitle 
-            : currentTourId.GetAgency(db)?.DisplayTitle;
+            : passenger.TourId.GetAgency(db)?.DisplayTitle;
     }
 }

@@ -18,6 +18,7 @@ namespace Tourine.Test
     public class ReportDataTest : ServiceTest<ReportService>
     {
         public Guid CurrentTourId = Guid.NewGuid();
+        public Guid SampleBlockId = Guid.NewGuid();
         public static object[][] PassengerTestCases =
         {
             new object[] { new Person { IsInfant = false, IsUnder5 = false }, OptionType.Bus|OptionType.Food},
@@ -34,10 +35,13 @@ namespace Tourine.Test
         }
         private void FillDb(Guid tourId)
         {
+            new InsertHelper<TourDetail>(Db, new TourDetail())
+                .Insert(x => new Tour { Id = tourId, TourDetailId = x.Id, TourDetail = x })
+                .Insert(x => new Tour { Id = SampleBlockId, ParentId = tourId });
             foreach (var testCase in PassengerTestCases)
             {
                 new InsertHelper<Person>(Db, (Person)testCase[0])
-                    .Insert(x => new Passenger { PersonId = x.Id, Person = x, TourId = tourId, OptionType = (OptionType)testCase[1] });
+                    .Insert(x => new Passenger { PersonId = x.Id, Person = x, TourId = SampleBlockId, OptionType = (OptionType)testCase[1] });
             }
         }
         [Test]
@@ -56,16 +60,15 @@ namespace Tourine.Test
         [Test]
         public void TicketReport_should_be_fill_all_fields()
         {
-            var tour = new InsertHelper<TourDetail>(Db, new TourDetail())
-                 .Insert(x => new Tour { Id = CurrentTourId, TourDetailId = x.Id, TourDetail = x }).Result;
+            var tour = Db.Select<Tour>(x => x.Id == CurrentTourId).FirstOrDefault();
             var reportData = new TicketReportData(Db, CurrentTourId);
-
             reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);
             reportData.TourDetail.Id.Should().Be(tour.TourDetailId.Value);
             reportData.AdultCount.Should().Be(2);
             reportData.InfantCount.Should().Be(1);
 
         }
+
 
     }
 }

@@ -11,34 +11,25 @@ namespace Tourine.ServiceInterfaces.Reports.Data
     public class VisaReportData
     {
         private IDbConnection Db { get; }
-        public Guid TourId { get; }
         public int PassengerCount { get; set; }
-
-        public int AdultCount { get; set; }
-
-        public int InfantCount { get; set; }
-
-        public int BedCount { get; set; }
-
-        public int FoodCount { get; set; }
         public List<PassengerInfo> PassengersInfos { get; set; }
+        public Dictionary<Guid, string> BuyerNames { get; set; }
         public VisaReportData(IDbConnection db, Guid? tourId)
         {
             Db = db;
             if (!tourId.HasValue)
                 return;
-            TourId = tourId.Value;
-            FillData(TourId);
+            FillData(tourId.Value);
         }
 
         public void FillData(Guid tourId)
         {
-            PassengersInfos = Db.LoadSelect<PassengerInfo>().Where(x => x.TourId == TourId).ToList();
+            PassengersInfos = Db.LoadSelect<PassengerInfo>()
+                .Where(x => Sql.In(x.TourId, TourExtensions.GetChainedTours(Db, tourId)))
+                .ToList();
             PassengerCount = PassengersInfos.Count;
-            InfantCount = PassengersInfos.Count(x => x.Person.IsInfant);
-            AdultCount = PassengersInfos.Count(x => !x.Person.IsUnder5 && !x.Person.IsInfant);
-            BedCount = PassengersInfos.Count(x => x.OptionType.HasFlag(OptionType.Room));
-            FoodCount = PassengersInfos.Count(x => x.OptionType.HasFlag(OptionType.Food));
+            BuyerNames = new Dictionary<Guid, string>();
+            PassengersInfos.ForEach(x => BuyerNames[x.PersonId] = x.GetBuyerName(tourId, Db));
         }
     }
 }

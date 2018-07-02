@@ -110,9 +110,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-  <Compile Include="..\Tourine\Properties\SharedAssemblyInfo.cs">
+    <Compile Include="..\Tourine\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AgencyExtensions.cs" />
     <Compile Include="Common\Formatter.cs" />
     <Compile Include="Common\Strings.cs" />
     <Compile Include="Models\Agency.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Destination.cs" />
     <Compile Include="DestinationService.cs" />
+    <Compile Include="PassengerExtensions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

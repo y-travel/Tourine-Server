@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using ServiceStack;
 using ServiceStack.OrmLite;
 using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Models;
@@ -11,7 +12,6 @@ namespace Tourine.ServiceInterfaces.Reports.Data
     public class PassengerReportData
     {
         private IDbConnection Db { get; }
-        public Guid TourId { get; }
         public int PassengerCount { get; set; }
 
         public int AdultCount { get; set; }
@@ -27,13 +27,14 @@ namespace Tourine.ServiceInterfaces.Reports.Data
             Db = db;
             if (!tourId.HasValue)
                 return;
-            TourId = tourId.Value;
-            FillData(TourId);
+            FillData(tourId.Value);
         }
 
         public void FillData(Guid tourId)
         {
-            PassengersInfos = Db.LoadSelect<PassengerInfo>().Where(x => x.TourId == TourId).ToList();
+            PassengersInfos = Db.LoadSelect<PassengerInfo>()
+                .Where(x => Sql.In(x.TourId, TourExtensions.GetChainedTours(Db, tourId)))
+                .ToList();
             PassengerCount = PassengersInfos.Count;
             InfantCount = PassengersInfos.Count(x => x.Person.IsInfant);
             AdultCount = PassengersInfos.Count(x => !x.Person.IsUnder5 && !x.Person.IsInfant);

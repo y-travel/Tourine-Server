@@ -17,6 +17,7 @@ namespace Tourine.ServiceInterfaces.Common
         public const string PassengerReportFileName = "لیست مسافرین تور";
         public const string TicketReportFileName = "لیست بلیط";
         public const string VisaReportFileName = "لیست ویزا";
+        public const string Agency = "آژانس";
     }
 
     public static class StringsExtensions

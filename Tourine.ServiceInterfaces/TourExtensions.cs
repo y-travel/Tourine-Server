@@ -237,6 +237,11 @@ namespace Tourine.ServiceInterfaces
 
         public static bool CapacityChangeIsAllowed(this Tour tour, int newCapacity) => tour.Capacity - tour.FreeSpace <= newCapacity;
 
+        public static Guid[] GetChainedTours(IDbConnection db, Guid tourId)
+        {
+            return db.Select(db.From<Tour>().Where(x => x.Id == tourId || x.ParentId == tourId).Select(x => x.Id))
+                .Select(x => x.Id).ToArray();
+        }
         public static TourPassengers GetPassengers(IDbConnection Db, Guid tourId)
         {
             var reqTour = Db.LoadSingleById<Tour>(tourId);

@@ -11,7 +11,6 @@ namespace Tourine.ServiceInterfaces.Reports.Data
     public class TicketReportData
     {
         private IDbConnection Db { get; }
-        public Guid TourId { get; }
         public int AdultCount { get; set; }
 
         public int InfantCount { get; set; }
@@ -24,14 +23,16 @@ namespace Tourine.ServiceInterfaces.Reports.Data
             Db = db;
             if (!tourId.HasValue)
                 return;
-            TourId = tourId.Value;
-            FillData(TourId);
+            FillData(tourId.Value);
         }
 
         public void FillData(Guid tourId)
         {
-            TourDetail = Db.Select<TourDetail>(Db.From<Tour, TourDetail>((x, y) => x.Id == tourId && y.Id == x.TourDetailId)).FirstOrDefault();
-            PassengersInfos = Db.LoadSelect<PassengerInfo>().Where(x => x.TourId == TourId).ToList();
+            TourDetail = Db.Select<TourDetail>(Db.From((Tour x, TourDetail y) => x.Id == tourId && y.Id == x.TourDetailId))
+                .FirstOrDefault();
+            PassengersInfos = Db.LoadSelect<PassengerInfo>()
+                .Where(x => Sql.In(x.TourId, TourExtensions.GetChainedTours(Db, tourId)))
+                .ToList();
             InfantCount = PassengersInfos.Count(x => x.Person.IsInfant);
             AdultCount = PassengersInfos.Count(x => !x.Person.IsUnder5 && !x.Person.IsInfant);
         }

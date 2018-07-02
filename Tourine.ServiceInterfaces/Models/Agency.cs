@@ -1,5 +1,6 @@
 ﻿using System;
 using ServiceStack;
+using ServiceStack.DataAnnotations;
 using ServiceStack.FluentValidation;
 using Tourine.ServiceInterfaces.Common;
 
@@ -17,6 +18,9 @@ namespace Tourine.ServiceInterfaces.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
+
+        [Ignore]
+        public string DisplayTitle => $"{Strings.Agency} {Name}";
         public string PhoneNumber { get; set; }
     }
     public class UpdateAgencyValidator : AbstractValidator<UpdateAgency>

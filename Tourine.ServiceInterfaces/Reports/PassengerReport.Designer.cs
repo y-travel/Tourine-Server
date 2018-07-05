@@ -40,6 +40,7 @@
             this.xrTableCell10 = new DevExpress.XtraReports.UI.XRTableCell();
             this.TopMargin = new DevExpress.XtraReports.UI.TopMarginBand();
             this.BottomMargin = new DevExpress.XtraReports.UI.BottomMarginBand();
+            this.xrLabel13 = new DevExpress.XtraReports.UI.XRLabel();
             this.PassengerReportDataSource = new DevExpress.DataAccess.ObjectBinding.ObjectDataSource(this.components);
             this.reportHeaderBand1 = new DevExpress.XtraReports.UI.ReportHeaderBand();
             this.xrPanel1 = new DevExpress.XtraReports.UI.XRPanel();
@@ -71,7 +72,7 @@
             this.xrTableCell6 = new DevExpress.XtraReports.UI.XRTableCell();
             this.xrTableCell11 = new DevExpress.XtraReports.UI.XRTableCell();
             this.xrTableCell12 = new DevExpress.XtraReports.UI.XRTableCell();
-            this.xrLabel13 = new DevExpress.XtraReports.UI.XRLabel();
+            this.xrLabel14 = new DevExpress.XtraReports.UI.XRLabel();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PassengerReportDataSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable2)).BeginInit();
@@ -199,6 +200,14 @@
             this.BottomMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.BottomMargin.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
             // 
+            // xrLabel13
+            // 
+            this.xrLabel13.LocationFloat = new DevExpress.Utils.PointFloat(10.99993F, 3.000005F);
+            this.xrLabel13.Name = "xrLabel13";
+            this.xrLabel13.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.xrLabel13.SizeF = new System.Drawing.SizeF(156.6667F, 23F);
+            this.xrLabel13.Text = "تاریخ چاپ : [Parameters.reportDate]";
+            // 
             // PassengerReportDataSource
             // 
             this.PassengerReportDataSource.DataSource = typeof(Tourine.ServiceInterfaces.Reports.Data.PassengerReportData);
@@ -207,6 +216,7 @@
             // reportHeaderBand1
             // 
             this.reportHeaderBand1.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
+            this.xrLabel14,
             this.xrPanel1,
             this.xrLabel2,
             this.xrLabel1});
@@ -392,7 +402,7 @@
             this.xrLabel2.StyleName = "Title";
             this.xrLabel2.StylePriority.UseFont = false;
             this.xrLabel2.StylePriority.UseTextAlignment = false;
-            this.xrLabel2.Text = " لیست مسافرین تور .......... در تاریخ [Parameters.reportDate]";
+            this.xrLabel2.Text = " لیست مسافرین تور .......... در تاریخ ";
             this.xrLabel2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
             // 
             // xrLabel1
@@ -609,13 +619,21 @@
             this.xrTableCell12.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             this.xrTableCell12.Weight = 0.39187906705415942D;
             // 
-            // xrLabel13
+            // xrLabel14
             // 
-            this.xrLabel13.LocationFloat = new DevExpress.Utils.PointFloat(10.99993F, 3.000005F);
-            this.xrLabel13.Name = "xrLabel13";
-            this.xrLabel13.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 96F);
-            this.xrLabel13.SizeF = new System.Drawing.SizeF(156.6667F, 23F);
-            this.xrLabel13.Text = "تاریخ چاپ : [Parameters.reportDate]";
+            this.xrLabel14.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "TourDetail.StartDate")});
+            this.xrLabel14.Font = new System.Drawing.Font("B Yekan", 14F);
+            this.xrLabel14.LocationFloat = new DevExpress.Utils.PointFloat(458.3332F, 33.37501F);
+            this.xrLabel14.Name = "xrLabel14";
+            this.xrLabel14.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.xrLabel14.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
+            this.xrLabel14.SizeF = new System.Drawing.SizeF(147.6251F, 27.04166F);
+            this.xrLabel14.StyleName = "Title";
+            this.xrLabel14.StylePriority.UseFont = false;
+            this.xrLabel14.StylePriority.UseTextAlignment = false;
+            this.xrLabel14.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+            this.xrLabel14.EvaluateBinding += new DevExpress.XtraReports.UI.BindingEventHandler(this.ToPersianDate_EvaluateBinding);
             // 
             // PassengerReport
             // 
@@ -695,5 +713,6 @@
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell11;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell12;
         private DevExpress.XtraReports.UI.XRLabel xrLabel13;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel14;
     }
 }

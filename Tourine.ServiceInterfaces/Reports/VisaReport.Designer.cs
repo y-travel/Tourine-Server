@@ -41,6 +41,8 @@
             this.TopMargin = new DevExpress.XtraReports.UI.TopMarginBand();
             this.BottomMargin = new DevExpress.XtraReports.UI.BottomMarginBand();
             this.reportHeaderBand1 = new DevExpress.XtraReports.UI.ReportHeaderBand();
+            this.xrLabel7 = new DevExpress.XtraReports.UI.XRLabel();
+            this.xrLabel5 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel2 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrPanel1 = new DevExpress.XtraReports.UI.XRPanel();
@@ -160,7 +162,7 @@
             this.xrTableCell9.StylePriority.UseTextAlignment = false;
             this.xrTableCell9.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             this.xrTableCell9.Weight = 0.28963420506767468D;
-            this.xrTableCell9.EvaluateBinding += new DevExpress.XtraReports.UI.BindingEventHandler(this.xrTableCell9_EvaluateBinding);
+            this.xrTableCell9.EvaluateBinding += new DevExpress.XtraReports.UI.BindingEventHandler(this.BuyerNameCell_EvaluateBinding);
             // 
             // xrTableCell10
             // 
@@ -198,6 +200,8 @@
             // reportHeaderBand1
             // 
             this.reportHeaderBand1.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
+            this.xrLabel7,
+            this.xrLabel5,
             this.xrLabel1,
             this.xrLabel2,
             this.xrPanel1,
@@ -207,6 +211,38 @@
             this.reportHeaderBand1.Name = "reportHeaderBand1";
             this.reportHeaderBand1.StylePriority.UseTextAlignment = false;
             this.reportHeaderBand1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
+            // 
+            // xrLabel7
+            // 
+            this.xrLabel7.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "TourDetail.EndDate")});
+            this.xrLabel7.Font = new System.Drawing.Font("B Yekan", 14F);
+            this.xrLabel7.LocationFloat = new DevExpress.Utils.PointFloat(482.7084F, 65.41666F);
+            this.xrLabel7.Name = "xrLabel7";
+            this.xrLabel7.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.xrLabel7.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
+            this.xrLabel7.SizeF = new System.Drawing.SizeF(128.8751F, 27.04166F);
+            this.xrLabel7.StyleName = "Title";
+            this.xrLabel7.StylePriority.UseFont = false;
+            this.xrLabel7.StylePriority.UseTextAlignment = false;
+            this.xrLabel7.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+            this.xrLabel7.EvaluateBinding += new DevExpress.XtraReports.UI.BindingEventHandler(this.ToPersianDate_EvaluateBinding);
+            // 
+            // xrLabel5
+            // 
+            this.xrLabel5.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "TourDetail.StartDate")});
+            this.xrLabel5.Font = new System.Drawing.Font("B Yekan", 14F);
+            this.xrLabel5.LocationFloat = new DevExpress.Utils.PointFloat(129.4167F, 65.41666F);
+            this.xrLabel5.Name = "xrLabel5";
+            this.xrLabel5.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.xrLabel5.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
+            this.xrLabel5.SizeF = new System.Drawing.SizeF(147.6251F, 27.04166F);
+            this.xrLabel5.StyleName = "Title";
+            this.xrLabel5.StylePriority.UseFont = false;
+            this.xrLabel5.StylePriority.UseTextAlignment = false;
+            this.xrLabel5.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+            this.xrLabel5.EvaluateBinding += new DevExpress.XtraReports.UI.BindingEventHandler(this.ToPersianDate_EvaluateBinding);
             // 
             // xrLabel1
             // 
@@ -280,16 +316,16 @@
             // xrLabel3
             // 
             this.xrLabel3.Font = new System.Drawing.Font("B Yekan", 14F);
-            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(11.99991F, 65.41666F);
+            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(11.99989F, 65.41666F);
             this.xrLabel3.Name = "xrLabel3";
             this.xrLabel3.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrLabel3.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
-            this.xrLabel3.SizeF = new System.Drawing.SizeF(290.3334F, 27.04166F);
+            this.xrLabel3.SizeF = new System.Drawing.SizeF(117.4168F, 27.04166F);
             this.xrLabel3.StyleName = "Title";
             this.xrLabel3.StylePriority.UseFont = false;
             this.xrLabel3.StylePriority.UseTextAlignment = false;
-            this.xrLabel3.Text = "تاریخ رفت : [TourDetail.StartDate]";
-            this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
+            this.xrLabel3.Text = "تاریخ رفت :";
+            this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             // 
             // xrLabel6
             // 
@@ -299,12 +335,12 @@
             this.xrLabel6.Name = "xrLabel6";
             this.xrLabel6.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrLabel6.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
-            this.xrLabel6.SizeF = new System.Drawing.SizeF(290.3334F, 27.04166F);
+            this.xrLabel6.SizeF = new System.Drawing.SizeF(133.0418F, 27.04166F);
             this.xrLabel6.StyleName = "Title";
             this.xrLabel6.StylePriority.UseFont = false;
             this.xrLabel6.StylePriority.UseTextAlignment = false;
-            this.xrLabel6.Text = "تاریخ برگشت : [TourDetail.EndDate]";
-            this.xrLabel6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
+            this.xrLabel6.Text = "تاریخ برگشت :";
+            this.xrLabel6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             // 
             // Title
             // 
@@ -597,5 +633,7 @@
         private DevExpress.DataAccess.ObjectBinding.ObjectDataSource VisaReportDataSource;
         private DevExpress.XtraReports.UI.CalculatedField BuyerName;
         private DevExpress.XtraReports.UI.CalculatedField calculatedField1;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel7;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel5;
     }
 }

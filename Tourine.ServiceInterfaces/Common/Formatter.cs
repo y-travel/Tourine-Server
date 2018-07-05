@@ -3,6 +3,7 @@ using System.Linq;
 using ServiceStack;
 using Tourine.ServiceInterfaces.Models;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Tourine.ServiceInterfaces.Common
 {
@@ -36,6 +37,12 @@ namespace Tourine.ServiceInterfaces.Common
                 .Cast<Enum>()
                 .Where(predicate: x => (int)Enum.Parse(typeof(OptionType), x.ToString()) > 0 && mask.HasFlag(x))
                 .Select(x => x.ToString()).ToArray();
+        }
+
+        public static string ToPersianDate(this DateTime date)
+        {
+            var calendar = new PersianCalendar();
+            return $"{calendar.GetYear(date)}/{calendar.GetMonth(date)}/{calendar.GetDayOfMonth(date)}";
         }
     }
 }

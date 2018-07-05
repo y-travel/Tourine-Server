@@ -47,21 +47,21 @@ namespace Tourine.ServiceInterfaces.Reports
         private object GetTicketReport(Guid tourId)
         {
             var report = new TicketReport { DataSource = new object[] { new TicketReportData(Db, tourId) } };
-            report.Parameters["reportDate"].Value = DateTime.Now;
+            report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
             return GetPdfResult(report, Strings.TicketReportFileName);
         }
 
         private object GetVisaReport(Guid tourId)
         {
             var report = new VisaReport { DataSource = new object[] { new VisaReportData(Db, tourId) } };
-            report.Parameters["reportDate"].Value = DateTime.Now;
+            report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
             return GetPdfResult(report, Strings.VisaReportFileName);
         }
 
         public object GetTourPassengersReport(Guid tourId)
         {
             var report = new PassengerReport { DataSource = new object[] { new PassengerReportData(Db, tourId) } };
-            report.Parameters["reportDate"].Value = DateTime.Now;
+            report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
             return GetPdfResult(report, Strings.PassengerReportFileName);
         }
 

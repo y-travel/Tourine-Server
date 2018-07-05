@@ -389,7 +389,7 @@
             this.xrLabel2.StyleName = "Title";
             this.xrLabel2.StylePriority.UseFont = false;
             this.xrLabel2.StylePriority.UseTextAlignment = false;
-            this.xrLabel2.Text = " لیست مسافرین تور در تاریخ [Parameters.reportDate]";
+            this.xrLabel2.Text = " لیست مسافرین تور .......... در تاریخ [Parameters.reportDate]";
             this.xrLabel2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
             // 
             // xrLabel1

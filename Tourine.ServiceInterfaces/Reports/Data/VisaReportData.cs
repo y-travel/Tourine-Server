@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using ServiceStack.OrmLite;
-using Tourine.ServiceInterfaces.Common;
 using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.ServiceInterfaces.Reports.Data

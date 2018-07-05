@@ -131,6 +131,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Data\ReportBase.cs" />
     <Compile Include="Reports\Data\TicketReportData.cs" />
     <Compile Include="Reports\Data\VisaReportData.cs" />
     <Compile Include="Reports\VisaReport.cs">

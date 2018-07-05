@@ -43,7 +43,7 @@ namespace Tourine.Test
         [Test]
         public void PassengerReport_should_be_fill_all_fields()
         {
-            var reportData = new PassengerReportData(Db, CurrentTourId);
+            var reportData = (PassengerReportData)new PassengerReportData(Db).FillData(CurrentTourId);
 
             reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);
             reportData.PassengerCount.Should().Be(4);
@@ -57,7 +57,7 @@ namespace Tourine.Test
         public void TicketReport_should_be_fill_all_fields()
         {
             var tour = Db.Select<Tour>(x => x.Id == CurrentTourId).FirstOrDefault();
-            var reportData = new TicketReportData(Db, CurrentTourId);
+            var reportData = (TicketReportData)new TicketReportData(Db).FillData(CurrentTourId);
 
             reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);
             reportData.TourDetail.Id.Should().Be(tour.TourDetailId.Value);
@@ -72,7 +72,7 @@ namespace Tourine.Test
             var block = Db.Select<Tour>(x => x.Id == SampleBlockId).FirstOrDefault();
             block.Agency = new InsertHelper<Agency>(Db, new Agency()).Result;
             Db.Save(block, true);
-            var reportData = new VisaReportData(Db, CurrentTourId);
+            var reportData = (VisaReportData)new VisaReportData(Db).FillData(CurrentTourId);
 
             reportData.TourDetail.Id.Should().Be(block.TourDetailId.Value);
             reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);

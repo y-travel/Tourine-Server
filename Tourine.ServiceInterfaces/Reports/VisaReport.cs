@@ -11,10 +11,6 @@ namespace Tourine.ServiceInterfaces.Reports
         public VisaReport()
         {
             InitializeComponent();
-            var data = new VisaReportData(null, null);
-            data.TourDetail = new TourDetail { StartDate = DateTime.Now };
-            Report.DataSource = new object[] { data };
-
         }
 
         private void BuyerNameCell_EvaluateBinding(object sender, BindingEventArgs e)

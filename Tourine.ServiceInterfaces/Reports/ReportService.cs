@@ -44,35 +44,32 @@ namespace Tourine.ServiceInterfaces.Reports
             }
         }
 
-        private object GetTicketReport(Guid tourId)
+        private object GetTicketReport(Guid tourId) =>
+            GenerateReport(new TicketReport { DataSource = new object[] { new TicketReportData(Db).FillData(tourId) } });
+
+        private object GetVisaReport(Guid tourId) =>
+            GenerateReport(new VisaReport { DataSource = new object[] { new VisaReportData(Db).FillData(tourId) } });
+
+        private object GetTourPassengersReport(Guid tourId) =>
+            GenerateReport(new PassengerReport { DataSource = new object[] { new PassengerReportData(Db).FillData(tourId) } });
+
+        private object GenerateReport(XtraReport report)
         {
-            var report = new TicketReport { DataSource = new object[] { new TicketReportData(Db, tourId) } };
             report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
-            return GetPdfResult(report, Strings.TicketReportFileName);
+            return report.GetPdfResult(Strings.PassengerReportFileName);
         }
 
-        private object GetVisaReport(Guid tourId)
-        {
-            var report = new VisaReport { DataSource = new object[] { new VisaReportData(Db, tourId) } };
-            report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
-            return GetPdfResult(report, Strings.VisaReportFileName);
-        }
+    }
 
-        public object GetTourPassengersReport(Guid tourId)
-        {
-            var report = new PassengerReport { DataSource = new object[] { new PassengerReportData(Db, tourId) } };
-            report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
-            return GetPdfResult(report, Strings.PassengerReportFileName);
-        }
-
-        private object GetPdfResult(XtraReport report, string filename)
+    public static class ReportExtensions
+    {
+        public static object GetPdfResult(this XtraReport report, string filename)
         {
             var memoryStream = new MemoryStream();
             report.ExportToPdf(memoryStream);
             return new PdfResult(memoryStream, filename);
         }
     }
-
     public class PdfResult : IHasOptions, IStreamWriterAsync
     {
         public Stream ResponseStream;

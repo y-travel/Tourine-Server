@@ -56,7 +56,7 @@ namespace Tourine.ServiceInterfaces.Reports
         private object GenerateReport(XtraReport report)
         {
             report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
-            return report.GetPdfResult(Strings.PassengerReportFileName);
+            return report.GetPdfResult($"{report.GetType().Name}FileName".Loc());
         }
 
     }

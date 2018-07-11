@@ -15,8 +15,6 @@ namespace Tourine.ServiceInterfaces.Reports.Data
         public Guid TourId { get; set; }
         public TourDetail TourDetail { get; set; }
         public List<PassengerInfo> PassengersInfos { get; set; }
-        public int PassengerCount { get; set; }
-
 
         protected ReportBase(IDbConnection db)
         {
@@ -31,7 +29,6 @@ namespace Tourine.ServiceInterfaces.Reports.Data
             PassengersInfos = Db.LoadSelect<PassengerInfo>()
                 .Where(x => Sql.In(x.TourId, TourExtensions.GetChainedTours(Db, tourId)))
                 .ToList();
-            PassengerCount = PassengersInfos.Count;
             return this;
         }
     }

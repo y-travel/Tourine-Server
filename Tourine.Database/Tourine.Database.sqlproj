@@ -43,16 +43,10 @@
 Table=[dbo].[VersionInfo];
 </ExcludeObjectsFromSync>
     <BuildOptionSkipThreePartNameCheck>True</BuildOptionSkipThreePartNameCheck>
+    <MigrationOrdering>SemanticVersioning</MigrationOrdering>
+    <Baselining>FolderBased</Baselining>
   </PropertyGroup>
   <!-- READYROLL OFFLINE SCHEMA MODEL OPTIONS -->
-  <PropertyGroup>
-    <SyncToOfflineSchemaModel>True</SyncToOfflineSchemaModel>
-    <!--
-    <SyncToOfflineSchemaModelBySchema>True</SyncToOfflineSchemaModelBySchema>
-    <SyncToOfflineSchemaModelObjectTypes>Table;Assembly;Contract;Default;EventNotification;FullTextCatalog;FullTextStoplist;MessageType;PartitionFunction;PartitionScheme;Queue;ServiceBinding;Role;Route;Rule;Schema;SearchPropertyList;Service;Sequence;Synonym;User;UserDefinedType;XmlSchemaCollection</SyncToOfflineSchemaModelObjectTypes>
-    <SchemaModelSubFolder>Schema-Model</SchemaModelSubFolder>
-    -->
-  </PropertyGroup>
   <!-- READYROLL PROGRAMMABLE OBJECT OPTIONS -->
   <PropertyGroup>
     <!--

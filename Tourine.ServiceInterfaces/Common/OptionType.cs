@@ -10,7 +10,8 @@ namespace Tourine.ServiceInterfaces.Common
         Empty = 0,
         Room = 1,
         Bus = 2,
-        Food = 4
+        Food = 4,
+        All = Empty | Room | Bus | Food
     }
     public static class OptionTypeExtension
     {

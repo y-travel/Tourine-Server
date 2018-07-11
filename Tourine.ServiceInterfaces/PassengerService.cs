@@ -77,7 +77,7 @@ namespace Tourine.ServiceInterfaces
                 BusPrice = options.Find(x => x.OptionType == OptionType.Bus).Price,
                 Teams = newTeamList,
             };
-            //@TODO ughly
+            //@TODO clean
             return result;
         }
 

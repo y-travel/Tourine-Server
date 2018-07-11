@@ -46,7 +46,6 @@ namespace Tourine.Test
             var reportData = (PassengerReportData)new PassengerReportData(Db).FillData(CurrentTourId);
 
             reportData.PassengersInfos.Count.Should().Be(PassengerTestCases.Length);
-            reportData.PassengerCount.Should().Be(4);
             reportData.AdultCount.Should().Be(2);
             reportData.InfantCount.Should().Be(1);
             reportData.BedCount.Should().Be(1);

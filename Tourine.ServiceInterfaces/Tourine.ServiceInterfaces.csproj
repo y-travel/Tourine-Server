@@ -131,9 +131,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Reports\Data\ReportBase.cs" />
+    <Compile Include="Reports\Data\PassengerDataReportBase.cs" />
     <Compile Include="Reports\Data\TicketReportData.cs" />
     <Compile Include="Reports\Data\VisaReportData.cs" />
+    <Compile Include="Reports\GetReportData.cs" />
     <Compile Include="Reports\VisaReport.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -153,7 +154,7 @@
       <DependentUpon>PassengerReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Reports\ReportService.cs" />
-    <Compile Include="Reports\GetReport.cs" />
+    <Compile Include="Reports\GetReportFile.cs" />
     <Compile Include="Common\ErrorCode.cs" />
     <Compile Include="Common\OptionType.cs" />
     <Compile Include="Common\PathHelper.cs" />

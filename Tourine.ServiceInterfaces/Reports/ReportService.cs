@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using DevExpress.XtraReports.Parameters;
 using DevExpress.XtraReports.UI;
 using ServiceStack;
 using ServiceStack.Web;
@@ -14,48 +15,33 @@ namespace Tourine.ServiceInterfaces.Reports
 {
     public class ReportService : AppService
     {
-        public object Get(GetReport req)
+        public object Get(GetReportFile req)
         {
-            return new ReportFactory(Db).GetReport(req);
+            return new ReportFactory(Db, req.ReportType).GetReport(req.TourId);
+        }
+
+        public object Get(GetReportData getReportData)
+        {
+            return getReportData.ReportType.ToReportData(Db).FillData(getReportData.TourId);
         }
     }
 
     public class ReportFactory
     {
         public IDbConnection Db { get; }
-
-        public ReportFactory(IDbConnection db)
+        private ReportType ReportType { get; }
+        public ReportFactory(IDbConnection db, ReportType reportType)
         {
             Db = db;
+            ReportType = reportType;
         }
 
-        public object GetReport(GetReport request)
+        public object GetReport(Guid tourId)
         {
-            switch (request.ReportType)
-            {
-                case ReportType.TourPassenger:
-                    return GetTourPassengersReport(request.TourId);
-                case ReportType.Ticket:
-                    return GetTicketReport(request.TourId);
-                case ReportType.Visa:
-                    return GetVisaReport(request.TourId);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private object GetTicketReport(Guid tourId) =>
-            GenerateReport(new TicketReport { DataSource = new object[] { new TicketReportData(Db).FillData(tourId) } });
-
-        private object GetVisaReport(Guid tourId) =>
-            GenerateReport(new VisaReport { DataSource = new object[] { new VisaReportData(Db).FillData(tourId) } });
-
-        private object GetTourPassengersReport(Guid tourId) =>
-            GenerateReport(new PassengerReport { DataSource = new object[] { new PassengerReportData(Db).FillData(tourId) } });
-
-        private object GenerateReport(XtraReport report)
-        {
-            report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
+            var report = ReportType.ToReportFile();
+            report.DataSource = new object[] { ReportType.ToReportData(Db).FillData(tourId) };
+            if (report.Parameters["reportDate"] != null)
+                report.Parameters["reportDate"].Value = DateTime.Now.ToPersianDate();
             return report.GetPdfResult($"{report.GetType().Name}FileName".Loc());
         }
 

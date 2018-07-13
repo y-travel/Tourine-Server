@@ -55,10 +55,11 @@ namespace Tourine.Test.Common
         public override void Configure(Container container)
         {
             JsConfig.EmitCamelCaseNames = true;
+            TestMode = true;
             container.Register<IDbConnectionFactory>(ConnectionFactory);
             container.Register<TourineBot>(MockBot);
             container.RegisterFactory<IAuthSession>(() => Session);
-//            RegisterServicesAsAutoWired(container);
+            //            RegisterServicesAsAutoWired(container);
             container.RegisterFactory<IRequest>(() => new MockHttpRequest());
             Plugins.Add(new AutoQueryFeature());
             Plugins.Add(new AuthFeature(() => new AuthSession { UserAuthId = Session.UserAuthId }, new IAuthProvider[] { MockAuthProvider }));

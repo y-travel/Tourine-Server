@@ -15,7 +15,7 @@ namespace Tourine.ServiceInterfaces.Reports.Data
         public Guid TourId { get; set; }
         public TourDetail TourDetail { get; set; }
         public List<PassengerInfo> PassengersInfos { get; set; }
-
+        public Person Leader { get; set; }
         protected PassengerDataReportBase(IDbConnection db)
         {
             Db = db;
@@ -48,19 +48,20 @@ namespace Tourine.ServiceInterfaces.Reports.Data
             if (leaderId == null)
                 return;
             var existLeader = passengerDataReport.PassengersInfos.Find(x => x.PersonId == leaderId);
+            //if leader is passenger move it to the top of the list
             if (existLeader != null)
             {
-                //if leader is passenger move it to the top of the list
+                passengerDataReport.Leader = existLeader.Person;
                 passengerDataReport.PassengersInfos.Remove(existLeader);
                 passengerDataReport.PassengersInfos.Insert(0, existLeader);
             }
             else
             {
                 //add leader at the first of the list
-                var leader = db.Select<Person>(x => x.Id == leaderId).FirstOrDefault();
+                passengerDataReport.Leader = db.Select<Person>(x => x.Id == leaderId).FirstOrDefault();
                 passengerDataReport.PassengersInfos.Insert(0, new PassengerInfo
                 {
-                    Person = leader,
+                    Person = passengerDataReport.Leader,
                     PersonId = leaderId.Value,
                     OptionType = OptionType.All
                 });

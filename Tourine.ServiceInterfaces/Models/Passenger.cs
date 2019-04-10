@@ -116,13 +116,6 @@ namespace Tourine.ServiceInterfaces.Models
         public List<PassengerInfo> Passengers { get; set; }
     }
 
-    [Route("/tours/{TourId}/visa/{Have}")]
-    public class GetTourVisa : IReturn<TourPassengers>
-    {
-        public Guid TourId { get; set; }
-        public bool? Have { get; set; } = true;
-    }
-
     [Route("/tours/{TourId}/buyers", "GET")]
     public class GetTourBuyers : IReturn<IList<TourBuyer>>
     {

@@ -16,13 +16,14 @@ namespace Tourine.Test.Services
         private void MockReportEnvironmnet(ReportType reportType)
         {
             Mock.SetupStatic(typeof(ReportTypeExtensions));
-            Mock.SetupStatic(typeof(ReportExtensions), Behavior.Strict, StaticConstructor.Mocked);
+            Mock.SetupStatic(typeof(ReportExtensions));
             Mock.Arrange(() => reportType.ToReportData(Db)).Returns(new MockReportData(Db));
             var mockReport = new XtraReport();
             Mock.Arrange(() => reportType.ToReportFile()).Returns(mockReport);
             Mock.Arrange(() => mockReport.GetPdfResult("XtraReportFileName".Loc())).Returns(true);
 
         }
+
         [Test]
         [TestCase(ReportType.TourPassenger)]
         [TestCase(ReportType.Ticket)]

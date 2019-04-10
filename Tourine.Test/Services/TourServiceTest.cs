@@ -203,12 +203,6 @@ namespace Tourine.Test.Services
             returnedTour.Options[0].TourId.Should().Be(returnedTour.Id);
             returnedTour.Options[0].Price.Should().Be(request.Options[0].Price);
         }
-        [Test]
-        public void GetPersonOfTour_should_return_result()
-        {
-            var res = (TourPassengers)MockService.Get(new GetTourPassengers { TourId = _tour.Id });
-            res.Leader.Id.Should().Be(_person.Id);
-        }
 
         [Test]
         public void UpdateBlock_should_store_dependecies()

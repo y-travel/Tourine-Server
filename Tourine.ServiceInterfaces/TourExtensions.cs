@@ -242,56 +242,5 @@ namespace Tourine.ServiceInterfaces
             return db.Select(db.From<Tour>().Where(x => x.Id == tourId || x.ParentId == tourId).Select(x => x.Id))
                 .Select(x => x.Id).ToArray();
         }
-        public static TourPassengers GetPassengers(IDbConnection Db, Guid tourId)
-        {
-            var reqTour = Db.LoadSingleById<Tour>(tourId);
-            var tours = Db.From<Tour>().Where(t => t.Id == tourId || t.ParentId == tourId);
-            var q = Db.From<Person, Passenger>((p, pl) => p.Id == pl.PersonId)
-                .Where<Passenger>(pl => Sql.In(pl.TourId, Db.Select(tours).Select(t => t.Id)))
-                .GroupBy<Person, Passenger>((x, pl) => new
-                {
-                    x,
-                    pl.TourId,
-                    pl.PassportDelivered,
-                    VisaDelivered = pl.HasVisa,
-                    pl.TeamId,
-                    pl.OptionType,
-                })
-                .OrderBy<Passenger>(pl => pl.TeamId)
-                .OrderBy(p => new { p.Family, p.Name })
-                .Select<Person, Passenger>((x, pl) => new
-                {
-                    x,
-                    pl.TourId,
-                    pl.PassportDelivered,
-                    VisaDelivered = pl.HasVisa,
-                    pl.TeamId,
-                    SumOptionType = pl.OptionType,
-                });
-
-            var items = Db.Select<TempPerson>(q);
-
-            var mainTour = Db.Single<Tour>(x => x.Id == tourId);
-
-            var teams = new List<PassengerInfo>();
-
-            foreach (var item in items)
-            {
-                var t = new PassengerInfo
-                {
-                    Person = item.ConvertTo<Person>(),
-                    PersonId = item.Id,
-                    OptionType = item.SumOptionType,
-                    HasVisa = item.VisaDelivered,
-                    PassportDelivered = item.PassportDelivered,
-                    TourId = item.TourId,
-                    TeamId = item.TeamId,
-                };
-                teams.Add(t);
-            }
-            var leader = Db.Single(Db.From<Person, TourDetail>((p, td) => td.Id == mainTour.TourDetailId && p.Id == td.LeaderId));
-
-            return new TourPassengers { Tour = reqTour, Leader = leader, Passengers = teams };
-        }
     }
 }

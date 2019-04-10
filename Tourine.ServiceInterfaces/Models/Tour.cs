@@ -88,6 +88,7 @@ namespace Tourine.ServiceInterfaces.Models
     public class GetTourPassengers : IReturn<TourPassengers>
     {
         public Guid TourId { get; set; }
+        public bool? HasVisa { get; set; }
     }
 
     [Route("/tours/{TourId}/freespace","GET")]

@@ -90,14 +90,6 @@ namespace Tourine.ServiceInterfaces
         }
 
         [Authenticate]
-        public object Get(GetTourPassengers getTourPassengers)
-        {
-            if (getTourPassengers.TourId == Guid.Empty)
-                throw HttpError.NotFound("");
-            return TourExtensions.GetPassengers(Db, getTourPassengers.TourId);
-        }
-
-        [Authenticate]
         public object Get(GetTourAgency tour)
         {
             return tour.LoadChild ? Db.LoadSelect(Db.From<Tour>()

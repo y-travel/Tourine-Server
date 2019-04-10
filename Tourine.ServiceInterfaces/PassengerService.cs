@@ -82,52 +82,6 @@ namespace Tourine.ServiceInterfaces
         }
 
         [Authenticate]
-        public object Get(GetTourTicket req)
-        {
-            if (!Db.Exists<Tour>(x => x.Id == req.TourId))
-                throw HttpError.NotFound(ErrorCode.TourNotFound.ToString());
-
-            var tours = Db.From<Tour>().Where(t => t.Id == req.TourId || t.ParentId == req.TourId);
-
-            var tour = Db.LoadSingleById<Tour>(req.TourId);
-            var leader = Db.SingleById<Person>(tour.TourDetail.LeaderId);
-            var query = Db.From<Person, Passenger>()
-                .Where<Passenger>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)))
-                .SelectDistinct(x => x);
-            var passengers = Db.Select(query);
-            var ticket = new TourPersonReport
-            {
-                Tour = tour,
-                Leader = leader,
-                Passengers = passengers,
-            };
-            return ticket;
-        }
-
-        [Authenticate]
-        public object Get(GetTourVisa req)
-        {
-            if (!Db.Exists<Tour>(x => x.Id == req.TourId))
-                throw HttpError.NotFound(ErrorCode.TourNotFound.ToString());
-
-            var tours = Db.From<Tour>().Where(t => t.Id == req.TourId || t.ParentId == req.TourId);
-
-            var tour = Db.LoadSingleById<Tour>(req.TourId);
-            var leader = Db.SingleById<Person>(tour.TourDetail.LeaderId);
-            var query = Db.From<Person, Passenger>()
-                .Where<Passenger>(x => Sql.In(x.TourId, Db.Select(tours).Map(y => y.Id)) && x.HasVisa == req.Have)
-                .SelectDistinct(x => x);
-            var passengers = Db.Select(query);
-            var ticket = new TourPersonReport
-            {
-                Tour = tour,
-                Leader = leader,
-                Passengers = passengers,
-            };
-            return ticket;
-        }
-
-        [Authenticate]
         public object Get(GetTourBuyers req)
         {
             if (!Db.Exists<Tour>(x => x.Id == req.TourId))
@@ -136,6 +90,13 @@ namespace Tourine.ServiceInterfaces
             var blocks = tour.GetAgenciesReport(Db);
             blocks.AddRange(tour.GetTeamReport(Db));
             return blocks;
+        }
+        [Authenticate]
+        public object Get(GetTourPassengers getTourPassengers)
+        {
+            if (getTourPassengers.TourId == Guid.Empty)
+                throw HttpError.NotFound("");
+            return PassengerExtensions.GetPassengers(Db, getTourPassengers.TourId, getTourPassengers.HasVisa);
         }
     }
 

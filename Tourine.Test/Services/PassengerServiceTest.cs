@@ -25,27 +25,11 @@ namespace Tourine.Test.Services
         }
 
         [Test]
-        public void duplication_in_passenger_list_upsert_should_throw_exception()
+        public void GetTourPassengers_should_return_passenger_depend_on_visa()
         {
-
-        }
-
-        [Test]
-        public void GetTourVisa_should_return_result()
-        {
-            var result = (TourPersonReport)MockService.Get(new GetTourVisa { TourId = _tour.Id, Have = true });
-            result.Leader.Id.Should().Be(_person.Id);
-            result.Tour.Id.Should().Be(_tour.Id);
-            result.Passengers[0].Id.Should().Be(_person.Id);
-        }
-
-        [Test]
-        public void GetTourVisa_should_return_zero_passenger()
-        {
-            var result = (TourPersonReport)MockService.Get(new GetTourVisa { TourId = _tour.Id, Have = false });
-            result.Leader.Id.Should().Be(_person.Id);
-            result.Tour.Id.Should().Be(_tour.Id);
-            result.Passengers.Count.Should().Be(0);
+            var res = (TourPassengers)MockService.Get(new GetTourPassengers { TourId = _tour.Id });
+            res.Leader.Id.Should().Be(_person.Id);
+            res.Passengers.Count.Should().Be(3);
         }
 
         [Test]
@@ -68,12 +52,6 @@ namespace Tourine.Test.Services
             Db.Insert(tour3);
             Db.Insert(new Team { TourId = tour1.Id, TotalPrice = numericValue[3, 0], Count = (int)numericValue[3, 1] });
             Db.Insert(new Team { TourId = tour1.Id, TotalPrice = numericValue[4, 0], Count = (int)numericValue[4, 1] });
-
-            Db.Insert(new Team { TourId = tour2.Id, TotalPrice = numericValue[5, 0], Count = (int)numericValue[5, 1] });
-            Db.Insert(new Team { TourId = tour2.Id, TotalPrice = numericValue[6, 0], Count = (int)numericValue[6, 1] });
-
-            Db.Insert(new Team { TourId = tour3.Id, TotalPrice = numericValue[7, 0], Count = (int)numericValue[7, 1] });
-            Db.Insert(new Team { TourId = tour3.Id, TotalPrice = numericValue[8, 0], Count = (int)numericValue[8, 1] });
 
             long totalPrice = 0;
             long totalCount = 0;

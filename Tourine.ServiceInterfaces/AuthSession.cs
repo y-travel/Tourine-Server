@@ -42,9 +42,10 @@ namespace Tourine.ServiceInterfaces
                 throw new HttpError(HttpStatusCode.NotFound);
             session.User = session.User ?? db.SingleById<User>(id);
             var agencyPerson = db.Single<AgencyPerson>(x => x.PersonId == session.User.PersonId);
-            var customer = db.SingleById<Person>(agencyPerson.PersonId);
+
+            var customer = db.SingleById<Person>(session.User.PersonId);
             session.DisplayName = customer.Name + " " + customer.Family;
-            session.Agency = session.Agency ?? db.SingleById<Agency>(agencyPerson.AgencyId);
+            session.Agency = agencyPerson != null ? (session.Agency ?? db.SingleById<Agency>(agencyPerson.AgencyId)) : null;
             session.Roles = session.User.Role.ParseRole<string>();
             return session;
         }

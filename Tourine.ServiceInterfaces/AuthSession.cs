@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Data;
+using System.Net;
 using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
-using Tourine.ServiceInterfaces.Agencies;
-using Tourine.ServiceInterfaces.AgencyCustomers;
-using Tourine.ServiceInterfaces.Persons;
-using Tourine.ServiceInterfaces.Users;
+using Tourine.ServiceInterfaces.Common;
+using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.ServiceInterfaces
 {
@@ -39,13 +38,14 @@ namespace Tourine.ServiceInterfaces
         public static AuthSession GetAuthSession(this IRequest request, IDbConnection db)
         {
             var session = request.SessionAs<AuthSession>();
-            Guid id;
-            id = Guid.TryParse(session.UserAuthId, out id) ? id : Guid.Empty;
+            if (!Guid.TryParse(session.UserAuthId, out var id))
+                throw new HttpError(HttpStatusCode.NotFound);
             session.User = session.User ?? db.SingleById<User>(id);
             var agencyPerson = db.Single<AgencyPerson>(x => x.PersonId == session.User.PersonId);
-            var customer = db.SingleById<Person>(agencyPerson.PersonId);
+
+            var customer = db.SingleById<Person>(session.User.PersonId);
             session.DisplayName = customer.Name + " " + customer.Family;
-            session.Agency = session.Agency ?? db.SingleById<Agency>(agencyPerson.AgencyId);
+            session.Agency = agencyPerson != null ? (session.Agency ?? db.SingleById<Agency>(agencyPerson.AgencyId)) : null;
             session.Roles = session.User.Role.ParseRole<string>();
             return session;
         }

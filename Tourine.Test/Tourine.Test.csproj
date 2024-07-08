@@ -57,6 +57,8 @@
     <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Printing.v17.1.Core, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraReports.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="FluentAssertions, Version=4.19.4.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.19.4\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
@@ -93,6 +95,9 @@
     <Reference Include="ServiceStack.OrmLite.Sqlite.Windows, Version=4.5.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.OrmLite.Sqlite.Windows.4.5.14\lib\net45\ServiceStack.OrmLite.Sqlite.Windows.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.OrmLite.SqlServer, Version=4.5.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.4.5.14\lib\net45\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Redis, Version=4.5.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Redis.4.5.14\lib\net45\ServiceStack.Redis.dll</HintPath>
     </Reference>
@@ -108,28 +113,36 @@
     <Reference Include="System.Data.SQLite, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.105.2\lib\net451\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Telerik.JustMock, Version=2018.1.117.2, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
+    <Reference Include="Telerik.JustMock, Version=2018.2.511.5, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\JustMock.2018.1.117.2\lib\Net\Telerik.JustMock.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgencyCustomerServiceTest.cs" />
-    <Compile Include="AgencyServiceTest.cs" />
+    <Compile Include="FormatterTest.cs" />
+    <Compile Include="ReportDataTest.cs" />
+    <Compile Include="Services\AgencyPersonServiceTest.cs" />
+    <Compile Include="Services\AgencyServiceTest.cs" />
+    <Compile Include="Common\InsertHelper.cs" />
+    <Compile Include="Common\TestAppHost.cs" />
     <Compile Include="AuthProviderTest.cs" />
-    <Compile Include="DestinationServiceTest.cs" />
-    <Compile Include="InMemoryDbTest.cs" />
-    <Compile Include="PersonServiceTest.cs" />
-    <Compile Include="PlaceServiceTest.cs" />
+    <Compile Include="Services\DestinationServiceTest.cs" />
+    <Compile Include="Services\ReportServiceTest.cs" />
+    <Compile Include="Services\PassengerServiceTest.cs" />
+    <Compile Include="Services\PersonServiceTest.cs" />
+    <Compile Include="Services\PlaceServiceTest.cs" />
     <Compile Include="RoleTest.cs" />
-    <Compile Include="ServiceTest.cs" />
-    <Compile Include="TeamPassengerServiceTest.cs" />
-    <Compile Include="TeamServiceTest.cs" />
-    <Compile Include="TourDetailServiceTest.cs" />
-    <Compile Include="TourServiceTest.cs" />
+    <Compile Include="Common\ServiceTest.cs" />
+    <Compile Include="StringsTest.cs" />
+    <Compile Include="Services\TeamServiceTest.cs" />
+    <Compile Include="Services\TourDetailServiceTest.cs" />
+    <Compile Include="TourineBotTest.cs" />
+    <Compile Include="Services\TourServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserServiceTest.cs" />
+    <Compile Include="Services\UserServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -144,10 +157,11 @@
       <Name>Tourine.ServiceInterfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tourine\Tourine.csproj">
-      <Project>{b58020c1-7ec2-4d42-8797-a894739d2b73}</Project>
+      <Project>{7d20ee23-5d34-4e94-a163-ceeb063df07a}</Project>
       <Name>Tourine</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

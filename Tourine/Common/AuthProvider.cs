@@ -5,7 +5,8 @@ using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Web;
 using Tourine.ServiceInterfaces;
-using Tourine.ServiceInterfaces.Users;
+using Tourine.ServiceInterfaces.Common;
+using Tourine.ServiceInterfaces.Models;
 
 namespace Tourine.Common
 {

@@ -8,6 +8,7 @@ namespace Tourine
         public static void Init()
         {
             JsConfig.TreatEnumAsInteger = true;
+            JsConfig.EmitCamelCaseNames = true;
             JsConfig.DateHandler = DateHandler.ISO8601;
             JsConfig.TimeSpanHandler = TimeSpanHandler.StandardFormat;
             JsConfig<Version>.DeSerializeFn = Version.Parse;

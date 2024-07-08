@@ -1,0 +1,82 @@
+#Your build pipeline references an undefined variable named ‘ReadyRoll.MsBuildResponseFileName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+variables:
+  SqlInstance: '.\SqlServer2016'
+  DatabaseName: 'Tourine.QA'
+  VersionSharePath: '\\WIN-NLK2NU95VLS\Version'
+  Build.Configuration: 'Release'
+  Build.Platform: 'AnyCPU'
+steps:
+- task: gittools.gitversion.gitversion-task.GitVersion@3
+  displayName: GitVersion
+  inputs:
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: 'Tourine/Properties/SharedAssemblyInfo.cs'
+
+- task: NuGetCommand@2
+  displayName: Restore NuGet Packages
+
+- task: redgatesoftware.redgate-readyroll.set-target-database.SetTargetDatabase@1
+  displayName: Set Target Database
+  inputs:
+    TargetServer: '$(SqlInstance)'
+    TargetDatabase: '$(DatabaseName)'
+
+- task: VSBuild@1
+  displayName: Build Project
+  inputs:
+    solution: Tourine.sln
+    msbuildArgs: '/p:ShadowServer=$(SqlInstance) /p:TargetServer=$(SqlInstance) /p:TargetDatabase=$(DatabaseName) /p:SkipDriftAnalysis=True /p:GenerateSqlPackage=True @"$(Build.SourcesDirectory)\$(ReadyRoll.MsBuildResponseFileName)"'
+    # platform: '$(Build.Platform)'
+    # configuration: '$(Build.Configuration)'
+    clean: true
+    msbuildArchitecture: x64
+
+- task: VSTest@2
+  displayName: Run tests
+  inputs:
+    testAssemblyVer2: |
+     **\tourine.test.dll
+     !**\obj\**
+    runInParallel: true
+    runTestsInIsolation: false
+    codeCoverageEnabled: true
+  condition: eq(variables['test'], 'true')
+
+- task: CopyFiles@2
+  displayName: Copy Server Files
+  inputs:
+    SourceFolder: Tourine
+    Contents: |
+     bin\**\*.dll
+     global.asax
+     global.asax.cs
+     Web.Config
+     Content\*
+     !**\*.resources.dll
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+
+- task: ArchiveFiles@2
+  displayName: Create Web Archive
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/archive/bin.zip'
+
+- task: ArchiveFiles@2
+  displayName: Create Database Script Archive
+  inputs:
+    rootFolderOrFile: 'Tourine.Database\bin\Release'
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/archive/db.zip'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Web
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/archive'
+    ArtifactName: '$(Build.BuildNumber)'
+    publishLocation: FilePath
+    TargetPath: '$(VersionSharePath)\Server'
+
+
+

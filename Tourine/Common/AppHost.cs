@@ -3,14 +3,20 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using Funq;
+using Quartz;
+using Quartz.Impl;
 using ServiceStack;
 using ServiceStack.Admin;
 using ServiceStack.Auth;
 using ServiceStack.Data;
 using ServiceStack.FluentValidation;
+using ServiceStack.IO;
+using ServiceStack.MiniProfiler;
 using ServiceStack.OrmLite;
+using ServiceStack.VirtualPath;
 using ServiceStack.Web;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Common;
 using ValidationException = ServiceStack.FluentValidation.ValidationException;
 
 namespace Tourine.Common
@@ -22,9 +28,8 @@ namespace Tourine.Common
 
         public OrmLiteConnectionFactory ConnectionFactory { get; }
         public TourineBot TourineBot { get; }
-
+        public Type[] TablesTypes { get; set; }
         public AuthSession Session { get; set; }
-
 
         public AppHost(Settings settings, OrmLiteConnectionFactory connectionFactory, TourineBot tourineBot) : base("Tourine Services", typeof(AppService).GetAssembly())
         {
@@ -80,10 +85,11 @@ namespace Tourine.Common
             container.Register(TourineBot);
             GlobalRequestFilters.Add(ValidationFilter);
             ConfigureQuartzJobs();
-            Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
+            Plugins.Add(new AutoQueryFeature { MaxLimit = 100, IncludeTotal = true });
             Plugins.Add(new AdminFeature());
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new CorsFeature());
+            
             Plugins.Add(
                 new AuthFeature(() => new AuthSession(), new IAuthProvider[]
                 {
@@ -107,6 +113,20 @@ namespace Tourine.Common
                 })
                 { IncludeRegistrationService = false, IncludeAssignRoleServices = false, IncludeAuthMetadataProvider = false, HtmlRedirect = null }
             );
+            Plugins.Add(new RequestLogsFeature
+            {
+                RequestLogger = new CsvRequestLogger(
+                    files: new FileSystemVirtualFiles(Path.GetTempPath()),
+                    requestLogsPattern: "requestlogs/{year}-{month}/{year}-{month}-{day}.csv",
+                    errorLogsPattern: "requestlogs/{year}-{month}/{year}-{month}-{day}-errors.csv",
+                    appendEvery: TimeSpan.FromSeconds(1)
+                ),
+                EnableResponseTracking = true,
+                EnableErrorTracking = true,
+                EnableRequestBodyTracking = true,
+                EnableSessionTracking = true,
+                LimitToServiceRequests = false
+            });
         }
 
         private void ValidationFilter(IRequest request, IResponse response, object dto)
@@ -120,23 +140,24 @@ namespace Tourine.Common
             response.WriteToResponse(request, error);
         }
 
-        public static void ConfigureQuartzJobs()
+        private static void ConfigureQuartzJobs()
         {
-            //            ISchedulerFactory schedFact = new StdSchedulerFactory();
-            //
-            //            var sched = schedFact.GetScheduler();
-            //            sched.Start();
-            //            var job = JobBuilder.Create<Job>()
-            //                .WithIdentity("SendJob")
-            //                .Build();
-            //
-            //            var trigger = TriggerBuilder.Create()
-            //                .WithIdentity("SendTrigger")
-            //                .WithSimpleSchedule(x => x.WithIntervalInMinutes(15).RepeatForever())
-            //                .StartNow()
-            //                .Build();
-            //
-            //            sched.ScheduleJob(job, trigger);
+            ISchedulerFactory schedFact = new StdSchedulerFactory();
+
+            var sched = schedFact.GetScheduler();
+            sched.Start();
+
+            var job = JobBuilder.Create<Job>()
+                .WithIdentity("schJob")
+                .Build();
+
+            var trigger = TriggerBuilder.Create()
+                .WithIdentity("jobTrig")
+                .WithSimpleSchedule(x => x.WithIntervalInMinutes(15).RepeatForever())
+                .StartNow()
+                .Build();
+
+            sched.ScheduleJob(job, trigger);
         }
     }
 }

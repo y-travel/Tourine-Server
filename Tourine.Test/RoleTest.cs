@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using Tourine.ServiceInterfaces;
+using Tourine.ServiceInterfaces.Common;
 
 namespace Tourine.Test
 {

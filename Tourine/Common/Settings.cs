@@ -8,6 +8,7 @@ namespace Tourine.Common
     {
 
         public string ConnectionString { get { return Get<string>(); } set { Set(value); } }
+        public string TelegramToken { get { return Get<string>(); } set { Set(value); } }
 
         private IAppSettings Instance { get; }
 
